@@ -91,9 +91,9 @@ export default function CheckoutPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8 md:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col md:grid md:grid-cols-12 gap-6">
           {/* Left Column: Address Selection */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="md:col-span-7 space-y-6">
             <AddressSelector 
               selectedId={selectedAddressId} 
               onSelect={(id) => {
@@ -104,7 +104,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* Right Column: Order Summary & Place Order */}
-          <div className="space-y-6">
+          <div className="md:col-span-5 space-y-6">
             <OrderSummary />
             
             {error && (

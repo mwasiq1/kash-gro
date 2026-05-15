@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { fetchApi } from "../../lib/api";
-import StatCard from "../../components/charts/StatCard";
-import RevenueChart from "../../components/charts/RevenueChart";
-import OrdersChart from "../../components/charts/OrdersChart";
-import TopProducts from "../../components/charts/TopProducts";
+import { fetchApi } from "@/lib/api";
+import StatCard from "../../../components/charts/StatCard";
+import RevenueChart from "../../../components/charts/RevenueChart";
+import OrdersChart from "../../../components/charts/OrdersChart";
+import TopProducts from "../../../components/charts/TopProducts";
 import { 
   ShoppingBag, 
   IndianRupee, 

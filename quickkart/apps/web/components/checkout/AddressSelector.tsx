@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MapPin, Plus, Loader2, CheckCircle2 } from "lucide-react";
+import { MapPin, Plus, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import AddressForm from "./AddressForm";
+import { AddressInput } from "@quickkart/shared";
 import { fetchApi } from "../../lib/api";
 import { useAuth } from "@clerk/nextjs";
 
@@ -26,14 +28,7 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newAddress, setNewAddress] = useState({
-    label: "Home",
-    line1: "",
-    line2: "",
-    city: "",
-    state: "",
-    pincode: "",
-  });
+  const [error, setError] = useState<string | null>(null);
 
   const loadAddresses = async () => {
     try {
@@ -59,22 +54,25 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
     loadAddresses();
   }, []);
 
-  const handleAddAddress = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAddAddress = async (data: AddressInput) => {
     setLoading(true);
+    setError(null);
     try {
       const token = await getToken();
       const response = await fetchApi("/addresses", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ ...newAddress, isDefault: addresses.length === 0 }),
+        body: JSON.stringify({ ...data, isDefault: addresses.length === 0 }),
       });
       if (response.success) {
         await loadAddresses();
         setShowAddForm(false);
         onSelect(response.data.id);
+      } else {
+        setError(response.error || "Failed to add address");
       }
-    } catch (err) {
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred");
       console.error("Failed to add address", err);
     } finally {
       setLoading(false);
@@ -104,62 +102,19 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
       </div>
 
       {showAddForm ? (
-        <form onSubmit={handleAddAddress} className="bg-white p-6 rounded-2xl border-2 border-[#0C831F] space-y-4 shadow-sm animate-in fade-in slide-in-from-top-4 duration-300">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Label (e.g. Home, Office)</label>
-              <input
-                required
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#0C831F] focus:ring-1 focus:ring-[#0C831F] outline-none font-medium transition-all"
-                value={newAddress.label}
-                onChange={(e) => setNewAddress({ ...newAddress, label: e.target.value })}
-              />
+        <div className="space-y-4">
+          {error && (
+            <div className="bg-red-50 border border-red-100 p-4 rounded-xl text-red-600 text-xs font-bold flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              {error}
             </div>
-            <div className="col-span-2">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Address Line 1</label>
-              <input
-                required
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#0C831F] focus:ring-1 focus:ring-[#0C831F] outline-none font-medium transition-all"
-                value={newAddress.line1}
-                onChange={(e) => setNewAddress({ ...newAddress, line1: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">City</label>
-              <input
-                required
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#0C831F] focus:ring-1 focus:ring-[#0C831F] outline-none font-medium transition-all"
-                value={newAddress.city}
-                onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 block">Pincode</label>
-              <input
-                required
-                className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#0C831F] focus:ring-1 focus:ring-[#0C831F] outline-none font-medium transition-all"
-                value={newAddress.pincode}
-                onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value })}
-              />
-            </div>
-          </div>
-          <div className="flex gap-3 pt-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 bg-[#0C831F] text-white font-black py-4 rounded-xl hover:bg-[#096618] transition-all disabled:opacity-50"
-            >
-              {loading ? "Saving..." : "Save Address"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowAddForm(false)}
-              className="px-6 py-4 border-2 border-gray-100 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-all"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+          )}
+          <AddressForm 
+            onSubmit={handleAddAddress} 
+            onCancel={() => setShowAddForm(false)} 
+            isLoading={loading}
+          />
+        </div>
       ) : addresses.length === 0 ? (
         <div className="bg-white p-12 rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-center">
           <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">

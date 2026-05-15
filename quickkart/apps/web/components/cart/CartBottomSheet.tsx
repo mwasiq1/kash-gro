@@ -64,7 +64,7 @@ export default function CartBottomSheet() {
           {items.map((item) => (
             <div key={item.id} className="flex items-center gap-3 bg-[#F4F6FA] rounded-xl p-3">
               <img
-                src={item.imageUrl}
+                src={item.image}
                 alt={item.name}
                 className="w-12 h-12 object-contain rounded-lg bg-white flex-shrink-0"
                 onError={(e) => {
@@ -85,7 +85,7 @@ export default function CartBottomSheet() {
                 </button>
               </div>
               <p className="text-sm font-extrabold text-[#1C1C1C] w-12 text-right flex-shrink-0">
-                ₹{(item.sellingPrice * item.quantity).toFixed(0)}
+                ₹{(item.price * item.quantity).toFixed(0)}
               </p>
             </div>
           ))}

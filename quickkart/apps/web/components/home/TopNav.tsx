@@ -18,7 +18,7 @@ export default function TopNav() {
         </div>
         <button
           onClick={openCart}
-          className="ml-auto relative flex items-center gap-2 bg-[#0C831F] text-white text-xs font-bold px-3 py-2 rounded-xl"
+          className="ml-auto relative flex items-center justify-center gap-2 bg-[#0C831F] text-white text-xs font-bold px-4 min-h-[44px] min-w-[44px] rounded-xl"
         >
           <ShoppingCart className="w-4 h-4" />
           {itemCount > 0 ? (

@@ -24,13 +24,13 @@ export default function OrderSummary() {
             {items.map((item) => (
               <div key={item.id} className="flex gap-4">
                 <div className="w-12 h-12 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-gray-100">
-                  <img src={item.imageUrl} alt={item.name} className="w-8 h-8 object-contain" />
+                  <img src={item.image} alt={item.name} className="w-8 h-8 object-contain" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.name}</p>
-                  <p className="text-xs text-gray-500">{item.quantity} × ₹{item.sellingPrice}</p>
+                  <p className="text-xs text-gray-500">{item.quantity} × ₹{item.price}</p>
                 </div>
-                <p className="text-sm font-black text-[#1C1C1C]">₹{item.quantity * item.sellingPrice}</p>
+                <p className="text-sm font-black text-[#1C1C1C]">₹{item.quantity * item.price}</p>
               </div>
             ))}
           </div>

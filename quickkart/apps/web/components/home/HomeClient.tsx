@@ -18,9 +18,9 @@ interface Product {
   name: string;
   description: string;
   mrp: number;
-  sellingPrice: number;
+  price: number;
   unit: string;
-  imageUrl: string;
+  images: string[];
   categoryId: string;
   category?: { name: string };
 }
@@ -70,7 +70,7 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product as any} />
               ))}
             </div>
           )}

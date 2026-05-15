@@ -11,9 +11,9 @@ const productSchema = z.object({
   slug: z.string().optional(),
   description: z.string().min(1, "Description is required"),
   mrp: z.number().positive(),
-  sellingPrice: z.number().positive(),
+  price: z.number().positive(),
   unit: z.string().min(1, "Unit is required"),
-  imageUrl: z.string().url("Valid image URL is required"),
+  images: z.array(z.string().url("Valid image URL is required")),
   categoryId: z.string().min(1, "Category is required"),
   stock: z.number().int().min(0).default(10),
   lowStockAt: z.number().int().min(0).default(5),
@@ -31,8 +31,6 @@ const generateSlug = (name: string) => {
 
 const normalizeProduct = (product: any) => ({
   ...product,
-  price: product.sellingPrice,
-  images: [product.imageUrl],
 });
 
 /**
@@ -525,5 +523,82 @@ export const getAnalytics = asyncHandler(
         lowStock,
       },
     });
+    });
   }
 );
+
+// --- BANNERS ---
+
+const bannerSchema = z.object({
+  imageUrl: z.string().url("Valid image URL is required"),
+  title: z.string().min(1, "Title is required"),
+  linkUrl: z.string().optional(),
+  sortOrder: z.number().int().default(0),
+  isActive: z.boolean().default(true),
+});
+
+export const getBanners = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const banners = await prisma.banner.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
+  res.json({ success: true, data: banners });
+});
+
+export const createBanner = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const validatedData = bannerSchema.parse(req.body);
+  const banner = await prisma.banner.create({ data: validatedData });
+  res.status(201).json({ success: true, data: banner });
+});
+
+export const updateBanner = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const validatedData = bannerSchema.partial().parse(req.body);
+  const banner = await prisma.banner.update({
+    where: { id },
+    data: validatedData,
+  });
+  res.json({ success: true, data: banner });
+});
+
+export const deleteBanner = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  await prisma.banner.delete({ where: { id } });
+  res.json({ success: true, message: "Banner deleted successfully" });
+});
+
+// --- PROMO CODES ---
+
+const promoSchema = z.object({
+  code: z.string().min(1).toUpperCase(),
+  discountType: z.enum(["PERCENTAGE", "FLAT"]),
+  discountValue: z.number().positive(),
+  minOrderAmount: z.number().min(0).default(0),
+  maxDiscountAmount: z.number().nullable().optional(),
+  usageLimit: z.number().int().positive().nullable().optional(),
+  startDate: z.string().or(z.date()).transform((val) => new Date(val)),
+  endDate: z.string().or(z.date()).nullable().optional().transform((val) => val ? new Date(val) : null),
+  isActive: z.boolean().default(true),
+});
+
+export const getPromos = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const promos = await prisma.promoCode.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  res.json({ success: true, data: promos });
+});
+
+export const createPromo = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const validatedData = promoSchema.parse(req.body);
+  const promo = await prisma.promoCode.create({ data: validatedData as any });
+  res.status(201).json({ success: true, data: promo });
+});
+
+export const updatePromo = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  const validatedData = promoSchema.partial().parse(req.body);
+  const promo = await prisma.promoCode.update({
+    where: { id },
+    data: validatedData as any,
+  });
+  res.json({ success: true, data: promo });
+});

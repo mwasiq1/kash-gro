@@ -5,7 +5,7 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import ProductGallery from "../../../../components/product/ProductGallery";
 import AddToCartButton from "../../../../components/product/AddToCartButton";
 import RelatedProducts from "../../../../components/product/RelatedProducts";
-import { Product } from "../../../../types";
+import { Product } from "@/types";
 
 interface ProductDetailContentProps {
   product: Product;
@@ -13,11 +13,7 @@ interface ProductDetailContentProps {
 
 export default function ProductDetailContent({ product }: ProductDetailContentProps) {
   const router = useRouter();
-  const discount = Math.round(((product.mrp - product.sellingPrice) / product.mrp) * 100);
-
-  const galleryImages = product.images && product.images.length > 0 
-    ? product.images 
-    : [product.imageUrl];
+  const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
 
   return (
     <div className="min-h-screen bg-white md:bg-[#F4F6FA] pb-24">
@@ -44,7 +40,7 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
         <div className="flex flex-col md:flex-row gap-8 bg-white md:rounded-3xl md:p-8 md:shadow-sm border border-gray-50">
           {/* Left: Gallery */}
           <div className="w-full md:w-[45%]">
-            <ProductGallery images={galleryImages} />
+            <ProductGallery images={product.images} />
           </div>
 
           {/* Right: Details */}
@@ -59,7 +55,7 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
             <div className="flex items-center gap-3 mb-6">
               <div className="flex flex-col">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl md:text-3xl font-black text-[#1C1C1C]">₹{product.sellingPrice}</span>
+                  <span className="text-2xl md:text-3xl font-black text-[#1C1C1C]">₹{product.price}</span>
                   {discount > 0 && (
                     <span className="text-sm md:text-base text-gray-400 line-through">₹{product.mrp}</span>
                   )}

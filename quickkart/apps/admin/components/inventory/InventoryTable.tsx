@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { AlertTriangle, Package, Check, X, Loader2 } from "lucide-react";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 
 interface InventoryItem {
   id: string;

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { X, Upload, Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import Papa from "papaparse";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 
 interface BulkUpdateModalProps {
   onClose: () => void;

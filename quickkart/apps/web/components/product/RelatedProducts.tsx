@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { fetchApi } from "../../lib/api";
 import ProductCard from "./ProductCard";
-import { Product } from "../../types";
+import { Product } from "@/types";
 
 interface RelatedProductsProps {
   categoryId: string;

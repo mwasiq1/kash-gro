@@ -3,9 +3,127 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String?   @unique
+  phone     String?   @unique
+  name      String?
+  clerkId   String?   @unique
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  addresses Address[]
+  orders    Order[]
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  label     String
+  line1     String
+  line2     String?
+  city      String
+  state     String
+  pincode   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String?   @unique
+  imageUrl  String?
+  sortOrder Int       @default(0)
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String?     @unique
+  description String
+  mrp         Float
+  unit        String
+  categoryId  String
+  stock       Int         @default(10)
+  lowStockAt  Int         @default(5)
+  isFeatured  Boolean     @default(false)
+  isActive    Boolean     @default(true)
+  tags        String[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  images      String[]
+  price       Float
+  orderItems  OrderItem[]
+  category    Category    @relation(fields: [categoryId], references: [id])
+}
+
+model Order {
+  id               String        @id @default(cuid())
+  orderNumber      String        @unique
+  userId           String
+  totalAmount      Float
+  deliveryAddress  String
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
+  confirmedAt      DateTime?
+  processingAt     DateTime?
+  outForDeliveryAt DateTime?
+  deliveredAt      DateTime?
+  cancelledAt      DateTime?
+  cancelReason     String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  user             User          @relation(fields: [userId], references: [id])
+  items            OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  title     String
+  linkUrl   String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PromoCode {
+  id                String       @id @default(cuid())
+  code              String       @unique
+  discountType      DiscountType @default(FLAT)
+  discountValue     Float
+  minOrderAmount    Float        @default(0)
+  maxDiscountAmount Float?
+  usageLimit        Int?
+  usedCount         Int          @default(0)
+  startDate         DateTime     @default(now())
+  endDate           DateTime?
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 }
 
 enum Role {
@@ -29,111 +147,7 @@ enum PaymentStatus {
   FAILED
 }
 
-model User {
-  id          String   @id @default(cuid())
-  email       String?  @unique
-  phone       String?  @unique
-  name        String?
-  clerkId     String?  @unique
-  role        Role     @default(USER)
-  orders      Order[]
-  addresses   Address[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Address {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  label     String   // e.g., "Home", "Office"
-  line1     String
-  line2     String?
-  city      String
-  state     String
-  pincode   String
-  isDefault Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Category {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  slug      String?   @unique
-  imageUrl  String?
-  sortOrder Int       @default(0)
-  isActive  Boolean   @default(true)
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-model Product {
-  id           String      @id @default(cuid())
-  name         String
-  slug         String?     @unique
-  description  String
-  mrp          Float
-  sellingPrice Float
-  unit         String
-  imageUrl     String
-  categoryId   String
-  category     Category    @relation(fields: [categoryId], references: [id])
-  stock        Int         @default(10)
-  lowStockAt   Int         @default(5)
-  isFeatured   Boolean     @default(false)
-  isActive     Boolean     @default(true)
-  tags         String[]
-  orderItems   OrderItem[]
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-}
-
-model Order {
-  id                String        @id @default(cuid())
-  orderNumber       String        @unique
-  userId            String
-  user              User          @relation(fields: [userId], references: [id])
-  items             OrderItem[]
-  totalAmount       Float
-  deliveryAddress   String
-  status            OrderStatus   @default(PENDING)
-  paymentStatus     PaymentStatus @default(PENDING)
-  confirmedAt       DateTime?
-  processingAt      DateTime?
-  outForDeliveryAt  DateTime?
-  deliveredAt       DateTime?
-  cancelledAt       DateTime?
-  cancelReason      String?
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-}
-
-model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  price     Float
-}
-
-model Banner {
-  id       String  @id @default(cuid())
-  imageUrl String
-  linkUrl  String?
-  isActive Boolean @default(true)
-}
-
-model PromoCode {
-  id             String    @id @default(cuid())
-  code           String    @unique
-  discountAmount Float
-  minOrderValue  Float     @default(0)
-  isActive       Boolean   @default(true)
-  expiresAt      DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+enum DiscountType {
+  PERCENTAGE
+  FLAT
 }

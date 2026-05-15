@@ -71,7 +71,7 @@ export default function OrdersPage() {
             <ShoppingBag className="w-10 h-10 text-gray-200" />
           </div>
           <h2 className="text-xl font-black text-[#1C1C1C] mb-2">No orders yet</h2>
-          <p className="text-gray-500 mb-8 max-w-xs mx-auto">Looks like you haven't placed any orders yet. Start shopping to see them here!</p>
+          <p className="text-gray-500 mb-8 max-w-xs mx-auto">Looks like you haven&apos;t placed any orders yet. Start shopping to see them here!</p>
           <Link href="/" className="bg-[#0C831F] text-white font-black px-10 py-4 rounded-2xl hover:bg-[#096618] transition-all shadow-lg shadow-green-100">
             Start Shopping
           </Link>

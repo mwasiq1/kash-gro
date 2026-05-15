@@ -7,9 +7,9 @@ interface QuantityStepperProps {
   product: {
     id: string;
     name: string;
-    sellingPrice: number;
+    price: number;
     unit: string;
-    imageUrl: string;
+    images: string[];
     stock: number;
   };
 }
@@ -24,9 +24,9 @@ export default function QuantityStepper({ product }: QuantityStepperProps) {
       addItem({
         id: product.id,
         name: product.name,
-        sellingPrice: product.sellingPrice,
+        price: product.price,
         unit: product.unit,
-        imageUrl: product.imageUrl,
+        image: product.images[0] || "",
       });
     }
   };

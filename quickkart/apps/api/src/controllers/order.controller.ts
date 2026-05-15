@@ -74,7 +74,7 @@ export const createOrder = async (
         const product = productsInDb.find((p) => p.id === item.productId);
         if (!product) throw new Error("INVALID_PRODUCT");
 
-        const price = product.sellingPrice;
+        const price = product.price;
         totalAmount += price * item.quantity;
 
         return {

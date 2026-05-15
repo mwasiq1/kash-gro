@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
 import { Edit, Search, Trash2, Plus, AlertTriangle } from "lucide-react";
@@ -118,7 +118,7 @@ export default function ProductTable() {
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 relative rounded border overflow-hidden bg-gray-100">
                           <Image
-                            src={product.imageUrl}
+                            src={product.images[0] || ""}
                             alt={product.name}
                             fill
                             className="object-cover"
@@ -131,8 +131,8 @@ export default function ProductTable() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">₹{product.sellingPrice.toFixed(2)}</div>
-                      {product.mrp > product.sellingPrice && (
+                      <div className="text-sm text-gray-900">₹{product.price.toFixed(2)}</div>
+                      {product.mrp > product.price && (
                         <div className="text-xs text-gray-500 line-through">₹{product.mrp.toFixed(2)}</div>
                       )}
                     </td>

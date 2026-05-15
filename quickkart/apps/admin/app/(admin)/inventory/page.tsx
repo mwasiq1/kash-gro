@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { fetchApi } from "../../lib/api";
-import InventoryTable from "../../components/inventory/InventoryTable";
-import BulkUpdateModal from "../../components/inventory/BulkUpdateModal";
+import { fetchApi } from "@/lib/api";
+import InventoryTable from "../../../components/inventory/InventoryTable";
+import BulkUpdateModal from "../../../components/inventory/BulkUpdateModal";
 import { Download, Upload, PackageSearch, RefreshCw } from "lucide-react";
 import Papa from "papaparse";
 

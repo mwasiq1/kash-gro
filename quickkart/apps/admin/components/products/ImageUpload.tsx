@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { UploadCloud, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "../../lib/utils";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 
 interface ImageUploadProps {
   value: string;

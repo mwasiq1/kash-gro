@@ -8,9 +8,13 @@ interface ProductGalleryProps {
 }
 
 export default function ProductGallery({ images }: ProductGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState(images[0]);
+  const [selectedImage, setSelectedImage] = useState(images && images.length > 0 ? images[0] : "");
 
-  if (!images || images.length === 0) return null;
+  if (!images || images.length === 0) return (
+    <div className="aspect-square w-full bg-gray-50 rounded-2xl flex items-center justify-center text-gray-300">
+      No image available
+    </div>
+  );
 
   return (
     <div className="flex flex-col gap-4">

@@ -3,16 +3,10 @@
 import React from "react";
 import { useCartStore } from "../../stores/cart.store";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Product } from "@/types";
 
 interface AddToCartButtonProps {
-  product: {
-    id: string;
-    name: string;
-    sellingPrice: number;
-    unit: string;
-    imageUrl: string;
-    stock: number;
-  };
+  product: Product;
 }
 
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
@@ -27,9 +21,9 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
       addItem({
         id: product.id,
         name: product.name,
-        sellingPrice: product.sellingPrice,
+        price: product.price,
         unit: product.unit,
-        imageUrl: product.imageUrl,
+        image: product.images[0] || "",
       });
     }
   };

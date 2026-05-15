@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import { addressSchema } from "@quickkart/shared";
 
 const prisma = new PrismaClient();
 
@@ -44,7 +45,8 @@ export const createAddress = async (
       return;
     }
 
-    const { label, line1, line2, city, state, pincode, isDefault } = req.body;
+    const validatedData = addressSchema.parse(req.body);
+    const { label, line1, line2, city, state, pincode, isDefault } = validatedData;
 
     const user = await prisma.user.findUnique({
       where: { clerkId },

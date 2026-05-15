@@ -1,6 +1,6 @@
 import React from "react";
 import ProductForm from "../../../../components/products/ProductForm";
-import { fetchApi } from "../../../../lib/api";
+import { fetchApi } from "@/lib/api";
 import { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";

@@ -9,9 +9,9 @@ interface Product {
   name: string;
   description: string;
   mrp: number;
-  sellingPrice: number;
+  price: number;
   unit: string;
-  imageUrl: string;
+  images: string[];
   category?: { name: string };
 }
 
@@ -21,7 +21,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const cartItem = items.find((i) => i.id === product.id);
   const quantity = cartItem?.quantity ?? 0;
   const discount = Math.round(
-    ((product.mrp - product.sellingPrice) / product.mrp) * 100
+    ((product.mrp - product.price) / product.mrp) * 100
   );
 
   const handleAdd = (e: React.MouseEvent) => {
@@ -30,9 +30,9 @@ export default function ProductCard({ product }: { product: Product }) {
     addItem({
       id: product.id,
       name: product.name,
-      sellingPrice: product.sellingPrice,
+      price: product.price,
       unit: product.unit,
-      imageUrl: product.imageUrl,
+      image: product.images[0] || "",
     });
   };
 
@@ -52,7 +52,7 @@ export default function ProductCard({ product }: { product: Product }) {
           </span>
         )}
         <img
-          src={product.imageUrl}
+          src={product.images[0]}
           alt={product.name}
           className="w-24 h-24 object-contain"
           onError={(e) => {
@@ -70,7 +70,7 @@ export default function ProductCard({ product }: { product: Product }) {
       {/* Price + CTA */}
       <div className="flex items-end justify-between mt-auto gap-1">
         <div>
-          <p className="text-base font-extrabold text-[#1C1C1C]">₹{product.sellingPrice}</p>
+          <p className="text-base font-extrabold text-[#1C1C1C]">₹{product.price}</p>
           {discount > 0 && (
             <p className="text-[11px] text-gray-400 line-through">₹{product.mrp}</p>
           )}
@@ -80,7 +80,7 @@ export default function ProductCard({ product }: { product: Product }) {
         {quantity === 0 ? (
           <button
             onClick={handleAdd}
-            className="flex items-center gap-1 bg-[#EBF9EE] border-2 border-[#0C831F] text-[#0C831F] font-bold text-sm px-3 py-1.5 rounded-xl hover:bg-[#0C831F] hover:text-white transition-all active:scale-95"
+            className="flex items-center justify-center gap-1 bg-[#EBF9EE] border-2 border-[#0C831F] text-[#0C831F] font-bold text-sm px-3 min-h-[44px] min-w-[44px] rounded-xl hover:bg-[#0C831F] hover:text-white transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" />
             ADD
@@ -89,14 +89,14 @@ export default function ProductCard({ product }: { product: Product }) {
           <div className="flex items-center bg-[#0C831F] rounded-xl overflow-hidden">
             <button
               onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
-              className="px-2 py-1.5 text-white hover:bg-[#0a6b19] transition"
+              className="px-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-white hover:bg-[#0a6b19] transition"
             >
               <Minus className="w-4 h-4" />
             </button>
             <span className="text-white font-bold text-sm w-6 text-center">{quantity}</span>
             <button
               onClick={handleAdd}
-              className="px-2 py-1.5 text-white hover:bg-[#0a6b19] transition"
+              className="px-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-white hover:bg-[#0a6b19] transition"
             >
               <Plus className="w-4 h-4" />
             </button>

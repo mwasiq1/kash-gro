@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { X, Loader2 } from "lucide-react";
 import ImageUpload from "../products/ImageUpload";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 
 const categorySchema = z.object({
   name: z.string().min(1, "Name is required"),

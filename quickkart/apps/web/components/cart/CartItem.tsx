@@ -8,9 +8,9 @@ interface CartItemProps {
   item: {
     id: string;
     name: string;
-    sellingPrice: number;
+    price: number;
     unit: string;
-    imageUrl: string;
+    image: string;
     quantity: number;
   };
 }
@@ -22,7 +22,7 @@ export default function CartItem({ item }: CartItemProps) {
     <div className="flex items-center gap-4 py-4 border-b border-gray-100 last:border-0">
       <div className="relative w-16 h-16 bg-[#F4F6FA] rounded-xl overflow-hidden flex-shrink-0 border border-gray-100">
         <Image
-          src={item.imageUrl}
+          src={item.image}
           alt={item.name}
           fill
           className="object-contain p-1"
@@ -35,7 +35,7 @@ export default function CartItem({ item }: CartItemProps) {
         </h4>
         <p className="text-xs text-gray-500 mt-0.5">{item.unit}</p>
         <p className="text-sm font-black text-[#1C1C1C] mt-1">
-          ₹{item.sellingPrice}
+          ₹{item.price}
         </p>
       </div>
 

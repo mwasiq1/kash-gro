@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 import ImageUpload from "./ImageUpload";
+import MultiImageUpload from "./MultiImageUpload";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
@@ -14,9 +15,9 @@ const productSchema = z.object({
   slug: z.string().optional(),
   description: z.string().min(1, "Description is required"),
   mrp: z.coerce.number().positive(),
-  sellingPrice: z.coerce.number().positive(),
+  price: z.coerce.number().positive(),
   unit: z.string().min(1, "Unit is required"),
-  imageUrl: z.string().url("Valid image URL is required").min(1, "Image is required"),
+  images: z.array(z.string()).min(1, "At least one image is required"),
   categoryId: z.string().min(1, "Category is required"),
   stock: z.coerce.number().int().min(0),
   lowStockAt: z.coerce.number().int().min(0),
@@ -50,9 +51,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       slug: initialData?.slug || "",
       description: initialData?.description || "",
       mrp: initialData?.mrp || 0,
-      sellingPrice: initialData?.sellingPrice || 0,
+      price: initialData?.price || 0,
       unit: initialData?.unit || "1 pc",
-      imageUrl: initialData?.imageUrl || "",
+      images: initialData?.images || [],
       categoryId: initialData?.categoryId || "",
       stock: initialData?.stock || 10,
       lowStockAt: initialData?.lowStockAt || 5,
@@ -62,7 +63,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     },
   });
 
-  const imageUrl = watch("imageUrl");
+  const images = watch("images");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -106,11 +107,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
-            <ImageUpload
-              value={imageUrl}
-              onChange={(url) => setValue("imageUrl" as any, url, { shouldValidate: true })}
+            <MultiImageUpload
+              value={images || []}
+              onChange={(urls) => setValue("images" as any, urls, { shouldValidate: true })}
             />
-            {errors.imageUrl && <p className="mt-1 text-sm text-red-600">{errors.imageUrl.message}</p>}
+            {errors.images && <p className="mt-1 text-sm text-red-600">{errors.images.message}</p>}
           </div>
 
           <div className="bg-gray-50 p-4 rounded-lg space-y-4">
@@ -222,10 +223,10 @@ export default function ProductForm({ initialData }: ProductFormProps) {
               <input
                 type="number"
                 step="0.01"
-                {...register("sellingPrice")}
+                {...register("price")}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F8C200] focus:ring-[#F8C200] sm:text-sm p-2 border"
               />
-              {errors.sellingPrice && <p className="mt-1 text-sm text-red-600">{errors.sellingPrice.message}</p>}
+              {errors.price && <p className="mt-1 text-sm text-red-600">{errors.price.message}</p>}
             </div>
           </div>
 

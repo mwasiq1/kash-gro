@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
-import { fetchApi } from "../lib/api";
+import { fetchApi } from "@/lib/api";
 
 export function useAdminGuard() {
   const router = useRouter();

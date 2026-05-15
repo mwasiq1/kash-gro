@@ -89,7 +89,7 @@ export default function SearchBar() {
             </div>
           ) : results.length === 0 ? (
             <div className="p-4 flex items-center justify-center text-sm text-gray-500">
-              No results for '{query}'
+              No results for &apos;{query}&apos;
             </div>
           ) : (
             <div className="py-2">
@@ -101,7 +101,7 @@ export default function SearchBar() {
                 >
                   <div className="w-10 h-10 bg-[#F4F6FA] rounded-md flex-shrink-0 flex items-center justify-center overflow-hidden border border-gray-50">
                     <img 
-                      src={product.imageUrl} 
+                      src={product.images[0]} 
                       alt={product.name} 
                       className="w-8 h-8 object-contain"
                       onError={(e) => {
@@ -113,7 +113,7 @@ export default function SearchBar() {
                     <p className="text-sm font-bold text-[#1C1C1C] truncate">{product.name}</p>
                     <p className="text-xs text-gray-400">{product.unit}</p>
                   </div>
-                  <p className="text-sm font-bold text-[#1C1C1C]">₹{product.sellingPrice}</p>
+                  <p className="text-sm font-bold text-[#1C1C1C]">₹{product.price}</p>
                 </div>
               ))}
             </div>

@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Plus, FolderOpen } from "lucide-react";
 import CategoryTable from "../../../components/categories/CategoryTable";
 import CategoryModal from "../../../components/categories/CategoryModal";
-import { fetchApi } from "../../../lib/api";
+import { fetchApi } from "@/lib/api";
 
 interface Category {
   id: string;

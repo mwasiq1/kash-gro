@@ -7,8 +7,6 @@ const prisma = new PrismaClient();
 
 const normalizeProduct = (product: any) => ({
   ...product,
-  price: product.sellingPrice,
-  images: [product.imageUrl],
 });
 
 // GET /api/products?categoryId=xxx&limit=30&skip=0&search=xxx

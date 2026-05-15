@@ -49,7 +49,7 @@ export default function CartDrawer() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div className="fixed inset-0 z-50 flex flex-col justify-end md:flex-row md:justify-end">
       {/* Backdrop */}
       <div 
         className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0"}`}
@@ -59,10 +59,10 @@ export default function CartDrawer() {
       {/* Drawer */}
       <div 
         onTransitionEnd={handleAnimationEnd}
-        className={`relative w-full md:w-[420px] h-full bg-[#F4F6FA] flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`relative w-full h-[90vh] rounded-t-2xl md:h-full md:w-[420px] md:rounded-none bg-[#F4F6FA] flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${isOpen ? "translate-y-0 md:translate-x-0" : "translate-y-full md:translate-y-0 md:translate-x-full"}`}
       >
         {/* Header */}
-        <header className="bg-white px-4 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        <header className="bg-white rounded-t-2xl md:rounded-none px-4 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10 shadow-sm">
           <h2 className="font-extrabold text-[#1C1C1C] text-lg flex items-center gap-2">
             My Cart
             {items.length > 0 && (
@@ -88,7 +88,7 @@ export default function CartDrawer() {
               </div>
               <h3 className="text-xl font-bold text-[#1C1C1C] mb-2">Your cart is empty</h3>
               <p className="text-gray-500 text-sm mb-6 max-w-[250px]">
-                Looks like you haven't added anything to your cart yet.
+                Looks like you haven&apos;t added anything to your cart yet.
               </p>
               <button
                 onClick={closeCart}

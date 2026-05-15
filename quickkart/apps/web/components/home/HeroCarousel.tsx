@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Banner {
   id: string;
-  imageUrl: string;
+  image: string;
   linkUrl?: string | null;
 }
 

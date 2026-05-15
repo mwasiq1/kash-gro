@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 
 const STATUS_OPTIONS = [

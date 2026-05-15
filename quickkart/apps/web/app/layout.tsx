@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   description: "Blinkit-style quick commerce app for groceries delivered in 10 minutes.",
 };
 
+export const viewport = {
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

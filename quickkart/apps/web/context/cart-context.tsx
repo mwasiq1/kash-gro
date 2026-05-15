@@ -5,9 +5,9 @@ import React, { createContext, useContext, useState, useCallback } from "react";
 export interface CartItem {
   id: string;
   name: string;
-  sellingPrice: number;
+  price: number;
   unit: string;
-  imageUrl: string;
+  image: string; // Keeping image for cart item representation but renaming sellingPrice
   quantity: number;
 }
 
@@ -58,7 +58,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const total = items.reduce((sum, i) => sum + i.sellingPrice * i.quantity, 0);
+  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (

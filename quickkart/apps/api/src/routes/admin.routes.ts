@@ -13,6 +13,13 @@ import {
   getInventory,
   updateStock,
   getAnalytics,
+  getBanners,
+  createBanner,
+  updateBanner,
+  deleteBanner,
+  getPromos,
+  createPromo,
+  updatePromo,
 } from "../controllers/admin.controller";
 
 const router = Router();
@@ -42,6 +49,17 @@ router.patch("/inventory/:id", updateStock as any);
 
 // Analytics route
 router.get("/analytics", getAnalytics as any);
+
+// Marketing: Banners
+router.get("/banners", getBanners as any);
+router.post("/banners", createBanner as any);
+router.patch("/banners/:id", updateBanner as any);
+router.delete("/banners/:id", deleteBanner as any);
+
+// Marketing: Promo Codes
+router.get("/promos", getPromos as any);
+router.post("/promos", createPromo as any);
+router.patch("/promos/:id", updatePromo as any);
 
 export default router;
 

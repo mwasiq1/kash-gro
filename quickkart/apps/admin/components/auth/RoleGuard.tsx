@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { fetchApi } from "../../lib/api";
+import { fetchApi } from "@/lib/api";
 
 interface RoleGuardProps {
   children: React.ReactNode;
