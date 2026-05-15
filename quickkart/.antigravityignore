@@ -13,4 +13,3 @@ yarn.lock
 **/__snapshots__/
 *.log
 public/assets/
-prisma/migrations/
