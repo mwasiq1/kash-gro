@@ -52,13 +52,16 @@ export default function CheckoutPage() {
     try {
       const token = await getToken();
       
+      const deliveryFee = cartTotal >= 200 ? 0 : 25;
+      const grandTotal = cartTotal + deliveryFee;
+
       const response = await fetchApi("/orders", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           addressId: selectedAddressId,
           items: items.map(i => ({ productId: i.id, quantity: i.quantity })),
-          totalAmount: cartTotal,
+          totalAmount: grandTotal,
         }),
       });
 
@@ -112,7 +115,7 @@ export default function CheckoutPage() {
 
             <button
               onClick={handlePlaceOrder}
-              disabled={isPlacingOrder || !selectedAddressId}
+              disabled={isPlacingOrder || !selectedAddressId || items.length === 0}
               className="w-full bg-[#0C831F] text-white font-black py-5 rounded-2xl text-xl shadow-lg hover:bg-[#096618] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 group"
             >
               {isPlacingOrder ? (

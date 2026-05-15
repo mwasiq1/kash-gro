@@ -1,11 +1,14 @@
 export interface Product {
   id: string;
   name: string;
+  slug?: string | null;
   description: string;
   mrp: number;
   sellingPrice: number;
+  price: number; // Normalized field
   unit: string;
   imageUrl: string;
+  images: string[]; // Normalized field
   categoryId: string;
   category?: {
     id: string;

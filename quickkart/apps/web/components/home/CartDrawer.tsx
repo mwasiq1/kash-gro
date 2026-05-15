@@ -80,17 +80,53 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
         </div>
 
         {items.length > 0 && (
-          <div className="p-4 border-t bg-white">
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-semibold text-gray-600">Subtotal</span>
-              <span className="font-extrabold text-[#1C1C1C] text-lg">₹{cartTotal.toFixed(0)}</span>
+          <div className="p-4 border-t bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+            {/* Free Delivery Progress */}
+            <div className="mb-4">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                  {cartTotal >= 200 ? (
+                    <span className="text-[#0C831F]">Yay! Free delivery unlocked</span>
+                  ) : (
+                    `Add ₹${(200 - cartTotal).toFixed(0)} more for free delivery`
+                  )}
+                </span>
+                <span className="text-[11px] font-black text-[#1C1C1C]">₹200</span>
+              </div>
+              <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-[#0C831F] transition-all duration-500" 
+                  style={{ width: `${Math.min(100, (cartTotal / 200) * 100)}%` }}
+                />
+              </div>
             </div>
+
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-500 font-medium">Subtotal</span>
+                <span className="font-bold text-[#1C1C1C]">₹{cartTotal.toFixed(0)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-500 font-medium">Delivery Fee</span>
+                <span className={`font-bold ${cartTotal >= 200 ? "text-[#0C831F]" : "text-[#1C1C1C]"}`}>
+                  {cartTotal >= 200 ? "FREE" : "₹25"}
+                </span>
+              </div>
+            </div>
+
             <Link
               href="/checkout"
               onClick={onClose}
-              className="w-full bg-[#0C831F] text-white font-bold py-4 rounded-xl flex justify-center hover:bg-[#0a6b19] active:scale-[0.98] transition-all text-base"
+              className="w-full bg-[#0C831F] text-white font-black py-4 rounded-xl flex items-center justify-between px-6 hover:bg-[#0a6b19] active:scale-[0.98] transition-all text-base shadow-lg shadow-green-100"
             >
-              Proceed to Checkout →
+              <div className="text-left">
+                <p className="text-[10px] uppercase opacity-80 leading-none mb-1">Total</p>
+                <p className="font-black">₹{(cartTotal + (cartTotal >= 200 ? 0 : 25)).toFixed(0)}</p>
+              </div>
+              <span className="flex items-center gap-1 font-black">
+                Proceed to Checkout
+                <span className="text-xl">→</span>
+              </span>
             </Link>
           </div>
         )}

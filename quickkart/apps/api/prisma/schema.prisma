@@ -60,6 +60,10 @@ model Address {
 model Category {
   id        String    @id @default(cuid())
   name      String    @unique
+  slug      String?   @unique
+  imageUrl  String?
+  sortOrder Int       @default(0)
+  isActive  Boolean   @default(true)
   products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -87,19 +91,23 @@ model Product {
 }
 
 model Order {
-  id              String        @id @default(cuid())
-  orderNumber     String        @unique
-  userId          String
-  user            User          @relation(fields: [userId], references: [id])
-  items           OrderItem[]
-  totalAmount     Float
-  deliveryAddress String
-  status          OrderStatus   @default(PENDING)
-  paymentStatus   PaymentStatus @default(PENDING)
-  cancelledAt     DateTime?
-  cancelReason    String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id                String        @id @default(cuid())
+  orderNumber       String        @unique
+  userId            String
+  user              User          @relation(fields: [userId], references: [id])
+  items             OrderItem[]
+  totalAmount       Float
+  deliveryAddress   String
+  status            OrderStatus   @default(PENDING)
+  paymentStatus     PaymentStatus @default(PENDING)
+  confirmedAt       DateTime?
+  processingAt      DateTime?
+  outForDeliveryAt  DateTime?
+  deliveredAt       DateTime?
+  cancelledAt       DateTime?
+  cancelReason      String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
 model OrderItem {

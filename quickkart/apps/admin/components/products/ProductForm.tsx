@@ -208,7 +208,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">MRP ($)</label>
+              <label className="block text-sm font-medium text-gray-700">MRP (₹)</label>
               <input
                 type="number"
                 step="0.01"
@@ -218,7 +218,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
               {errors.mrp && <p className="mt-1 text-sm text-red-600">{errors.mrp.message}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Selling Price ($)</label>
+              <label className="block text-sm font-medium text-gray-700">Selling Price (₹)</label>
               <input
                 type="number"
                 step="0.01"

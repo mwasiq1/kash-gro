@@ -182,16 +182,21 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
               onClick={() => onSelect(addr.id)}
               className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all duration-300 group ${
                 selectedId === addr.id
-                  ? "border-[#0C831F] bg-[#F8FFF9] shadow-md scale-[1.02]"
+                  ? "border-[#0C831F] bg-[#F8FFF9] shadow-md scale-[1.02] ring-2 ring-[#0C831F] ring-opacity-20"
                   : "border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
-                <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-md tracking-wider ${
-                  selectedId === addr.id ? "bg-[#0C831F] text-white" : "bg-gray-100 text-gray-500"
-                }`}>
-                  {addr.label}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-md tracking-wider ${
+                    selectedId === addr.id ? "bg-[#0C831F] text-white" : "bg-gray-100 text-gray-500"
+                  }`}>
+                    {addr.label}
+                  </span>
+                  {addr.isDefault && (
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Default</span>
+                  )}
+                </div>
                 {selectedId === addr.id && (
                   <CheckCircle2 className="w-5 h-5 text-[#0C831F]" />
                 )}

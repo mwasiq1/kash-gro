@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import ProductGallery from "../../../../components/product/ProductGallery";
-import QuantityStepper from "../../../../components/product/QuantityStepper";
+import AddToCartButton from "../../../../components/product/AddToCartButton";
 import RelatedProducts from "../../../../components/product/RelatedProducts";
 import { Product } from "../../../../types";
 
@@ -15,9 +15,9 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
   const router = useRouter();
   const discount = Math.round(((product.mrp - product.sellingPrice) / product.mrp) * 100);
 
-  // Mocking multiple images for gallery since schema only has one imageUrl
-  // In a real app, images would be an array in the DB.
-  const galleryImages = [product.imageUrl, product.imageUrl, product.imageUrl];
+  const galleryImages = product.images && product.images.length > 0 
+    ? product.images 
+    : [product.imageUrl];
 
   return (
     <div className="min-h-screen bg-white md:bg-[#F4F6FA] pb-24">
@@ -88,7 +88,7 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
 
             {/* Action Area */}
             <div className="w-full md:max-w-xs mb-8">
-              <QuantityStepper product={product} />
+              <AddToCartButton product={product} />
             </div>
 
             {/* Description */}
