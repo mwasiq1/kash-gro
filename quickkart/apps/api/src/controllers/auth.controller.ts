@@ -53,3 +53,49 @@ export const syncUser = asyncHandler(
     });
   }
 );
+
+/**
+ * GET /auth/me
+ * Protected — requires a valid Clerk token.
+ * Returns the current authenticated user's profile and role.
+ */
+export const getMe = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    // If the token decoded correctly, req.user will have the role
+    if (!req.user) {
+      res.status(401).json({ success: false, error: "Unauthorized" });
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { clerkId: req.user.uid },
+    });
+
+    if (!user) {
+      // In dev environment with fake token, we can mock it
+      if (req.user.uid === "temp-clerk-id") {
+        res.json({
+          success: true,
+          data: {
+            id: "temp-id",
+            role: "ADMIN",
+            name: "Admin User",
+          },
+        });
+        return;
+      }
+      res.status(404).json({ success: false, error: "User not found" });
+      return;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        id: user.id,
+        role: user.role,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  }
+);

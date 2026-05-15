@@ -7,12 +7,8 @@ import { fetchApi } from "../../lib/api";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-interface TopNavProps {
-  onCartOpen: () => void;
-}
-
-export default function TopNav({ onCartOpen }: TopNavProps) {
-  const { itemCount, cartTotal } = useCart();
+export default function TopNav() {
+  const { itemCount, cartTotal, openCart } = useCart();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -73,7 +69,7 @@ export default function TopNav({ onCartOpen }: TopNavProps) {
           <p className="text-[11px] text-gray-400 truncate max-w-[180px]">Your location, India</p>
         </div>
         <button
-          onClick={onCartOpen}
+          onClick={openCart}
           className="ml-auto relative flex items-center gap-2 bg-[#0C831F] text-white text-xs font-bold px-3 py-2 rounded-xl"
         >
           <ShoppingCart className="w-4 h-4" />

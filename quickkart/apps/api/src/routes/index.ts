@@ -5,6 +5,10 @@ import categoriesRouter from "./categories.routes";
 import productsRouter from "./products.routes";
 import bannersRouter from "./banners.routes";
 import orderRouter from "./order.routes";
+import promoRouter from "./promo.routes";
+import addressRouter from "./address.routes";
+import uploadRouter from "./upload.routes";
+import adminRouter from "./admin.routes";
 
 const router = Router();
 
@@ -14,5 +18,9 @@ router.use("/categories", categoriesRouter);
 router.use("/products", productsRouter);
 router.use("/banners", bannersRouter);
 router.use("/orders", orderRouter);
+router.use("/promo", promoRouter);
+router.use("/addresses", addressRouter);
+router.use("/upload", uploadRouter);
+router.use("/admin", adminRouter);
 
 export default router;

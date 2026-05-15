@@ -16,6 +16,7 @@ enum Role {
 
 enum OrderStatus {
   PENDING
+  PLACED
   PROCESSING
   OUT_FOR_DELIVERY
   DELIVERED
@@ -36,8 +37,24 @@ model User {
   clerkId     String?  @unique
   role        Role     @default(USER)
   orders      Order[]
+  addresses   Address[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  label     String   // e.g., "Home", "Office"
+  line1     String
+  line2     String?
+  city      String
+  state     String
+  pincode   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
@@ -51,6 +68,7 @@ model Category {
 model Product {
   id           String      @id @default(cuid())
   name         String
+  slug         String?     @unique
   description  String
   mrp          Float
   sellingPrice Float
@@ -58,22 +76,30 @@ model Product {
   imageUrl     String
   categoryId   String
   category     Category    @relation(fields: [categoryId], references: [id])
+  stock        Int         @default(10)
+  lowStockAt   Int         @default(5)
+  isFeatured   Boolean     @default(false)
+  isActive     Boolean     @default(true)
+  tags         String[]
   orderItems   OrderItem[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 }
 
 model Order {
-  id            String        @id @default(cuid())
-  userId        String
-  user          User          @relation(fields: [userId], references: [id])
-  items         OrderItem[]
-  totalAmount   Float
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+  totalAmount     Float
   deliveryAddress String
-  status        OrderStatus   @default(PENDING)
-  paymentStatus PaymentStatus @default(PENDING)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  status          OrderStatus   @default(PENDING)
+  paymentStatus   PaymentStatus @default(PENDING)
+  cancelledAt     DateTime?
+  cancelReason    String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
 model OrderItem {
@@ -91,4 +117,15 @@ model Banner {
   imageUrl String
   linkUrl  String?
   isActive Boolean @default(true)
+}
+
+model PromoCode {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  discountAmount Float
+  minOrderValue  Float     @default(0)
+  isActive       Boolean   @default(true)
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }

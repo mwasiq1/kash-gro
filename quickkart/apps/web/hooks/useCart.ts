@@ -23,10 +23,16 @@ export function useCart() {
 
   // Always subscribe so components re-render when cart changes after mount
   const items = useCartStore((s) => s.items);
+  const isOpen = useCartStore((s) => s.isOpen);
+  const promoCode = useCartStore((s) => s.promoCode);
   const addItem = useCartStore((s) => s.addItem);
   const removeItem = useCartStore((s) => s.removeItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const clearCart = useCartStore((s) => s.clearCart);
+  const openCart = useCartStore((s) => s.openCart);
+  const closeCart = useCartStore((s) => s.closeCart);
+  const applyPromo = useCartStore((s) => s.applyPromo);
+  const removePromo = useCartStore((s) => s.removePromo);
   const _cartTotal = useCartStore((s) => s.cartTotal);
   const _itemCount = useCartStore((s) => s.itemCount);
 
@@ -35,10 +41,16 @@ export function useCart() {
     return {
       isMounted: false,
       items: [] as CartItem[],
+      isOpen: false,
+      promoCode: null,
       addItem,       // actions are always safe to call (they don't render)
       removeItem,
       updateQuantity,
       clearCart,
+      openCart,
+      closeCart,
+      applyPromo,
+      removePromo,
       cartTotal: 0,
       itemCount: 0,
     };
@@ -47,10 +59,16 @@ export function useCart() {
   return {
     isMounted: true,
     items,
+    isOpen,
+    promoCode,
     addItem,
     removeItem,
     updateQuantity,
     clearCart,
+    openCart,
+    closeCart,
+    applyPromo,
+    removePromo,
     cartTotal: _cartTotal(),
     itemCount: _itemCount(),
   };

@@ -12,10 +12,16 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
+  isOpen: boolean;
+  promoCode: { code: string; discount: number } | null;
   addItem: (product: Omit<CartItem, "quantity">) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
+  openCart: () => void;
+  closeCart: () => void;
+  applyPromo: (code: string, discount: number) => void;
+  removePromo: () => void;
   // Derived
   cartTotal: () => number;
   itemCount: () => number;
@@ -25,6 +31,8 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      isOpen: false,
+      promoCode: null,
 
       addItem: (product) => {
         set((state) => {
@@ -34,9 +42,10 @@ export const useCartStore = create<CartStore>()(
               items: state.items.map((i) =>
                 i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
               ),
+              isOpen: true, // Auto open cart when item added
             };
           }
-          return { items: [...state.items, { ...product, quantity: 1 }] };
+          return { items: [...state.items, { ...product, quantity: 1 }], isOpen: true };
         });
       },
 
@@ -54,7 +63,13 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], promoCode: null }),
+      
+      openCart: () => set({ isOpen: true }),
+      closeCart: () => set({ isOpen: false }),
+      
+      applyPromo: (code, discount) => set({ promoCode: { code, discount } }),
+      removePromo: () => set({ promoCode: null }),
 
       // Derived getters (called as functions)
       cartTotal: () =>

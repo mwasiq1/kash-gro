@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
-import CartBottomSheet from "../components/cart/CartBottomSheet";
+import CartDrawer from "../components/cart/CartDrawer";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -39,7 +39,7 @@ export default function RootLayout({
             {children}
           </div>
           {/* Global cart UI — persists across all pages, powered by Zustand */}
-          <CartBottomSheet />
+          <CartDrawer />
         </ClerkProvider>
       </body>
     </html>

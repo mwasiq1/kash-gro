@@ -40,6 +40,7 @@ export interface Product {
   imageUrl: string;
   categoryId: string;
   category?: Partial<Category>;
+  stock: number;
   createdAt: string;
   updatedAt: string;
 }

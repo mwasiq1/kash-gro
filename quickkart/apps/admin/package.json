@@ -9,10 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.3.3",
+    "@hookform/resolvers": "^5.2.2",
     "@quickkart/shared": "*",
+    "axios": "^1.16.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.378.0",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.75.0",
+    "tailwind-merge": "^2.6.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^20",

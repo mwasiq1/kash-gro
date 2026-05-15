@@ -40,20 +40,20 @@ async function main() {
   // 3. Products
   const productsData = [
     // Dairy & Breakfast
-    { name: 'Amul Taaza Toned Milk', description: 'Fresh toned milk', mrp: 34, sellingPrice: 34, unit: '500ml', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id },
-    { name: 'Britannia Daily Fresh White Bread', description: 'Soft white bread', mrp: 40, sellingPrice: 38, unit: '400g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id },
-    { name: 'Amul Butter', description: 'Pasteurised Butter', mrp: 58, sellingPrice: 56, unit: '100g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id },
-    { name: 'Nandini GoodLife Milk', description: 'UHT Milk', mrp: 60, sellingPrice: 58, unit: '1L', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id },
-    { name: 'Kellogg\'s Corn Flakes', description: 'Breakfast cereal', mrp: 180, sellingPrice: 170, unit: '475g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id },
-    { name: 'Gowardhan Paneer', description: 'Fresh paneer', mrp: 95, sellingPrice: 90, unit: '200g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id },
+    { name: 'Amul Taaza Toned Milk', description: 'Fresh toned milk', mrp: 34, sellingPrice: 34, unit: '500ml', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id, stock: 15 },
+    { name: 'Britannia Daily Fresh White Bread', description: 'Soft white bread', mrp: 40, sellingPrice: 38, unit: '400g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id, stock: 5 },
+    { name: 'Amul Butter', description: 'Pasteurised Butter', mrp: 58, sellingPrice: 56, unit: '100g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id, stock: 0 },
+    { name: 'Nandini GoodLife Milk', description: 'UHT Milk', mrp: 60, sellingPrice: 58, unit: '1L', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id, stock: 20 },
+    { name: 'Kellogg\'s Corn Flakes', description: 'Breakfast cereal', mrp: 180, sellingPrice: 170, unit: '475g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id, stock: 8 },
+    { name: 'Gowardhan Paneer', description: 'Fresh paneer', mrp: 95, sellingPrice: 90, unit: '200g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[0].id, stock: 12 },
     
     // Fruits & Vegetables
-    { name: 'Onion (Pyaz)', description: 'Fresh red onions', mrp: 40, sellingPrice: 32, unit: '1kg', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id },
-    { name: 'Potato (Aloo)', description: 'Fresh potatoes', mrp: 30, sellingPrice: 25, unit: '1kg', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id },
-    { name: 'Tomato (Tamatar)', description: 'Fresh red tomatoes', mrp: 50, sellingPrice: 42, unit: '1kg', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id },
-    { name: 'Green Chilli', description: 'Fresh green chillies', mrp: 15, sellingPrice: 12, unit: '100g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id },
-    { name: 'Coriander Leaves', description: 'Fresh coriander (Dhaniya)', mrp: 20, sellingPrice: 15, unit: '1 bunch', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id },
-    { name: 'Banana Robusta', description: 'Fresh bananas', mrp: 60, sellingPrice: 54, unit: '1 dozen', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id },
+    { name: 'Onion (Pyaz)', description: 'Fresh red onions', mrp: 40, sellingPrice: 32, unit: '1kg', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id, stock: 50 },
+    { name: 'Potato (Aloo)', description: 'Fresh potatoes', mrp: 30, sellingPrice: 25, unit: '1kg', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id, stock: 40 },
+    { name: 'Tomato (Tamatar)', description: 'Fresh red tomatoes', mrp: 50, sellingPrice: 42, unit: '1kg', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id, stock: 2 },
+    { name: 'Green Chilli', description: 'Fresh green chillies', mrp: 15, sellingPrice: 12, unit: '100g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id, stock: 10 },
+    { name: 'Coriander Leaves', description: 'Fresh coriander (Dhaniya)', mrp: 20, sellingPrice: 15, unit: '1 bunch', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id, stock: 15 },
+    { name: 'Banana Robusta', description: 'Fresh bananas', mrp: 60, sellingPrice: 54, unit: '1 dozen', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[1].id, stock: 5 },
     
     // Snacks & Munchies
     { name: 'Haldiram\'s Bhujia Sev', description: 'Spicy tepary bean and gram flour noodles', mrp: 110, sellingPrice: 105, unit: '400g', imageUrl: 'https://via.placeholder.com/150', categoryId: categories[2].id },
@@ -89,6 +89,11 @@ async function main() {
     if (!exists) {
       await prisma.product.create({ data: p });
       createdProducts++;
+    } else {
+      await prisma.product.update({
+        where: { id: exists.id },
+        data: { stock: p.stock },
+      });
     }
   }
   console.log(`Created ${createdProducts} new products`);
@@ -102,6 +107,21 @@ async function main() {
   await prisma.banner.deleteMany({}); // refresh banners
   await prisma.banner.createMany({ data: bannersData });
   console.log('Created 2 banners');
+
+  // 5. Promo Codes
+  const promoData = [
+    { code: 'WELCOME50', discountAmount: 50, minOrderValue: 200 },
+    { code: 'SAVE100', discountAmount: 100, minOrderValue: 500 },
+  ];
+
+  for (const promo of promoData) {
+    await prisma.promoCode.upsert({
+      where: { code: promo.code },
+      update: {},
+      create: promo,
+    });
+  }
+  console.log('Created 2 promo codes');
 
   console.log('Database seeded successfully!');
 }

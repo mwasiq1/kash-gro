@@ -1,10 +1,15 @@
 import { Router } from "express";
-import { createOrder } from "../controllers/order.controller";
+import { createOrder, getOrderById, getOrders, cancelOrder } from "../controllers/order.controller";
 import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
 
-// Protect the order creation route with authMiddleware
-router.post("/", authMiddleware as any, createOrder as any);
+// All order routes are protected
+router.use(authMiddleware as any);
+
+router.get("/", getOrders as any);
+router.post("/", createOrder as any);
+router.get("/:id", getOrderById as any);
+router.patch("/:id/cancel", cancelOrder as any);
 
 export default router;

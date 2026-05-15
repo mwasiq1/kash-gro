@@ -5,7 +5,6 @@ import HeroCarousel from "./HeroCarousel";
 import CategoryBar from "./CategoryBar";
 import ProductCard from "../product/ProductCard";
 import TopNav from "./TopNav";
-import CartDrawer from "./CartDrawer";
 import { Package } from "lucide-react";
 
 interface Category {
@@ -33,7 +32,6 @@ interface HomeClientProps {
 
 export default function HomeClient({ categories, allProducts }: HomeClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [cartOpen, setCartOpen] = useState(false);
 
   const filteredProducts = useMemo(() => {
     if (!selectedCategory) return allProducts;
@@ -46,7 +44,7 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
 
   return (
     <div className="min-h-screen bg-[#F4F6FA]">
-      <TopNav onCartOpen={() => setCartOpen(true)} />
+      <TopNav />
 
       <main className="pb-24">
         <HeroCarousel />
@@ -78,8 +76,6 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
           )}
         </section>
       </main>
-
-      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </div>
   );
 }

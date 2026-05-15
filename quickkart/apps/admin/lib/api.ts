@@ -1,18 +1,29 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1";
+import axios from "axios";
 
-export async function fetchApi(endpoint: string, options: RequestInit = {}) {
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.message || "API request failed");
+export const fetchApi = async (url: string, options: any = {}) => {
+  try {
+    const isFormData = options.body instanceof FormData;
+    const response = await api({
+      url,
+      method: options.method || "GET",
+      data: isFormData ? options.body : (options.body ? JSON.parse(options.body) : undefined),
+      headers: {
+        ...(isFormData ? { "Content-Type": "multipart/form-data" } : {}),
+        ...options.headers,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error("API Fetch Error:", error.response?.data || error.message);
+    return error.response?.data || { success: false, error: "Something went wrong" };
   }
+};
 
-  return res.json();
-}
+export default api;
