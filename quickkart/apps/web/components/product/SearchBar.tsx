@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Search, Loader2 } from "lucide-react";
 import { fetchApi } from "../../lib/api";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -99,14 +100,13 @@ export default function SearchBar() {
                   onClick={() => handleProductClick(product.id)}
                   className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer transition"
                 >
-                  <div className="w-10 h-10 bg-[#F4F6FA] rounded-md flex-shrink-0 flex items-center justify-center overflow-hidden border border-gray-50">
-                    <img 
-                      src={product.images[0]} 
+                  <div className="relative w-10 h-10 bg-[#F4F6FA] rounded-md flex-shrink-0 flex items-center justify-center overflow-hidden border border-gray-50">
+                    <Image 
+                      src={product.images[0] || "https://placehold.co/32x32?text=P"} 
                       alt={product.name} 
-                      className="w-8 h-8 object-contain"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://placehold.co/32x32?text=P";
-                      }}
+                      fill
+                      className="object-contain p-1"
+                      sizes="40px"
                     />
                   </div>
                   <div className="flex-1 min-w-0">

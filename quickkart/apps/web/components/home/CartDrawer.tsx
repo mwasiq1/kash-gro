@@ -2,6 +2,7 @@
 
 import { X, Minus, Plus, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "../../hooks/useCart";
 
 interface CartDrawerProps {
@@ -50,14 +51,15 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           ) : (
             items.map((item) => (
               <div key={item.id} className="flex items-center gap-3 bg-[#F4F6FA] rounded-xl p-3">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-12 h-12 object-contain rounded-lg bg-white flex-shrink-0"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = `https://placehold.co/48x48/F4F6FA/1C1C1C?text=${item.name.slice(0, 2)}`;
-                  }}
-                />
+                <div className="relative w-12 h-12 bg-white rounded-lg flex-shrink-0 overflow-hidden">
+                  <Image
+                    src={item.image || `https://placehold.co/48x48/F4F6FA/1C1C1C?text=${item.name.slice(0, 2)}`}
+                    alt={item.name}
+                    fill
+                    className="object-contain p-1"
+                    sizes="48px"
+                  />
+                </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.name}</p>
                   <p className="text-xs text-gray-400">{item.unit}</p>

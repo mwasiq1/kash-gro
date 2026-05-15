@@ -29,6 +29,7 @@ export const getAddresses = async (
 
     res.status(200).json({ success: true, data: user.addresses });
   } catch (error) {
+    console.error("[getAddresses] Error:", error);
     next(error);
   }
 };
@@ -53,7 +54,7 @@ export const createAddress = async (
     });
 
     if (!user) {
-      res.status(404).json({ success: false, error: "User not found" });
+      res.status(404).json({ success: false, error: "User not found in database. Please try signing out and back in." });
       return;
     }
 
@@ -80,6 +81,7 @@ export const createAddress = async (
 
     res.status(201).json({ success: true, data: address });
   } catch (error) {
+    console.error("[createAddress] Error:", error);
     next(error);
   }
 };

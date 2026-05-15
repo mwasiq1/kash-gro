@@ -10,8 +10,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "KashGro — Groceries in 10 Minutes",
-  description: "Blinkit-style quick commerce app for groceries delivered in 10 minutes.",
+  title: {
+    template: "%s | Kash Gro",
+    default: "Kash Gro | Delivered in minutes",
+  },
+  description: "India's fastest 10-minute grocery and essentials delivery platform.",
 };
 
 export const viewport = {

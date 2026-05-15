@@ -35,9 +35,9 @@ export interface Product {
   name: string;
   description: string;
   mrp: number;
-  sellingPrice: number;
+  price: number;
   unit: string;
-  imageUrl: string;
+  images: string[];
   categoryId: string;
   category?: Partial<Category>;
   stock: number;

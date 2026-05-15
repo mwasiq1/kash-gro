@@ -2,6 +2,7 @@
 
 import { useCart } from "../../hooks/useCart";
 import CODConfirm from "./CODConfirm";
+import Image from "next/image";
 
 export default function OrderSummary() {
   const { items, cartTotal, promoCode } = useCart();
@@ -23,8 +24,8 @@ export default function OrderSummary() {
           <div className="max-h-[300px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
             {items.map((item) => (
               <div key={item.id} className="flex gap-4">
-                <div className="w-12 h-12 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-gray-100">
-                  <img src={item.image} alt={item.name} className="w-8 h-8 object-contain" />
+                <div className="relative w-12 h-12 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-gray-100 overflow-hidden">
+                  <Image src={item.image} alt={item.name} fill className="object-contain p-2" sizes="48px" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.name}</p>

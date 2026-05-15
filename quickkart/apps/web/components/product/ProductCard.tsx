@@ -2,6 +2,7 @@
 
 import { Plus, Minus } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "../../hooks/useCart";
 
 interface Product {
@@ -51,13 +52,12 @@ export default function ProductCard({ product }: { product: Product }) {
             {discount}% OFF
           </span>
         )}
-        <img
-          src={product.images[0]}
+        <Image
+          src={product.images[0] || `https://placehold.co/96x96/F4F6FA/1C1C1C?text=${encodeURIComponent(product.name.slice(0, 2))}`}
           alt={product.name}
-          className="w-24 h-24 object-contain"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = `https://placehold.co/96x96/F4F6FA/1C1C1C?text=${encodeURIComponent(product.name.slice(0, 2))}`;
-          }}
+          fill
+          className="object-contain p-2"
+          sizes="(max-width: 768px) 50vw, 33vw"
         />
       </div>
 

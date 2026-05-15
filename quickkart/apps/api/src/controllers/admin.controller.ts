@@ -296,7 +296,7 @@ export const getAdminOrders = asyncHandler(
           items: {
             include: {
               product: {
-                select: { id: true, name: true, imageUrl: true, unit: true },
+                select: { id: true, name: true, images: true, unit: true },
               },
             },
           },
@@ -484,12 +484,12 @@ export const getAnalytics = asyncHandler(
       topProductsRaw.map(async (item) => {
         const product = await prisma.product.findUnique({
           where: { id: item.productId },
-          select: { name: true, imageUrl: true, unit: true },
+          select: { name: true, images: true, unit: true },
         });
         return {
           id: item.productId,
           name: product?.name || "Unknown",
-          imageUrl: product?.imageUrl,
+          imageUrl: product?.images?.[0],
           unit: product?.unit,
           unitsSold: item._sum.quantity || 0,
           revenue: item._sum.price || 0,
@@ -522,7 +522,6 @@ export const getAnalytics = asyncHandler(
         topProducts,
         lowStock,
       },
-    });
     });
   }
 );

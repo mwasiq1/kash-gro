@@ -7,7 +7,7 @@ export interface CartItem {
   name: string;
   price: number;
   unit: string;
-  image: string; // Keeping image for cart item representation but renaming sellingPrice
+  image: string; // Snapshot of images[0] at time of add-to-cart
   quantity: number;
 }
 

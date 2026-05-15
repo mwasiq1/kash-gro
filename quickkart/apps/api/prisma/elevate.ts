@@ -9,7 +9,7 @@ async function main() {
   });
 
   if (!user) {
-    console.log(`User with email ${targetEmail} not found. Make sure you have signed in on the storefront at least once.`);
+    console.log(`User ${targetEmail} not found. Please sign in on the storefront first to sync your account to the DB.`);
     return;
   }
 
@@ -18,11 +18,7 @@ async function main() {
     data: { role: 'ADMIN' }
   });
 
-  console.log(`SUCCESS: Role for ${updatedUser.email} has been updated to ${updatedUser.role}.`);
+  console.log(`SUCCESS: ${updatedUser.email} is now an ADMIN.`);
 }
 
-main()
-  .catch((e) => console.error(e))
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch(console.error).finally(() => prisma.$disconnect());

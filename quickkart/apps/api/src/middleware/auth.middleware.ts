@@ -25,30 +25,44 @@ export const requireClerkAuth = async (
   }
 
   const token = authHeader.split(" ")[1];
-  
-  // In a real app we'd verify the JWT with Clerk's public key.
-  // For this local dev/test environment, we'll decode the token payload or fallback.
-  // Actually, Clerk's token payload contains the user ID as 'sub'.
+
   try {
     const payloadBase64 = token.split('.')[1];
-    if (payloadBase64) {
-      const payload = JSON.parse(Buffer.from(payloadBase64, 'base64').toString('utf-8'));
-      
-      if (payload.sub) {
-        const user = await prisma.user.findUnique({ where: { clerkId: payload.sub } });
-        if (user) {
-          req.user = { uid: user.clerkId!, role: user.role };
-          return next();
-        }
-      }
+    if (!payloadBase64) {
+      res.status(401).json({ success: false, error: "Invalid token" });
+      return;
     }
-  } catch (err) {
-    // ignore parse error and fallback
-  }
 
-  // Fallback to placeholder if token is not a valid JWT (e.g. testing)
-  req.user = { uid: "temp-clerk-id", role: "ADMIN" };
-  next();
+    const payload = JSON.parse(Buffer.from(payloadBase64, 'base64').toString('utf-8'));
+
+    if (!payload.sub) {
+      res.status(401).json({ success: false, error: "Invalid token payload" });
+      return;
+    }
+
+    // Upsert the user so the DB record always exists for authenticated requests.
+    // Clerk stores the user ID in the 'sub' claim. Email may be in payload.email or
+    // payload.email_address (depends on Clerk JWT template).
+    const email = payload.email || payload.email_address || undefined;
+    const name = payload.name || payload.full_name || undefined;
+
+    const user = await prisma.user.upsert({
+      where: { clerkId: payload.sub },
+      update: {},           // don't overwrite existing data on every request
+      create: {
+        clerkId: payload.sub,
+        email,
+        name,
+      },
+    });
+
+    req.user = { uid: user.clerkId!, email: user.email ?? undefined, role: user.role };
+    return next();
+  } catch (err) {
+    console.error("[Auth] Token decode / upsert error:", err);
+    res.status(401).json({ success: false, error: "Authentication failed" });
+    return;
+  }
 };
 
 export const requireAdmin = async (

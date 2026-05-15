@@ -6,6 +6,7 @@ import { fetchApi } from "../../../lib/api";
 import { useAuth } from "@clerk/nextjs";
 import { CheckCircle2, Clock, MapPin, Package, ShoppingBag, Loader2, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { Suspense } from "react";
 
@@ -106,8 +107,8 @@ function OrderConfirmedContent() {
           <div className="p-6 space-y-6">
             {order.items.map((item: any) => (
               <div key={item.id} className="flex gap-4">
-                <div className="w-14 h-14 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-gray-100">
-                  <img src={item.product.images[0]} alt={item.product.name} className="w-10 h-10 object-contain" />
+                <div className="relative w-14 h-14 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-gray-100 overflow-hidden">
+                  <Image src={item.product.images[0] || "https://placehold.co/48x48/F4F6FA/1C1C1C?text=P"} alt={item.product.name} fill className="object-contain p-2" sizes="56px" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.product.name}</p>
