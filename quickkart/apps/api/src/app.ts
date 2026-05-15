@@ -8,7 +8,7 @@ import apiRouter from "./routes/index";
 import { notFoundHandler, errorHandler } from "./middleware/error.middleware";
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 4000;
 const prisma = new PrismaClient();
 
 // ── Security ────────────────────────────────────────────────────────────────
@@ -34,7 +34,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
-app.use("/api", apiRouter);
+app.get("/health", (req, res) => res.json({ status: "ok" }));
+app.use("/api/v1", apiRouter);
 
 // ── 404 & Global Error Handler ───────────────────────────────────────────────
 app.use(notFoundHandler);

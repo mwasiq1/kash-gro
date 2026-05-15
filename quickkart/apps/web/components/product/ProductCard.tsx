@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Minus } from "lucide-react";
+import Link from "next/link";
 import { useCart } from "../../hooks/useCart";
 
 interface Product {
@@ -23,7 +24,9 @@ export default function ProductCard({ product }: { product: Product }) {
     ((product.mrp - product.sellingPrice) / product.mrp) * 100
   );
 
-  const handleAdd = () => {
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     addItem({
       id: product.id,
       name: product.name,
@@ -33,8 +36,14 @@ export default function ProductCard({ product }: { product: Product }) {
     });
   };
 
+  const handleUpdateQuantity = (e: React.MouseEvent, newQuantity: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    updateQuantity(product.id, newQuantity);
+  };
+
   return (
-    <div className="bg-white rounded-2xl p-3 flex flex-col shadow-sm hover:shadow-md transition-shadow border border-gray-50">
+    <Link href={`/product/${product.id}`} className="bg-white rounded-2xl p-3 flex flex-col shadow-sm hover:shadow-md transition-shadow border border-gray-50 h-full">
       {/* Image */}
       <div className="relative bg-[#F4F6FA] rounded-xl h-32 mb-3 flex items-center justify-center overflow-hidden">
         {discount > 0 && (
@@ -79,7 +88,7 @@ export default function ProductCard({ product }: { product: Product }) {
         ) : (
           <div className="flex items-center bg-[#0C831F] rounded-xl overflow-hidden">
             <button
-              onClick={() => updateQuantity(product.id, quantity - 1)}
+              onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
               className="px-2 py-1.5 text-white hover:bg-[#0a6b19] transition"
             >
               <Minus className="w-4 h-4" />
@@ -94,6 +103,6 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

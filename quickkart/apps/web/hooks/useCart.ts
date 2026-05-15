@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useCartStore, CartItem } from "../store/useCartStore";
+import { useCartStore, CartItem } from "../stores/cart.store";
 
 /**
  * Hydration-safe cart hook.
