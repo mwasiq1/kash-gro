@@ -81,7 +81,7 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
 
   if (loading && addresses.length === 0) {
     return (
-      <div className="flex items-center justify-center p-8 bg-white rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex items-center justify-center p-8 bg-white rounded-2xl border border-[#E8E8E8] shadow-sm">
         <Loader2 className="w-6 h-6 text-[#0C831F] animate-spin" />
       </div>
     );
@@ -116,12 +116,12 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
           />
         </div>
       ) : addresses.length === 0 ? (
-        <div className="bg-white p-12 rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-center">
+        <div className="bg-white p-12 rounded-2xl border border-dashed border-[#E8E8E8] flex flex-col items-center justify-center text-center">
           <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
             <MapPin className="w-8 h-8 text-gray-300" />
           </div>
           <h4 className="font-bold text-[#1C1C1C] mb-1">No addresses saved</h4>
-          <p className="text-sm text-gray-500 mb-6 max-w-[240px]">Please add a delivery address to proceed with your order.</p>
+          <p className="text-sm text-[#666666] mb-6 max-w-[240px]">Please add a delivery address to proceed with your order.</p>
           <button
             onClick={() => setShowAddForm(true)}
             className="bg-[#1C1C1C] text-white font-black px-8 py-3.5 rounded-xl hover:bg-black transition-all active:scale-95"
@@ -138,18 +138,18 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
               className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all duration-300 group ${
                 selectedId === addr.id
                   ? "border-[#0C831F] bg-[#F8FFF9] shadow-md scale-[1.02] ring-2 ring-[#0C831F] ring-opacity-20"
-                  : "border-gray-100 bg-white hover:border-gray-200 hover:shadow-sm"
+                  : "border-[#E8E8E8] bg-white hover:border-[#E8E8E8] hover:shadow-sm"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-md tracking-wider ${
-                    selectedId === addr.id ? "bg-[#0C831F] text-white" : "bg-gray-100 text-gray-500"
+                    selectedId === addr.id ? "bg-[#0C831F] text-white" : "bg-gray-100 text-[#666666]"
                   }`}>
                     {addr.label}
                   </span>
                   {addr.isDefault && (
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Default</span>
+                    <span className="text-[10px] text-[#999999] font-bold uppercase tracking-widest">Default</span>
                   )}
                 </div>
                 {selectedId === addr.id && (
@@ -157,7 +157,7 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
                 )}
               </div>
               <p className="text-sm font-bold text-[#1C1C1C] line-clamp-1">{addr.line1}</p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[#666666] mt-1">
                 {addr.city}, {addr.pincode}
               </p>
             </div>

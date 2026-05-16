@@ -38,7 +38,7 @@ export default async function ProductDetailPage({ params }: Props) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#F4F6FA]">
         <h2 className="text-xl font-bold text-[#1C1C1C] mb-4">Something went wrong</h2>
-        <p className="text-gray-500">Please try again later.</p>
+        <p className="text-[#666666]">Please try again later.</p>
       </div>
     );
   }

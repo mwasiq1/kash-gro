@@ -24,6 +24,9 @@ async function main() {
     { name: 'Snacks & Munchies' },
     { name: 'Cold Drinks & Juices' },
     { name: 'Instant Food' },
+    { name: 'Bakery & Biscuits' },
+    { name: 'Personal Care' },
+    { name: 'Household & Cleaning' },
   ];
 
   const categories = [];

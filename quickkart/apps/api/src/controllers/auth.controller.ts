@@ -14,7 +14,9 @@ const prisma = new PrismaClient();
  */
 export const syncUser = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    const { uid, email, phone, name } = req.user!;
+    const { uid, phone, name } = req.user!;
+    const clerkUser = req.body.clerkUser;
+    const email = clerkUser?.emailAddresses?.[0]?.emailAddress || req.user!.email;
 
     // Upsert: find by clerkId or create a new record
     const user = await prisma.user.upsert({
@@ -34,12 +36,6 @@ export const syncUser = asyncHandler(
     });
 
     const isNew = user.createdAt.getTime() === user.updatedAt.getTime();
-
-    if (isNew) {
-      console.log(`🆕 Created user: ${user.id} (${email ?? phone})`);
-    } else {
-      console.log(`✅ Found user: ${user.id} (${email ?? phone})`);
-    }
 
     res.status(isNew ? 201 : 200).json({
       success: true,

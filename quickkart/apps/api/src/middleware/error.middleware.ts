@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { ZodError } from "zod";
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -20,12 +21,22 @@ export const notFoundHandler = (req: Request, res: Response, next: NextFunction)
  * Returns a standardised error envelope for every uncaught error.
  */
 export const errorHandler = (
-  err: AppError,
+  err: any,
   req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ): void => {
+  if (err instanceof ZodError) {
+    res.status(422).json({
+      success: false,
+      error: "Validation error",
+      code: "VALIDATION_ERROR",
+      fieldErrors: (err as any).errors,
+    });
+    return;
+  }
+
   const statusCode = err.statusCode ?? 500;
   const code = err.code ?? "INTERNAL_SERVER_ERROR";
 

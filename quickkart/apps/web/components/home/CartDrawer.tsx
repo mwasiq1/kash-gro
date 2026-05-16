@@ -33,7 +33,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           <div>
             <h2 className="font-extrabold text-lg text-[#1C1C1C]">Your Cart</h2>
             {itemCount > 0 && (
-              <p className="text-xs text-gray-400">{itemCount} item{itemCount !== 1 ? "s" : ""}</p>
+              <p className="text-xs text-[#999999]">{itemCount} item{itemCount !== 1 ? "s" : ""}</p>
             )}
           </div>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-xl transition">
@@ -43,7 +43,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-3">
+            <div className="flex flex-col items-center justify-center h-full text-[#999999] gap-3">
               <ShoppingCart className="w-14 h-14 text-gray-200" />
               <p className="font-semibold text-sm">Your cart is empty</p>
               <p className="text-xs text-center">Add items to get started!</p>
@@ -62,14 +62,14 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.name}</p>
-                  <p className="text-xs text-gray-400">{item.unit}</p>
+                  <p className="text-xs text-[#999999]">{item.unit}</p>
                 </div>
-                <div className="flex items-center bg-[#0C831F] rounded-xl overflow-hidden flex-shrink-0">
-                  <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2 py-1.5 text-white hover:bg-[#0a6b19] transition">
+                <div className="flex items-center bg-[#F8C200] rounded-xl overflow-hidden flex-shrink-0">
+                  <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2 py-1.5 text-[#1C1C1C] hover:bg-[#E6B400] transition">
                     <Minus className="w-3.5 h-3.5" />
                   </button>
-                  <span className="text-white font-bold text-sm w-5 text-center">{item.quantity}</span>
-                  <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2 py-1.5 text-white hover:bg-[#0a6b19] transition">
+                  <span className="text-[#1C1C1C] font-bold text-sm w-5 text-center">{item.quantity}</span>
+                  <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2 py-1.5 text-[#1C1C1C] hover:bg-[#E6B400] transition">
                     <Plus className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -86,9 +86,9 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             {/* Free Delivery Progress */}
             <div className="mb-4">
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-[#666666] uppercase tracking-wider">
                   {cartTotal >= 200 ? (
-                    <span className="text-[#0C831F]">Yay! Free delivery unlocked</span>
+                    <span className="text-[#0C831F] font-bold">Yay! Free delivery unlocked</span>
                   ) : (
                     `Add ₹${(200 - cartTotal).toFixed(0)} more for free delivery`
                   )}
@@ -97,7 +97,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               </div>
               <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-[#0C831F] transition-all duration-500" 
+                  className="h-full bg-[#F8C200] transition-all duration-500" 
                   style={{ width: `${Math.min(100, (cartTotal / 200) * 100)}%` }}
                 />
               </div>
@@ -105,11 +105,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
 
             <div className="space-y-2 mb-4">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 font-medium">Subtotal</span>
+                <span className="text-[#666666] font-medium">Subtotal</span>
                 <span className="font-bold text-[#1C1C1C]">₹{cartTotal.toFixed(0)}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-500 font-medium">Delivery Fee</span>
+                <span className="text-[#666666] font-medium">Delivery Fee</span>
                 <span className={`font-bold ${cartTotal >= 200 ? "text-[#0C831F]" : "text-[#1C1C1C]"}`}>
                   {cartTotal >= 200 ? "FREE" : "₹25"}
                 </span>
@@ -119,7 +119,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             <Link
               href="/checkout"
               onClick={onClose}
-              className="w-full bg-[#0C831F] text-white font-black py-4 rounded-xl flex items-center justify-between px-6 hover:bg-[#0a6b19] active:scale-[0.98] transition-all text-base shadow-lg shadow-green-100"
+              className="w-full bg-[#F8C200] text-[#1C1C1C] font-black py-4 rounded-xl flex items-center justify-between px-6 hover:bg-[#E6B400] active:scale-[0.98] transition-all text-base shadow-lg shadow-yellow-100"
             >
               <div className="text-left">
                 <p className="text-[10px] uppercase opacity-80 leading-none mb-1">Total</p>

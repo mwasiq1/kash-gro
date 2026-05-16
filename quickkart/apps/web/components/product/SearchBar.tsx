@@ -66,8 +66,8 @@ export default function SearchBar() {
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
-      <div className="flex items-center gap-2 bg-[#F4F6FA] rounded-xl px-3 py-2.5 border border-gray-100">
-        <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+      <div className="flex items-center gap-2 bg-[#F4F6FA] rounded-xl px-3 py-2.5 border border-[#E8E8E8]">
+        <Search className="w-4 h-4 text-[#999999] flex-shrink-0" />
         <input
           type="text"
           placeholder='Search "milk", "bread"...'
@@ -78,18 +78,18 @@ export default function SearchBar() {
           }}
           className="bg-transparent text-sm flex-1 outline-none text-[#1C1C1C] placeholder-gray-400"
         />
-        {loading && <Loader2 className="w-4 h-4 animate-spin text-gray-400 flex-shrink-0" />}
+        {loading && <Loader2 className="w-4 h-4 animate-spin text-[#999999] flex-shrink-0" />}
       </div>
 
       {/* Dropdown */}
       {showDropdown && query.length >= 2 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 max-h-80 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-lg border border-[#E8E8E8] overflow-hidden z-50 max-h-80 overflow-y-auto">
           {loading ? (
-            <div className="p-4 flex items-center justify-center text-sm text-gray-500">
+            <div className="p-4 flex items-center justify-center text-sm text-[#666666]">
               Searching...
             </div>
           ) : results.length === 0 ? (
-            <div className="p-4 flex items-center justify-center text-sm text-gray-500">
+            <div className="p-4 flex items-center justify-center text-sm text-[#666666]">
               No results for &apos;{query}&apos;
             </div>
           ) : (
@@ -100,7 +100,7 @@ export default function SearchBar() {
                   onClick={() => handleProductClick(product.id)}
                   className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer transition"
                 >
-                  <div className="relative w-10 h-10 bg-[#F4F6FA] rounded-md flex-shrink-0 flex items-center justify-center overflow-hidden border border-gray-50">
+                  <div className="relative w-10 h-10 bg-[#F4F6FA] rounded-md flex-shrink-0 flex items-center justify-center overflow-hidden border border-[#E8E8E8]">
                     <Image 
                       src={product.images[0] || "https://placehold.co/32x32?text=P"} 
                       alt={product.name} 
@@ -111,7 +111,7 @@ export default function SearchBar() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold text-[#1C1C1C] truncate">{product.name}</p>
-                    <p className="text-xs text-gray-400">{product.unit}</p>
+                    <p className="text-xs text-[#999999]">{product.unit}</p>
                   </div>
                   <p className="text-sm font-bold text-[#1C1C1C]">₹{product.price}</p>
                 </div>

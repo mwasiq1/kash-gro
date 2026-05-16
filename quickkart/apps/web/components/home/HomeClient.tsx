@@ -58,11 +58,11 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
         <section className="mt-5 px-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-bold text-[#1C1C1C]">{categoryLabel}</h2>
-            <span className="text-xs text-gray-400 font-medium">{filteredProducts.length} items</span>
+            <span className="text-xs text-[#999999] font-medium">{filteredProducts.length} items</span>
           </div>
 
           {filteredProducts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
+            <div className="flex flex-col items-center justify-center py-20 text-[#999999] gap-3">
               <Package className="w-14 h-14 text-gray-200" />
               <p className="font-semibold">No products found</p>
               <p className="text-xs text-center">Try selecting a different category</p>

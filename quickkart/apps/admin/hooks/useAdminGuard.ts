@@ -32,7 +32,7 @@ export function useAdminGuard() {
           headers: { Authorization: `Bearer ${token}` }
         });
         
-        if (res.user?.role !== "ADMIN") {
+        if (res.data?.role !== "ADMIN") {
           router.push("/unauthorized");
         }
       } catch (err) {

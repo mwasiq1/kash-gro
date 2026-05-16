@@ -5,7 +5,7 @@ import { OrderStatus } from "@prisma/client";
 const statusConfig = {
   PENDING: {
     label: "Pending",
-    classes: "bg-gray-100 text-gray-600",
+    classes: "bg-gray-100 text-[#666666]",
   },
   PLACED: {
     label: "Placed",
@@ -25,7 +25,7 @@ const statusConfig = {
   },
   CANCELLED: {
     label: "Cancelled",
-    classes: "bg-red-50 text-red-600",
+    classes: "bg-[#FEF0EF] text-[#D0190A]",
   },
 };
 

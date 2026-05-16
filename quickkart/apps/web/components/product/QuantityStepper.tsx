@@ -47,7 +47,7 @@ export default function QuantityStepper({ product }: QuantityStepperProps) {
     return (
       <button
         disabled
-        className="w-full py-3.5 rounded-xl bg-gray-100 text-gray-400 font-bold text-base cursor-not-allowed border border-gray-200"
+        className="w-full py-3.5 rounded-xl bg-gray-100 text-[#999999] font-bold text-base cursor-not-allowed border border-[#E8E8E8]"
       >
         Out of Stock
       </button>
@@ -58,7 +58,7 @@ export default function QuantityStepper({ product }: QuantityStepperProps) {
     return (
       <button
         onClick={handleAdd}
-        className="w-full py-3.5 rounded-xl bg-[#F8C200] text-black font-bold text-base hover:bg-[#e6b400] transition-all active:scale-[0.98] shadow-sm"
+        className="w-full py-3.5 rounded-xl bg-[#F8C200] text-[#1C1C1C] font-bold text-base hover:bg-[#e6b400] transition-all active:scale-[0.98] shadow-sm"
       >
         ADD
       </button>

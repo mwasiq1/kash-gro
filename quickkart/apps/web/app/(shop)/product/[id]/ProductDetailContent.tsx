@@ -18,8 +18,8 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
   return (
     <div className="min-h-screen bg-white md:bg-[#F4F6FA] pb-24">
       {/* Header / Breadcrumb */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center text-[10px] md:text-xs font-medium text-gray-500 overflow-hidden whitespace-nowrap">
+      <div className="bg-white border-b border-[#E8E8E8]">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center text-[10px] md:text-xs font-medium text-[#666666] overflow-hidden whitespace-nowrap">
           <span onClick={() => router.push("/")} className="cursor-pointer hover:text-[#1C1C1C] flex-shrink-0">Home</span>
           <ChevronRight className="w-3 h-3 mx-1 md:mx-2 flex-shrink-0" />
           <span className="truncate max-w-[100px] md:max-w-none">{product.category?.name || "Category"}</span>
@@ -37,7 +37,7 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
       </header>
 
       <main className="max-w-7xl mx-auto md:p-6">
-        <div className="flex flex-col md:flex-row gap-8 bg-white md:rounded-3xl md:p-8 md:shadow-sm border border-gray-50">
+        <div className="flex flex-col md:flex-row gap-8 bg-white md:rounded-3xl md:p-8 md:shadow-sm border border-[#E8E8E8]">
           {/* Left: Gallery */}
           <div className="w-full md:w-[45%]">
             <ProductGallery images={product.images} />
@@ -49,7 +49,7 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
               <h1 className="text-xl md:text-3xl font-extrabold text-[#1C1C1C] leading-tight mb-2">
                 {product.name}
               </h1>
-              <p className="text-sm md:text-base text-gray-500 font-medium">{product.unit}</p>
+              <p className="text-sm md:text-base text-[#666666] font-medium">{product.unit}</p>
             </div>
 
             <div className="flex items-center gap-3 mb-6">
@@ -57,14 +57,14 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl md:text-3xl font-black text-[#1C1C1C]">₹{product.price}</span>
                   {discount > 0 && (
-                    <span className="text-sm md:text-base text-gray-400 line-through">₹{product.mrp}</span>
+                    <span className="text-sm md:text-base text-[#999999] line-through">₹{product.mrp}</span>
                   )}
                 </div>
-                <p className="text-[10px] md:text-xs text-gray-400 mt-1">(Inclusive of all taxes)</p>
+                <p className="text-[10px] md:text-xs text-[#999999] mt-1">(Inclusive of all taxes)</p>
               </div>
               
               {discount > 0 && (
-                <div className="bg-[#F8C200] text-black text-[10px] md:text-xs font-black px-2 py-1 rounded-lg">
+                <div className="bg-[#F8C200] text-[#1C1C1C] text-[10px] md:text-xs font-black px-2 py-1 rounded-lg">
                   {discount}% OFF
                 </div>
               )}
@@ -72,7 +72,7 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
 
             {/* Stock Alerts */}
             {product.stock === 0 ? (
-              <div className="mb-6 bg-gray-50 text-gray-500 text-sm font-bold p-3 rounded-xl border border-gray-100">
+              <div className="mb-6 bg-gray-50 text-[#666666] text-sm font-bold p-3 rounded-xl border border-[#E8E8E8]">
                 Out of Stock
               </div>
             ) : product.stock < 10 ? (
@@ -88,9 +88,9 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
             </div>
 
             {/* Description */}
-            <div className="border-t border-gray-100 pt-6">
+            <div className="border-t border-[#E8E8E8] pt-6">
               <h3 className="font-bold text-[#1C1C1C] mb-3 text-base md:text-lg">Product Details</h3>
-              <p className="text-sm md:text-base text-gray-600 leading-relaxed whitespace-pre-line">
+              <p className="text-sm md:text-base text-[#666666] leading-relaxed whitespace-pre-line">
                 {product.description || "No description available for this product."}
               </p>
             </div>

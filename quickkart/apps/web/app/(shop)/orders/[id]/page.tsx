@@ -88,7 +88,7 @@ export default function OrderDetailPage() {
   return (
     <div className="min-h-screen bg-[#F4F6FA] pb-24">
       {/* Header */}
-      <div className="bg-white sticky top-0 z-20 border-b border-gray-100 px-4 py-4 md:px-8">
+      <div className="bg-white sticky top-0 z-20 border-b border-[#E8E8E8] px-4 py-4 md:px-8">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/orders" className="p-2 hover:bg-gray-50 rounded-full transition-colors">
@@ -96,7 +96,7 @@ export default function OrderDetailPage() {
             </Link>
             <div>
               <h1 className="text-xl font-black text-[#1C1C1C]">Order #{order.orderNumber}</h1>
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <p className="text-xs font-bold text-[#999999] uppercase tracking-widest">
                 Placed on {new Date(order.createdAt).toLocaleDateString()}
               </p>
             </div>
@@ -118,7 +118,7 @@ export default function OrderDetailPage() {
       <div className="max-w-5xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left: Timeline & Address */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#E8E8E8]">
             <h3 className="text-lg font-black text-[#1C1C1C] mb-8 flex items-center gap-3">
               <Clock className="w-5 h-5 text-[#0C831F]" />
               Order Status
@@ -126,7 +126,7 @@ export default function OrderDetailPage() {
             <StatusTimeline currentStatus={order.status} cancelledAt={order.cancelledAt} />
           </div>
 
-          <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#E8E8E8]">
             <h3 className="text-lg font-black text-[#1C1C1C] mb-6 flex items-center gap-3">
               <MapPin className="w-5 h-5 text-[#0C831F]" />
               Delivery Address
@@ -141,33 +141,33 @@ export default function OrderDetailPage() {
 
         {/* Right: Summary & Items */}
         <div className="space-y-6">
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center gap-3">
-              <Package className="w-5 h-5 text-gray-400" />
+          <div className="bg-white rounded-3xl shadow-sm border border-[#E8E8E8] overflow-hidden">
+            <div className="px-6 py-4 bg-gray-50 border-b border-[#E8E8E8] flex items-center gap-3">
+              <Package className="w-5 h-5 text-[#999999]" />
               <h3 className="font-black text-[#1C1C1C]">Order Details</h3>
             </div>
             <div className="p-6 space-y-6">
               <div className="max-h-[400px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
                 {order.items.map((item: any) => (
                   <div key={item.id} className="flex gap-4">
-                    <div className="relative w-14 h-14 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-gray-100 overflow-hidden">
+                    <div className="relative w-14 h-14 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-[#E8E8E8] overflow-hidden">
                       <Image src={item.product.images[0] || "https://placehold.co/48x48/F4F6FA/1C1C1C?text=P"} alt={item.product.name} fill className="object-contain p-2" sizes="56px" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.product.name}</p>
-                      <p className="text-xs text-gray-500 font-medium">{item.quantity} × {item.product.unit}</p>
+                      <p className="text-xs text-[#666666] font-medium">{item.quantity} × {item.product.unit}</p>
                     </div>
                     <p className="text-sm font-black text-[#1C1C1C]">₹{item.price * item.quantity}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-6 border-t border-gray-100 space-y-3">
-                <div className="flex justify-between text-sm text-gray-600">
+              <div className="pt-6 border-t border-[#E8E8E8] space-y-3">
+                <div className="flex justify-between text-sm text-[#666666]">
                   <span className="font-medium">Total Amount</span>
                   <span className="font-black text-[#1C1C1C]">₹{order.totalAmount}</span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className="flex justify-between text-sm text-[#666666]">
                   <span className="font-medium">Payment Mode</span>
                   <span className="font-bold text-[#0C831F]">Cash on Delivery</span>
                 </div>

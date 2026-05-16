@@ -57,17 +57,17 @@ export default function StatusTimeline({ currentStatus, cancelledAt }: StatusTim
                   <CheckCircle2 className="w-4 h-4 text-white" />
                 </div>
               ) : (
-                <div className="w-6 h-6 rounded-full bg-white border-2 border-gray-100 flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full bg-white border-2 border-[#E8E8E8] flex items-center justify-center">
                   <Circle className="w-3 h-3 text-gray-200 fill-current" />
                 </div>
               )}
             </div>
 
             <div className="-mt-1">
-              <h4 className={`text-sm font-black ${isCompleted ? "text-[#1C1C1C]" : "text-gray-400"}`}>
+              <h4 className={`text-sm font-black ${isCompleted ? "text-[#1C1C1C]" : "text-[#999999]"}`}>
                 {step.label}
               </h4>
-              <p className={`text-xs font-medium mt-0.5 ${isCompleted ? "text-gray-500" : "text-gray-300"}`}>
+              <p className={`text-xs font-medium mt-0.5 ${isCompleted ? "text-[#666666]" : "text-gray-300"}`}>
                 {step.desc}
               </p>
             </div>

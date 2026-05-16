@@ -62,7 +62,7 @@ export default function CartDrawer() {
         className={`relative w-full h-[90vh] rounded-t-2xl md:h-full md:w-[420px] md:rounded-none bg-[#F4F6FA] flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${isOpen ? "translate-y-0 md:translate-x-0" : "translate-y-full md:translate-y-0 md:translate-x-full"}`}
       >
         {/* Header */}
-        <header className="bg-white rounded-t-2xl md:rounded-none px-4 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        <header className="bg-white rounded-t-2xl md:rounded-none px-4 py-4 border-b border-[#E8E8E8] flex items-center justify-between sticky top-0 z-10 shadow-sm">
           <h2 className="font-extrabold text-[#1C1C1C] text-lg flex items-center gap-2">
             My Cart
             {items.length > 0 && (
@@ -87,7 +87,7 @@ export default function CartDrawer() {
                 <ShoppingBag className="w-10 h-10 text-gray-300" />
               </div>
               <h3 className="text-xl font-bold text-[#1C1C1C] mb-2">Your cart is empty</h3>
-              <p className="text-gray-500 text-sm mb-6 max-w-[250px]">
+              <p className="text-[#666666] text-sm mb-6 max-w-[250px]">
                 Looks like you haven&apos;t added anything to your cart yet.
               </p>
               <button
@@ -100,14 +100,14 @@ export default function CartDrawer() {
           ) : (
             <div className="p-4 flex flex-col gap-6">
               {/* Items List */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E8E8]">
                 {items.map((item) => (
                   <CartItem key={item.id} item={item} />
                 ))}
               </div>
 
               {/* Promo Section */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E8E8]">
                 <h3 className="font-bold text-[#1C1C1C] text-sm mb-3">Offers & Benefits</h3>
                 <PromoInput />
               </div>
@@ -120,10 +120,10 @@ export default function CartDrawer() {
 
         {/* Footer CTA */}
         {items.length > 0 && (
-          <div className="bg-white p-4 border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] sticky bottom-0 z-10">
+          <div className="bg-white p-4 border-t border-[#E8E8E8] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] sticky bottom-0 z-10">
             <button
               onClick={handleCheckout}
-              className="w-full bg-[#0C831F] text-white font-bold text-lg px-6 py-4 rounded-xl hover:bg-[#0a6b19] transition-all active:scale-[0.98] shadow-sm flex items-center justify-between"
+              className="w-full bg-[#F8C200] text-[#1C1C1C] font-bold text-lg px-6 py-4 rounded-xl hover:bg-[#e6b400] transition-all active:scale-[0.98] shadow-sm flex items-center justify-between"
             >
               <div className="flex flex-col items-start">
                 <span className="text-sm font-semibold opacity-90">

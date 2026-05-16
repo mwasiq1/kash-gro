@@ -10,7 +10,7 @@ export const validatePromo = async (req: Request, res: Response) => {
     if (!code || subtotal === undefined) {
       return res.status(400).json({
         success: false,
-        message: "Code and subtotal are required",
+        error: "Code and subtotal are required",
       });
     }
 
@@ -21,28 +21,28 @@ export const validatePromo = async (req: Request, res: Response) => {
     if (!promo) {
       return res.status(404).json({
         success: false,
-        message: "Invalid promo code",
+        error: "Invalid promo code",
       });
     }
 
     if (!promo.isActive) {
       return res.status(400).json({
         success: false,
-        message: "This promo code is no longer active",
+        error: "This promo code is no longer active",
       });
     }
 
-    if (promo.expiresAt && new Date(promo.expiresAt) < new Date()) {
+    if (promo.endDate && new Date(promo.endDate) < new Date()) {
       return res.status(400).json({
         success: false,
-        message: "This promo code has expired",
+        error: "This promo code has expired",
       });
     }
 
-    if (subtotal < promo.minOrderValue) {
+    if (subtotal < promo.minOrderAmount) {
       return res.status(400).json({
         success: false,
-        message: `Add items worth ₹${promo.minOrderValue - subtotal} more to use this code`,
+        error: `Add items worth ₹${promo.minOrderAmount - subtotal} more to use this code`,
       });
     }
 
@@ -50,14 +50,14 @@ export const validatePromo = async (req: Request, res: Response) => {
       success: true,
       data: {
         code: promo.code,
-        discountAmount: promo.discountAmount,
+        discount: promo.discountValue,
       },
     });
   } catch (error) {
     console.error("Error validating promo:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: "Internal server error",
     });
   }
 };

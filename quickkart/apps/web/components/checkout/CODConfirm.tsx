@@ -14,7 +14,7 @@ export default function CODConfirm({ total }: CODConfirmProps) {
       </div>
       <div>
         <p className="text-sm font-black text-[#1C1C1C]">Cash on Delivery</p>
-        <p className="text-xs text-gray-600 font-medium">Pay ₹{total} to the rider when they arrive</p>
+        <p className="text-xs text-[#666666] font-medium">Pay ₹{total} to the rider when they arrive</p>
       </div>
     </div>
   );

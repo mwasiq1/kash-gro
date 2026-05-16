@@ -15,8 +15,8 @@ export default function OrderSummary() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="bg-gray-50 px-5 py-4 border-b border-gray-100">
+      <div className="bg-white rounded-2xl border border-[#E8E8E8] shadow-sm overflow-hidden">
+        <div className="bg-gray-50 px-5 py-4 border-b border-[#E8E8E8]">
           <h3 className="font-black text-[#1C1C1C]">Order Summary</h3>
         </div>
         
@@ -24,24 +24,24 @@ export default function OrderSummary() {
           <div className="max-h-[300px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
             {items.map((item) => (
               <div key={item.id} className="flex gap-4">
-                <div className="relative w-12 h-12 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-gray-100 overflow-hidden">
+                <div className="relative w-12 h-12 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-[#E8E8E8] overflow-hidden">
                   <Image src={item.image} alt={item.name} fill className="object-contain p-2" sizes="48px" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.name}</p>
-                  <p className="text-xs text-gray-500">{item.quantity} × ₹{item.price}</p>
+                  <p className="text-xs text-[#666666]">{item.quantity} × ₹{item.price}</p>
                 </div>
                 <p className="text-sm font-black text-[#1C1C1C]">₹{item.quantity * item.price}</p>
               </div>
             ))}
           </div>
 
-          <div className="pt-4 border-t border-gray-100 space-y-3">
-            <div className="flex justify-between text-sm text-gray-600">
+          <div className="pt-4 border-t border-[#E8E8E8] space-y-3">
+            <div className="flex justify-between text-sm text-[#666666]">
               <span className="font-medium">Item Total</span>
               <span className="font-bold text-[#1C1C1C]">₹{subtotal}</span>
             </div>
-            <div className="flex justify-between text-sm text-gray-600">
+            <div className="flex justify-between text-sm text-[#666666]">
               <span className="font-medium">Delivery Fee</span>
               <span className={`font-bold ${deliveryFee === 0 ? "text-[#0C831F]" : "text-[#1C1C1C]"}`}>
                 {deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}

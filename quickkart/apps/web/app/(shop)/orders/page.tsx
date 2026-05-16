@@ -53,7 +53,7 @@ export default function OrdersPage() {
           <ShoppingBag className="w-10 h-10 text-gray-300" />
         </div>
         <h1 className="text-2xl font-black text-[#1C1C1C] mb-2">My Orders</h1>
-        <p className="text-gray-500 mb-8">Please sign in to view your order history.</p>
+        <p className="text-[#666666] mb-8">Please sign in to view your order history.</p>
         <Link href="/sign-in" className="bg-[#1C1C1C] text-white font-black px-8 py-4 rounded-2xl hover:bg-black transition-all">
           Sign In
         </Link>
@@ -66,13 +66,13 @@ export default function OrdersPage() {
       <h1 className="text-3xl font-black text-[#1C1C1C] mb-8">My Orders</h1>
       
       {orders.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center border border-dashed border-gray-200">
+        <div className="bg-white rounded-3xl p-16 text-center border border-dashed border-[#E8E8E8]">
           <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShoppingBag className="w-10 h-10 text-gray-200" />
           </div>
           <h2 className="text-xl font-black text-[#1C1C1C] mb-2">No orders yet</h2>
-          <p className="text-gray-500 mb-8 max-w-xs mx-auto">Looks like you haven&apos;t placed any orders yet. Start shopping to see them here!</p>
-          <Link href="/" className="bg-[#0C831F] text-white font-black px-10 py-4 rounded-2xl hover:bg-[#096618] transition-all shadow-lg shadow-green-100">
+          <p className="text-[#666666] mb-8 max-w-xs mx-auto">Looks like you haven&apos;t placed any orders yet. Start shopping to see them here!</p>
+          <Link href="/" className="bg-[#F8C200] text-[#1C1C1C] font-black px-10 py-4 rounded-2xl hover:bg-[#e6b400] transition-all shadow-lg shadow-yellow-100">
             Start Shopping
           </Link>
         </div>

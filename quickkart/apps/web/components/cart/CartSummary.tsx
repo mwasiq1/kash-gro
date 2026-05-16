@@ -27,12 +27,12 @@ export default function CartSummary() {
     <div className="flex flex-col gap-4">
       {/* Free Delivery Progress */}
       {subtotal > 0 && remainingForFreeDelivery > 0 && (
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E8E8]">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-bold text-[#1C1C1C]">
               Add ₹{remainingForFreeDelivery} more for FREE delivery
             </span>
-            <span className="text-xs font-bold text-gray-400">₹199</span>
+            <span className="text-xs font-bold text-[#999999]">₹199</span>
           </div>
           <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
             <div 
@@ -44,15 +44,15 @@ export default function CartSummary() {
       )}
 
       {/* Bill Details */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col gap-3">
+      <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E8E8] flex flex-col gap-3">
         <h3 className="font-bold text-[#1C1C1C] text-sm mb-1">Bill Details</h3>
         
-        <div className="flex justify-between text-sm text-gray-600">
+        <div className="flex justify-between text-sm text-[#666666]">
           <span>Item Total</span>
           <span className="font-medium text-[#1C1C1C]">₹{subtotal}</span>
         </div>
 
-        <div className="flex justify-between text-sm text-gray-600">
+        <div className="flex justify-between text-sm text-[#666666]">
           <span>Delivery Fee</span>
           <span className="font-medium text-[#1C1C1C]">
             {deliveryFee === 0 ? (
@@ -70,7 +70,7 @@ export default function CartSummary() {
           </div>
         )}
 
-        <div className="border-t border-gray-100 pt-3 mt-1 flex justify-between font-bold text-base text-[#1C1C1C]">
+        <div className="border-t border-[#E8E8E8] pt-3 mt-1 flex justify-between font-bold text-base text-[#1C1C1C]">
           <span>Grand Total</span>
           <span>₹{grandTotal}</span>
         </div>

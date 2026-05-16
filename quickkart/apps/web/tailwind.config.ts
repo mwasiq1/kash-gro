@@ -10,11 +10,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        brand: "#0C831F",
+        brand: {
+          DEFAULT: "#F8C200",
+          dark: "#E6B400",
+          light: "#FFF9E0",
+        },
         "text-primary": "#1C1C1C",
         "text-muted": "#6B7280",
-        "primary-yellow": "#F8C200",
-        "primary-dark": "#E6B400",
         "success-green": "#0C831F",
         "success-light": "#EBF9EE",
         "danger-red": "#D0190A",

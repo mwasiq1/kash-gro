@@ -4,9 +4,12 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { ClerkProvider, SignInButton, SignUpButton, Show, UserButton } from "@clerk/nextjs";
 import CartDrawer from "../components/cart/CartDrawer";
 
+import BottomNav from "../components/layout/BottomNav";
+
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-jakarta",
 });
 
 export const metadata: Metadata = {
@@ -29,10 +32,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${plusJakartaSans.className} bg-[#F4F6FA] text-[#1C1C1C] antialiased`}>
+      <body className={`${plusJakartaSans.variable} ${plusJakartaSans.className} bg-[#F4F6FA] text-[#1C1C1C] antialiased`}>
         <ClerkProvider>
-          <header className="fixed top-0 left-0 right-0 z-[100] px-4 py-2 bg-white shadow-sm flex items-center justify-between">
-            <h1 className="font-extrabold text-[#0C831F]">KashGro</h1>
+          <header className="fixed top-0 left-0 right-0 z-[100] px-4 py-2 bg-white border-b border-[#E8E8E8] flex items-center justify-between">
+            <h1 className="font-extrabold text-[#F8C200]">KashGro</h1>
             <div className="flex items-center gap-3">
               <Show when="signed-out">
                 <SignInButton />
@@ -43,11 +46,14 @@ export default function RootLayout({
               </Show>
             </div>
           </header>
-          <div className="pt-[50px]">
+          <div className="pt-[50px] pb-[64px] md:pb-0">
             {children}
           </div>
           {/* Global cart UI — persists across all pages, powered by Zustand */}
           <CartDrawer />
+          <div className="md:hidden">
+            <BottomNav />
+          </div>
         </ClerkProvider>
       </body>
     </html>

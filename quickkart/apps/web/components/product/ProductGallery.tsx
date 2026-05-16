@@ -19,7 +19,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Main Image */}
-      <div className="relative aspect-square w-full bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+      <div className="relative aspect-square w-full bg-white rounded-2xl border border-[#E8E8E8] overflow-hidden shadow-sm">
         <Image
           src={selectedImage}
           alt="Product image"
@@ -38,7 +38,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
             className={`relative w-20 h-20 flex-shrink-0 rounded-xl border-2 transition-all ${
               selectedImage === img
                 ? "border-[#F8C200] shadow-md"
-                : "border-gray-100 hover:border-gray-200"
+                : "border-[#E8E8E8] hover:border-[#E8E8E8]"
             } bg-white overflow-hidden`}
           >
             <Image

@@ -31,6 +31,12 @@ app.use(morgan("dev"));
 
 // ── Body Parsing ─────────────────────────────────────────────────────────────
 app.use(express.json());
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (err instanceof SyntaxError && 'status' in err && err.status === 400 && 'body' in err) {
+    return res.status(400).json({ success: false, error: "Malformed JSON", code: "BAD_REQUEST" });
+  }
+  next();
+});
 app.use(express.urlencoded({ extended: true }));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
@@ -46,11 +52,8 @@ async function startServer() {
   try {
     // Verify DB connection before accepting traffic
     await prisma.$connect();
-    console.log("✅ Database connected");
 
     app.listen(port, () => {
-      console.log(`🚀 API server running on http://localhost:${port}`);
-      console.log(`   Health check: http://localhost:${port}/api/health`);
     });
   } catch (error) {
     console.error("❌ Failed to connect to database:", error);

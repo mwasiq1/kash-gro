@@ -16,7 +16,7 @@ const CATEGORY_CONFIG: Record<string, { icon: React.ReactNode; color: string; bg
   "Instant Food":         { icon: <Zap className="w-6 h-6" />,            color: "text-red-500",    bg: "bg-red-50" },
 };
 
-const DEFAULT_CONFIG = { icon: <ShoppingBag className="w-6 h-6" />, color: "text-gray-600", bg: "bg-gray-100" };
+const DEFAULT_CONFIG = { icon: <ShoppingBag className="w-6 h-6" />, color: "text-[#666666]", bg: "bg-gray-100" };
 
 interface CategoryBarProps {
   categories: Category[];
@@ -41,9 +41,9 @@ export default function CategoryBar({ categories, selected, onSelect }: Category
                 : "bg-gray-100 group-hover:bg-gray-200"
             }`}
           >
-            <ShoppingBasket className={`w-6 h-6 ${selected === null ? "text-black" : "text-gray-600"}`} />
+            <ShoppingBasket className={`w-6 h-6 ${selected === null ? "text-[#1C1C1C]" : "text-[#666666]"}`} />
           </div>
-          <span className={`text-[11px] font-semibold text-center leading-tight ${selected === null ? "text-[#1C1C1C]" : "text-gray-500"}`}>
+          <span className={`text-[11px] font-semibold text-center leading-tight ${selected === null ? "text-[#1C1C1C]" : "text-[#666666]"}`}>
             All
           </span>
         </button>
@@ -64,11 +64,11 @@ export default function CategoryBar({ categories, selected, onSelect }: Category
                     : `${config.bg} group-hover:opacity-80`
                 }`}
               >
-                <span className={isSelected ? "text-black" : config.color}>{config.icon}</span>
+                <span className={isSelected ? "text-[#1C1C1C]" : config.color}>{config.icon}</span>
               </div>
               <span
                 className={`text-[11px] font-semibold text-center leading-tight w-16 ${
-                  isSelected ? "text-[#1C1C1C]" : "text-gray-500"
+                  isSelected ? "text-[#1C1C1C]" : "text-[#666666]"
                 }`}
               >
                 {cat.name.split(" & ")[0]}

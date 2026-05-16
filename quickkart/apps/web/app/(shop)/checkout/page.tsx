@@ -35,7 +35,7 @@ export default function CheckoutPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <Loader2 className="w-10 h-10 text-[#0C831F] animate-spin" />
-        <p className="text-gray-500 font-bold">Securing your checkout...</p>
+        <p className="text-[#666666] font-bold">Securing your checkout...</p>
       </div>
     );
   }
@@ -81,7 +81,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-[#F4F6FA] pb-24">
       {/* Header */}
-      <div className="bg-white sticky top-0 z-20 border-b border-gray-100 px-4 py-4 md:px-8">
+      <div className="bg-white sticky top-0 z-20 border-b border-[#E8E8E8] px-4 py-4 md:px-8">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
           <Link href="/" className="p-2 hover:bg-gray-50 rounded-full transition-colors">
             <ArrowLeft className="w-6 h-6 text-[#1C1C1C]" />
@@ -116,7 +116,7 @@ export default function CheckoutPage() {
             <button
               onClick={handlePlaceOrder}
               disabled={isPlacingOrder || !selectedAddressId || items.length === 0}
-              className="w-full bg-[#0C831F] text-white font-black py-5 rounded-2xl text-xl shadow-lg hover:bg-[#096618] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 group"
+              className="w-full bg-[#F8C200] text-[#1C1C1C] font-black py-5 rounded-2xl text-xl shadow-lg hover:bg-[#e6b400] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 group"
             >
               {isPlacingOrder ? (
                 <Loader2 className="w-6 h-6 animate-spin" />
@@ -127,7 +127,7 @@ export default function CheckoutPage() {
                 </>
               )}
             </button>
-            <p className="text-[10px] text-gray-400 text-center font-medium uppercase tracking-widest">
+            <p className="text-[10px] text-[#999999] text-center font-medium uppercase tracking-widest">
               By placing this order, you agree to our Terms & Conditions
             </p>
           </div>

@@ -49,7 +49,7 @@ export default function PromoInput() {
           </div>
           <button
             onClick={removePromo}
-            className="text-gray-500 hover:text-red-500 transition p-1"
+            className="text-[#666666] hover:text-red-500 transition p-1"
             title="Remove Promo"
           >
             <X className="w-4 h-4" />
@@ -67,7 +67,7 @@ export default function PromoInput() {
       <div className="flex gap-2">
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Tag className="w-4 h-4 text-gray-400" />
+            <Tag className="w-4 h-4 text-[#999999]" />
           </div>
           <input
             type="text"
@@ -77,7 +77,7 @@ export default function PromoInput() {
               setError("");
             }}
             placeholder="Enter promo code"
-            className="w-full pl-9 pr-3 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#0C831F] focus:ring-1 focus:ring-[#0C831F] text-sm font-bold uppercase transition"
+            className="w-full pl-9 pr-3 py-3 rounded-xl border border-[#E8E8E8] focus:outline-none focus:border-[#0C831F] focus:ring-1 focus:ring-[#0C831F] text-sm font-bold uppercase transition"
           />
         </div>
         <button
