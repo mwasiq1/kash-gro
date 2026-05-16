@@ -236,7 +236,8 @@ export const getOrderById = async (
         name: item.product.name,
         price: item.price,
         quantity: item.quantity,
-        image: item.product.images?.[0] || ""
+        image: item.product.images?.[0] || "",
+        unit: item.product.unit || "item"
       })),
       address
     };

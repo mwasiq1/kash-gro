@@ -27,13 +27,12 @@ const api = {
     const data = await fetchApi(endpoint, { method: "GET", headers });
     return { data }; // Mimic axios { data: { success, data } }
   },
-  post: async (endpoint: string, body: any) => {
-    let token = undefined;
-    if (typeof window !== "undefined" && (window as any).Clerk) {
-      token = await (window as any).Clerk.session?.getToken();
-    }
-    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
-    const data = await fetchApi(endpoint, { method: "POST", body: JSON.stringify(body), headers });
+  post: async (endpoint: string, body: any, options: any = {}) => {
+    const data = await fetchApi(endpoint, { 
+      method: "POST", 
+      body: JSON.stringify(body), 
+      headers: options.headers 
+    });
     return { data };
   }
 };

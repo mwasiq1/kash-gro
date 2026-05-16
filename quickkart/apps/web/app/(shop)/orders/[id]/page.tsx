@@ -151,11 +151,11 @@ export default function OrderDetailPage() {
                 {order.items.map((item: any) => (
                   <div key={item.id} className="flex gap-4">
                     <div className="relative w-14 h-14 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-[#E8E8E8] overflow-hidden">
-                      <Image src={item.product.images[0] || "https://placehold.co/48x48/F4F6FA/1C1C1C?text=P"} alt={item.product.name} fill className="object-contain p-2" sizes="56px" />
+                      <Image src={item.product?.images?.[0] ?? item.image ?? "https://placehold.co/48x48/F4F6FA/1C1C1C?text=P"} alt={item.product?.name ?? item.name ?? "Product"} fill className="object-contain p-2" sizes="56px" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.product.name}</p>
-                      <p className="text-xs text-[#666666] font-medium">{item.quantity} × {item.product.unit}</p>
+                      <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.product?.name ?? item.name}</p>
+                      <p className="text-xs text-[#666666] font-medium">{item.quantity} × {item.product?.unit ?? item.unit ?? "item"}</p>
                     </div>
                     <p className="text-sm font-black text-[#1C1C1C]">₹{item.price * item.quantity}</p>
                   </div>

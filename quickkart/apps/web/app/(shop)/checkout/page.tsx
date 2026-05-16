@@ -54,25 +54,36 @@ export default function CheckoutPage() {
       
       const deliveryFee = cartTotal >= 200 ? 0 : 25;
       const grandTotal = cartTotal + deliveryFee;
+      const discountAmount = promoCode ? 0 : 0; // If promoCode logic is needed, calculate it here
 
       const orderData = {
         addressId: selectedAddressId,
         items: items.map(i => ({ productId: i.id, quantity: i.quantity })),
-        totalAmount: grandTotal,
+        subtotal: cartTotal,
+        deliveryFee,
+        discount: discountAmount,
+        total: grandTotal,
+        totalAmount: grandTotal, // Keep totalAmount for backward compatibility with the backend
+        promoCode: promoCode || undefined,
       };
 
-      const response = await api.post("/orders", orderData);
+      const response = await api.post("/orders", orderData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-      if (response.data.success) {
+      if (response.data?.success) {
         const order = response.data.data;
         clearCart();
         router.push(`/order-confirmed?id=${order.id}`);
+        // Do not reset isPlacingOrder here to prevent the empty cart useEffect from redirecting to "/"
       } else {
-        setError(response.data.message || response.data.error || "Failed to place order");
+        throw new Error(response.data?.message || response.data?.error || "Failed to place order");
       }
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
-    } finally {
+      console.error('Order failed:', err);
+      const message = err?.response?.data?.error || err.message || 'Failed to place order. Please try again.';
+      setError(message);
+      // Ensure we re-enable the button if it failed
       setIsPlacingOrder(false);
     }
   };
