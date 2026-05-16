@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Search, ShoppingBag } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 import { fetchApi } from "@/lib/api";
 import OrderTable from "../../../components/orders/OrderTable";
 import OrderDetailModal from "../../../components/orders/OrderDetailModal";
@@ -44,6 +45,7 @@ interface Order {
 }
 
 export default function OrdersPage() {
+  const { getToken } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeStatus, setActiveStatus] = useState("");
@@ -61,14 +63,22 @@ export default function OrdersPage() {
       ...(activeStatus && { status: activeStatus }),
       ...(search && { search }),
     });
-    const res = await fetchApi(`/admin/orders?${params}`);
-    if (res.success) {
-      setOrders(res.data);
-      setTotalPages(res.pagination.totalPages);
-      setTotal(res.pagination.total);
+    
+    try {
+      const token = await getToken();
+      const res = await fetchApi(`/admin/orders?${params}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.success) {
+        setOrders(res.data);
+        setTotalPages(res.pagination.totalPages);
+        setTotal(res.pagination.total);
+      }
+    } catch (err) {
+      console.error("Failed to fetch admin orders", err);
     }
     setLoading(false);
-  }, [page, activeStatus, search]);
+  }, [page, activeStatus, search, getToken]);
 
   // Reset page when filters change
   useEffect(() => {

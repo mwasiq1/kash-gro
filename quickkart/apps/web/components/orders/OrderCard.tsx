@@ -18,6 +18,7 @@ interface OrderCardProps {
 
 export default function OrderCard({ order }: OrderCardProps) {
   const itemCount = order.items.reduce((acc, item) => acc + item.quantity, 0);
+  const dateObj = order.createdAt ? new Date(order.createdAt) : new Date((order as any).placedAt);
   const formattedDate = new Intl.DateTimeFormat("en-IN", {
     day: "2-digit",
     month: "short",
@@ -25,7 +26,9 @@ export default function OrderCard({ order }: OrderCardProps) {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-  }).format(new Date(order.createdAt));
+  }).format(dateObj);
+
+  const displayTotal = order.totalAmount ?? (order as any).total;
 
   return (
     <Link 
@@ -53,7 +56,7 @@ export default function OrderCard({ order }: OrderCardProps) {
           </div>
           <div>
             <p className="text-[10px] font-black text-[#999999] uppercase tracking-widest">Total</p>
-            <p className="text-sm font-black text-[#1C1C1C]">₹{order.totalAmount}</p>
+            <p className="text-sm font-black text-[#1C1C1C]">₹{displayTotal}</p>
           </div>
         </div>
         <div className="flex items-center gap-1 text-[#0C831F] text-sm font-black">

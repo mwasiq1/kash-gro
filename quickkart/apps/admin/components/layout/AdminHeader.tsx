@@ -37,7 +37,6 @@ export default function AdminHeader() {
 
         <button className="relative p-2.5 hover:bg-gray-50 rounded-xl transition-colors">
           <Bell size={20} className="text-gray-500" />
-          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
 
         <div className="h-8 w-[1px] bg-gray-100 mx-2"></div>

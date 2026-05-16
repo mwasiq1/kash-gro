@@ -281,7 +281,47 @@ export const getOrders = async (
       orderBy: { createdAt: "desc" },
     });
 
-    res.status(200).json({ success: true, data: orders });
+    const formattedOrders = orders.map(order => {
+      // Format the response to match OrderDetail structure expected by frontend
+      const addressMatch = order.deliveryAddress.match(/^([^:]+):\s*([^,]+)(?:,\s*([^,]+))?,\s*([^,]+),\s*([^-]+)\s*-\s*(.*)$/);
+      
+      const address = addressMatch ? {
+        label: addressMatch[1],
+        line1: addressMatch[2],
+        line2: addressMatch[3] || "",
+        city: addressMatch[4],
+        state: addressMatch[5],
+        pincode: addressMatch[6]
+      } : {
+        label: "Delivery Address",
+        line1: order.deliveryAddress,
+        city: "",
+        state: "",
+        pincode: ""
+      };
+
+      return {
+        id: order.id,
+        orderNumber: order.orderNumber,
+        total: order.totalAmount,
+        subtotal: order.totalAmount,
+        deliveryFee: 0,
+        discount: 0,
+        status: order.status,
+        placedAt: order.createdAt.toISOString(),
+        items: order.items.map((item) => ({
+          id: item.productId,
+          name: item.product.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.product.images?.[0] || "",
+          unit: item.product.unit || "item"
+        })),
+        address
+      };
+    });
+
+    res.status(200).json({ success: true, data: formattedOrders });
   } catch (error) {
     next(error);
   }
