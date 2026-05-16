@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 import { fetchApi } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 
@@ -40,6 +41,7 @@ export default function OrderStatusSelect({
   currentStatus,
   onStatusUpdated,
 }: OrderStatusSelectProps) {
+  const { getToken } = useAuth();
   const [saving, setSaving] = useState(false);
 
   const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,16 +49,23 @@ export default function OrderStatusSelect({
     if (newStatus === currentStatus) return;
 
     setSaving(true);
-    const res = await fetchApi(`/admin/orders/${orderId}`, {
-      method: "PATCH",
-      body: JSON.stringify({ status: newStatus }),
-    });
-    setSaving(false);
-
-    if (res.success) {
-      onStatusUpdated(newStatus);
-    } else {
-      alert(res.error || "Failed to update status");
+    try {
+      const token = await getToken();
+      const res = await fetchApi(`/admin/orders/${orderId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: newStatus }),
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.success) {
+        onStatusUpdated(newStatus);
+      } else {
+        alert(res.error || "Failed to update status");
+      }
+    } catch (err) {
+      console.error("Failed to update status", err);
+      alert("Failed to update status");
+    } finally {
+      setSaving(false);
     }
   };
 

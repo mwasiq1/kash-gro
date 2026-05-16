@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { X, MapPin, User, Phone, Mail, CheckCircle2, Circle, Loader2 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 import { STATUS_COLORS } from "./OrderStatusSelect";
 import { fetchApi } from "@/lib/api";
 
@@ -62,6 +63,7 @@ const fmt = (iso?: string | null) =>
     : null;
 
 export default function OrderDetailModal({ order, onClose, onStatusUpdated }: OrderDetailModalProps) {
+  const { getToken } = useAuth();
   const [updating, setUpdating] = useState(false);
   const isCancelled = order.status === "CANCELLED";
 
@@ -86,19 +88,26 @@ export default function OrderDetailModal({ order, onClose, onStatusUpdated }: Or
 
   const handleUpdateStatus = async (nextStatus: string) => {
     setUpdating(true);
-    const res = await fetchApi(`/admin/orders/${order.id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ status: nextStatus }),
-    });
-    setUpdating(false);
-
-    if (res.success) {
-      alert("Order status updated");
-      if (onStatusUpdated) {
-        onStatusUpdated(order.id, nextStatus);
+    try {
+      const token = await getToken();
+      const res = await fetchApi(`/admin/orders/${order.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: nextStatus }),
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.success) {
+        alert("Order status updated");
+        if (onStatusUpdated) {
+          onStatusUpdated(order.id, nextStatus);
+        }
+      } else {
+        alert(res.error || "Failed to update status");
       }
-    } else {
-      alert(res.error || "Failed to update status");
+    } catch (err) {
+      console.error("Failed to update order status", err);
+      alert("Failed to update status");
+    } finally {
+      setUpdating(false);
     }
   };
 

@@ -8,6 +8,7 @@ import { fetchApi } from "@/lib/api";
 import ImageUpload from "./ImageUpload";
 import MultiImageUpload from "./MultiImageUpload";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { Loader2, Camera, Search, Sparkles } from "lucide-react";
 import BarcodeScanner from "./BarcodeScanner";
 import ScanResult from "./ScanResult";
@@ -115,19 +116,23 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     alert("Product details filled!");
   };
 
+  const { getToken } = useAuth();
   const images = watch("images");
 
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
-      const res = await fetchApi("/categories");
+      const token = await getToken();
+      const res = await fetchApi("/categories", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (res.success) {
         setCategories(res.data);
       }
       setIsLoading(false);
     };
     fetchCategories();
-  }, []);
+  }, [getToken]);
 
   const onSubmit = async (data: ProductFormValues) => {
     const payload = {
@@ -138,9 +143,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     const url = initialData ? `/admin/products/${initialData.id}` : "/admin/products";
     const method = initialData ? "PATCH" : "POST";
 
+    const token = await getToken();
     const response = await fetchApi(url, {
       method,
       body: JSON.stringify(payload),
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     if (response.success) {
