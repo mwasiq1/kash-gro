@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../../hooks/useCart";
 import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
-import { fetchApi } from "../../../lib/api";
+import api from "../../../lib/api";
 import { useAuth } from "@clerk/nextjs";
 import AddressSelector from "../../../components/checkout/AddressSelector";
 import OrderSummary from "../../../components/checkout/OrderSummary";
@@ -55,21 +55,20 @@ export default function CheckoutPage() {
       const deliveryFee = cartTotal >= 200 ? 0 : 25;
       const grandTotal = cartTotal + deliveryFee;
 
-      const response = await fetchApi("/orders", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          addressId: selectedAddressId,
-          items: items.map(i => ({ productId: i.id, quantity: i.quantity })),
-          totalAmount: grandTotal,
-        }),
-      });
+      const orderData = {
+        addressId: selectedAddressId,
+        items: items.map(i => ({ productId: i.id, quantity: i.quantity })),
+        totalAmount: grandTotal,
+      };
 
-      if (response.success) {
+      const response = await api.post("/orders", orderData);
+
+      if (response.data.success) {
+        const order = response.data.data;
         clearCart();
-        router.push(`/order-confirmed?id=${response.data.id}`);
+        router.push(`/order-confirmed?id=${order.id}`);
       } else {
-        setError(response.message || response.error || "Failed to place order");
+        setError(response.data.message || response.data.error || "Failed to place order");
       }
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");

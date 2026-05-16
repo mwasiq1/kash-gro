@@ -110,14 +110,40 @@ export const createOrder = async (
         },
       });
 
-      return newOrder;
+      return { newOrder, selectedAddress, productsInDb, orderItemsData };
     });
+
+    const { newOrder, selectedAddress, productsInDb, orderItemsData } = order;
 
     res.status(201).json({ 
       success: true, 
       data: { 
-        id: order.id, 
-        orderNumber: order.orderNumber 
+        id: newOrder.id, 
+        orderNumber: newOrder.orderNumber,
+        total: newOrder.totalAmount,
+        subtotal: newOrder.totalAmount,
+        deliveryFee: 0,
+        discount: 0,
+        status: newOrder.status,
+        placedAt: newOrder.createdAt.toISOString(),
+        items: orderItemsData.map((item: any) => {
+          const product = productsInDb.find((p) => p.id === item.productId);
+          return {
+            id: item.productId,
+            name: product?.name || "Unknown Product",
+            price: item.price,
+            quantity: item.quantity,
+            image: product?.images?.[0] || ""
+          };
+        }),
+        address: {
+          label: selectedAddress.label,
+          line1: selectedAddress.line1,
+          line2: selectedAddress.line2 || "",
+          city: selectedAddress.city,
+          state: selectedAddress.state,
+          pincode: selectedAddress.pincode
+        }
       } 
     });
   } catch (error: any) {
@@ -177,8 +203,45 @@ export const getOrderById = async (
       res.status(403).json({ success: false, error: "Forbidden" });
       return;
     }
+    // Format the response to match OrderDetail
+    const addressMatch = order.deliveryAddress.match(/^([^:]+):\s*([^,]+)(?:,\s*([^,]+))?,\s*([^,]+),\s*([^-]+)\s*-\s*(.*)$/);
+    
+    // Fallback if regex fails (though we constructed it nicely)
+    const address = addressMatch ? {
+      label: addressMatch[1],
+      line1: addressMatch[2],
+      line2: addressMatch[3] || "",
+      city: addressMatch[4],
+      state: addressMatch[5],
+      pincode: addressMatch[6]
+    } : {
+      label: "Delivery Address",
+      line1: order.deliveryAddress,
+      city: "",
+      state: "",
+      pincode: ""
+    };
 
-    res.status(200).json({ success: true, data: order });
+    const formattedOrder = {
+      id: order.id,
+      orderNumber: order.orderNumber,
+      total: order.totalAmount,
+      subtotal: order.totalAmount,
+      deliveryFee: 0,
+      discount: 0,
+      status: order.status,
+      placedAt: order.createdAt.toISOString(),
+      items: order.items.map((item) => ({
+        id: item.productId,
+        name: item.product.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.product.images?.[0] || ""
+      })),
+      address
+    };
+
+    res.status(200).json({ success: true, data: formattedOrder });
   } catch (error) {
     next(error);
   }
