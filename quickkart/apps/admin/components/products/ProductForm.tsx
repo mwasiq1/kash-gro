@@ -8,7 +8,10 @@ import { fetchApi } from "@/lib/api";
 import ImageUpload from "./ImageUpload";
 import MultiImageUpload from "./MultiImageUpload";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Camera, Search, Sparkles } from "lucide-react";
+import BarcodeScanner from "./BarcodeScanner";
+import ScanResult from "./ScanResult";
+import { lookupBarcode, ScannedProduct } from "@/lib/openfoodfacts";
 
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -37,6 +40,13 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   const [categories, setCategories] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Barcode Scanner State
+  const [showScanner, setShowScanner] = useState(false);
+  const [lookingUp, setLookingUp] = useState(false);
+  const [scannedBarcode, setScannedBarcode] = useState("");
+  const [scanResult, setScanResult] = useState<ScannedProduct | null>(null);
+  const [showResult, setShowResult] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -62,6 +72,48 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       tags: initialData?.tags ? initialData.tags.join(", ") : "",
     },
   });
+
+  const handleBarcodeScanned = async (barcode: string) => {
+    setShowScanner(false);
+    setScannedBarcode(barcode);
+    setLookingUp(true);
+    
+    const result = await lookupBarcode(barcode);
+    setScanResult(result);
+    setLookingUp(false);
+    setShowResult(true);
+  };
+
+  const handleUseScanResult = () => {
+    if (!scanResult) return;
+
+    setValue("name", scanResult.name, { shouldValidate: true });
+    setValue("unit", scanResult.unit || "1 unit", { shouldValidate: true });
+    
+    // Auto-generate slug if not present
+    const slug = scanResult.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    setValue("slug", slug);
+
+    // Find category ID by name
+    const category = categories.find(c => c.name === scanResult.categoryName);
+    if (category) {
+      setValue("categoryId", category.id, { shouldValidate: true });
+    }
+
+    // Handle image if present
+    if (scanResult.imageUrl) {
+      setValue("images", [scanResult.imageUrl], { shouldValidate: true });
+    }
+
+    // Add barcode to tags
+    const currentTags = watch("tags");
+    if (!currentTags.includes(scanResult.barcode)) {
+      setValue("tags", currentTags ? `${currentTags}, ${scanResult.barcode}` : scanResult.barcode);
+    }
+
+    setShowResult(false);
+    alert("Product details filled!");
+  };
 
   const images = watch("images");
 
@@ -100,7 +152,59 @@ export default function ProductForm({ initialData }: ProductFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100 relative">
+      {/* Scan Button at top */}
+      <div className="pb-6 border-b border-gray-50">
+        <button
+          type="button"
+          onClick={() => setShowScanner(true)}
+          className="w-full flex flex-col items-center justify-center p-6 border-2 border-dashed border-[#F8C200] rounded-2xl bg-yellow-50/50 hover:bg-yellow-50 transition-all group"
+        >
+          <div className="bg-[#F8C200] p-3 rounded-full shadow-lg group-hover:scale-110 transition-transform mb-3">
+            <Camera className="w-6 h-6 text-black" />
+          </div>
+          <span className="text-lg font-bold text-black flex items-center gap-2">
+            Scan Product Barcode
+            <Sparkles className="w-4 h-4 text-[#F8C200]" />
+          </span>
+          <span className="text-sm text-gray-500 mt-1 font-medium">(auto-fills product details from database)</span>
+        </button>
+      </div>
+
+      {/* Scanner Overlays */}
+      {showScanner && (
+        <BarcodeScanner 
+          onScan={handleBarcodeScanned} 
+          onCancel={() => setShowScanner(false)} 
+        />
+      )}
+
+      {lookingUp && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white p-8 rounded-2xl flex flex-col items-center gap-4 shadow-2xl animate-in fade-in zoom-in duration-300">
+            <div className="relative">
+              <Loader2 className="w-12 h-12 animate-spin text-[#F8C200]" />
+              <Search className="w-6 h-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#F8C200]" />
+            </div>
+            <p className="font-bold text-gray-900">Looking up product details...</p>
+            <p className="text-sm text-gray-400">Searching Open Food Facts...</p>
+          </div>
+        </div>
+      )}
+
+      {showResult && (
+        <ScanResult 
+          result={scanResult}
+          barcode={scannedBarcode}
+          onConfirm={handleUseScanResult}
+          onRetry={() => {
+            setShowResult(false);
+            setShowScanner(true);
+          }}
+          onFillManually={() => setShowResult(false)}
+        />
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Left Column - Image & Status */}

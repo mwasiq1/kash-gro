@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@quickkart/shared": "*",
     "@types/papaparse": "^5.5.2",
+    "@zxing/library": "^0.23.0",
     "axios": "^1.16.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.378.0",
