@@ -188,6 +188,7 @@ export default function OrdersPage() {
         <OrderDetailModal
           order={selectedOrder}
           onClose={() => setSelectedOrder(null)}
+          onStatusUpdated={handleStatusUpdated}
         />
       )}
     </div>

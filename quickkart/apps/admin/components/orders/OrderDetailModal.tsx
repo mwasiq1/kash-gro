@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { X, MapPin, User, Phone, Mail, CheckCircle2, Circle } from "lucide-react";
+import { X, MapPin, User, Phone, Mail, CheckCircle2, Circle, Loader2 } from "lucide-react";
 import { STATUS_COLORS } from "./OrderStatusSelect";
+import { fetchApi } from "@/lib/api";
 
 interface OrderItem {
   id: string;
@@ -20,6 +21,8 @@ interface Order {
   deliveryAddress: string;
   createdAt: string;
   confirmedAt?: string | null;
+  pickingAt?: string | null;
+  packedAt?: string | null;
   processingAt?: string | null;
   outForDeliveryAt?: string | null;
   deliveredAt?: string | null;
@@ -32,18 +35,21 @@ interface Order {
 interface OrderDetailModalProps {
   order: Order;
   onClose: () => void;
+  onStatusUpdated?: (orderId: string, newStatus: string) => void;
 }
 
 const STATUS_STEPS = [
   { key: "PLACED", label: "Order Placed", tsKey: "createdAt" },
-  { key: "PROCESSING", label: "Confirmed & Processing", tsKey: "processingAt" },
+  { key: "CONFIRMED", label: "Order Confirmed", tsKey: "confirmedAt" },
+  { key: "PICKING", label: "Picking", tsKey: "pickingAt" },
+  { key: "PACKED", label: "Packed", tsKey: "packedAt" },
   { key: "OUT_FOR_DELIVERY", label: "Out for Delivery", tsKey: "outForDeliveryAt" },
   { key: "DELIVERED", label: "Delivered", tsKey: "deliveredAt" },
 ] as const;
 
 const CANCELLED_STEP = { key: "CANCELLED", label: "Cancelled", tsKey: "cancelledAt" };
 
-const STATUS_ORDER = ["PLACED", "PROCESSING", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED"];
+const STATUS_ORDER = ["PLACED", "CONFIRMED", "PICKING", "PACKED", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED"];
 
 const fmt = (iso?: string | null) =>
   iso
@@ -55,7 +61,8 @@ const fmt = (iso?: string | null) =>
       })
     : null;
 
-export default function OrderDetailModal({ order, onClose }: OrderDetailModalProps) {
+export default function OrderDetailModal({ order, onClose, onStatusUpdated }: OrderDetailModalProps) {
+  const [updating, setUpdating] = useState(false);
   const isCancelled = order.status === "CANCELLED";
 
   const steps = isCancelled
@@ -63,6 +70,39 @@ export default function OrderDetailModal({ order, onClose }: OrderDetailModalPro
     : STATUS_STEPS;
 
   const currentIdx = STATUS_ORDER.indexOf(order.status);
+
+  const getNextStatusAction = () => {
+    switch (order.status) {
+      case "PLACED": return { next: "CONFIRMED", label: "Confirm Order" };
+      case "CONFIRMED": return { next: "PICKING", label: "Start Picking" };
+      case "PICKING": return { next: "PACKED", label: "Mark as Packed" };
+      case "PACKED": return { next: "OUT_FOR_DELIVERY", label: "Out for Delivery" };
+      case "OUT_FOR_DELIVERY": return { next: "DELIVERED", label: "Mark as Delivered" };
+      case "DELIVERED": return { badge: "Order Complete", color: "bg-[#0C831F] text-white" };
+      case "CANCELLED": return { badge: "Cancelled", color: "bg-red-500 text-white" };
+      default: return null;
+    }
+  };
+
+  const handleUpdateStatus = async (nextStatus: string) => {
+    setUpdating(true);
+    const res = await fetchApi(`/admin/orders/${order.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: nextStatus }),
+    });
+    setUpdating(false);
+
+    if (res.success) {
+      alert("Order status updated");
+      if (onStatusUpdated) {
+        onStatusUpdated(order.id, nextStatus);
+      }
+    } else {
+      alert(res.error || "Failed to update status");
+    }
+  };
+
+  const action = getNextStatusAction();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -97,7 +137,7 @@ export default function OrderDetailModal({ order, onClose }: OrderDetailModalPro
             </h3>
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <User className="w-4 h-4 text-gray-400" />
-              <span>{order.user.name ?? "Unknown"}</span>
+              <span>{order.user.name ?? order.user.email ?? "Guest"}</span>
             </div>
             {order.user.email && (
               <div className="flex items-center gap-2 text-sm text-gray-700">
@@ -201,12 +241,32 @@ export default function OrderDetailModal({ order, onClose }: OrderDetailModalPro
           </section>
 
           {/* Order Total */}
-          <div className="flex items-center justify-between border-t border-gray-100 pt-4">
+          <div className="flex items-center justify-between border-t border-gray-100 pt-4 mb-4">
             <span className="text-sm font-medium text-gray-600">Order Total</span>
             <span className="text-lg font-bold text-gray-900">
               ₹{order.totalAmount.toFixed(2)}
             </span>
           </div>
+
+          {/* Action Button */}
+          {action && (
+            <div className="pt-2">
+              {action.next ? (
+                <button
+                  onClick={() => handleUpdateStatus(action.next!)}
+                  disabled={updating}
+                  className="w-full bg-[#F8C200] text-black font-bold py-3.5 rounded-xl hover:bg-[#e6b400] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {updating ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
+                  {action.label}
+                </button>
+              ) : (
+                <div className={`w-full font-bold py-3.5 rounded-xl text-center ${action.color}`}>
+                  {action.badge}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

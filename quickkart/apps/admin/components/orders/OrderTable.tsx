@@ -90,7 +90,7 @@ export default function OrderTable({
                 {/* Customer */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <p className="text-sm font-medium text-gray-900">
-                    {order.user.name ?? "—"}
+                    {order.user.name ?? order.user.email ?? "Guest"}
                   </p>
                   <p className="text-xs text-gray-400">
                     {order.user.email ?? order.user.phone ?? ""}

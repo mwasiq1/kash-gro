@@ -7,6 +7,9 @@ import { Loader2 } from "lucide-react";
 const STATUS_OPTIONS = [
   { value: "PENDING", label: "Pending" },
   { value: "PLACED", label: "Placed" },
+  { value: "CONFIRMED", label: "Confirmed" },
+  { value: "PICKING", label: "Picking" },
+  { value: "PACKED", label: "Packed" },
   { value: "PROCESSING", label: "Processing" },
   { value: "OUT_FOR_DELIVERY", label: "Out for Delivery" },
   { value: "DELIVERED", label: "Delivered" },
@@ -17,6 +20,9 @@ const STATUS_OPTIONS = [
 export const STATUS_COLORS: Record<string, string> = {
   PENDING: "bg-gray-100 text-gray-700",
   PLACED: "bg-blue-100 text-blue-700",
+  CONFIRMED: "bg-indigo-100 text-indigo-700",
+  PICKING: "bg-orange-100 text-orange-800",
+  PACKED: "bg-yellow-100 text-yellow-800",
   PROCESSING: "bg-yellow-100 text-yellow-800",
   OUT_FOR_DELIVERY: "bg-purple-100 text-purple-700",
   DELIVERED: "bg-green-100 text-[#0C831F]",

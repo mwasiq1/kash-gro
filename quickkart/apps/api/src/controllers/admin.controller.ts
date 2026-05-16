@@ -241,10 +241,13 @@ export const updateCategory = asyncHandler(
 
 // ─── Admin Order Handlers ─────────────────────────────────────────────────────
 
-const ORDER_STATUSES = ["PENDING", "PLACED", "PROCESSING", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED"] as const;
+const ORDER_STATUSES = ["PENDING", "PLACED", "CONFIRMED", "PICKING", "PACKED", "PROCESSING", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED"] as const;
 type OrderStatusType = typeof ORDER_STATUSES[number];
 
 const STATUS_TIMESTAMP_MAP: Partial<Record<OrderStatusType, string>> = {
+  CONFIRMED: "confirmedAt",
+  PICKING: "pickingAt",
+  PACKED: "packedAt",
   PROCESSING: "processingAt",
   OUT_FOR_DELIVERY: "outForDeliveryAt",
   DELIVERED: "deliveredAt",

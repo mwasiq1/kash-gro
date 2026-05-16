@@ -78,6 +78,8 @@ model Order {
   status           OrderStatus   @default(PENDING)
   paymentStatus    PaymentStatus @default(PENDING)
   confirmedAt      DateTime?
+  pickingAt        DateTime?
+  packedAt         DateTime?
   processingAt     DateTime?
   outForDeliveryAt DateTime?
   deliveredAt      DateTime?
@@ -135,6 +137,9 @@ enum Role {
 enum OrderStatus {
   PENDING
   PLACED
+  CONFIRMED
+  PICKING
+  PACKED
   PROCESSING
   OUT_FOR_DELIVERY
   DELIVERED
