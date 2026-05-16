@@ -1,2 +1,2 @@
-export * from "./types/index.js";
-export * from "./schemas/address.schema.js";
+export * from "./types";
+export * from "./schemas/address.schema";
