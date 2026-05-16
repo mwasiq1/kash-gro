@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { fetchApi } from "../../../lib/api";
 import { useAuth } from "@clerk/nextjs";
-import { CheckCircle2, Clock, MapPin, Package, ShoppingBag, Loader2, ArrowRight } from "lucide-react";
+import { CheckCircle2, Clock, MapPin, Package, Loader2, CreditCard, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-
 import { Suspense } from "react";
 
 function OrderConfirmedContent() {
@@ -46,9 +45,9 @@ function OrderConfirmedContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F6FA] gap-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-4">
         <Loader2 className="w-10 h-10 text-[#0C831F] animate-spin" />
-        <p className="text-[#666666] font-bold">Verifying your order...</p>
+        <p className="text-[#1C1C1C] font-bold">Fetching order details...</p>
       </div>
     );
   }
@@ -56,82 +55,138 @@ function OrderConfirmedContent() {
   if (!order) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F6FA] p-6 text-center">
-        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm">
-          <ShoppingBag className="w-10 h-10 text-gray-300" />
-        </div>
         <h1 className="text-2xl font-black text-[#1C1C1C] mb-2">Order Not Found</h1>
-        <p className="text-[#666666] mb-8 max-w-sm">We couldn&apos;t retrieve the details for this order. It might still be processing.</p>
-        <Link href="/" className="bg-[#1C1C1C] text-white font-black px-8 py-4 rounded-2xl hover:bg-black transition-all">
-          Back to Shop
+        <p className="text-[#666666] mb-8">We couldn&apos;t find the order you&apos;re looking for.</p>
+        <Link href="/" className="bg-[#0C831F] text-white font-black px-8 py-4 rounded-2xl">
+          Return Home
         </Link>
       </div>
     );
   }
 
+  const subtotal = order.totalAmount;
+  const deliveryFee = subtotal >= 200 ? 0 : 25;
+  const total = subtotal + deliveryFee;
+
   return (
-    <div className="min-h-screen bg-[#F4F6FA] pb-24">
-      {/* Confetti-like Hero Section */}
-      <div className="bg-white pt-16 pb-12 px-6 text-center border-b border-[#E8E8E8] relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-[#0C831F]" />
-        <div className="max-w-3xl mx-auto">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#EBF9EE] rounded-full mb-6 text-[#0C831F] animate-in zoom-in duration-500">
-            <CheckCircle2 className="w-10 h-10" />
+    <div className="min-h-screen bg-[#F4F6FA] pb-20">
+      {/* Hero Success Section */}
+      <div className="bg-white px-4 py-12 text-center border-b border-gray-100">
+        <div className="max-w-xl mx-auto">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-[#EBF9EE] rounded-full mb-6 animate-in zoom-in duration-500">
+            <CheckCircle2 className="w-12 h-12 text-[#0C831F]" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-black text-[#1C1C1C] mb-3">Order Placed!</h1>
-          <p className="text-[#666666] font-medium mb-1">Order ID: <span className="font-bold text-[#1C1C1C]">{order.orderNumber}</span></p>
-          <div className="flex items-center justify-center gap-2 text-[#0C831F] font-black">
-            <Clock className="w-5 h-5" />
-            <span>Arriving in 20-30 mins</span>
+          <h1 className="text-3xl font-black text-[#0C831F] mb-2">Order placed!</h1>
+          <p className="text-gray-500 font-bold mb-4">Thank you for shopping with KashGro</p>
+          
+          <div className="inline-block bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 text-center">Order Number</p>
+            <p className="font-mono font-black text-[#1C1C1C] text-lg">{order.orderNumber}</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
-        {/* Delivery Details */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E8E8]">
+      <div className="max-w-2xl mx-auto px-4 -mt-4 space-y-4">
+        {/* Delivery Time Banner */}
+        <div className="bg-[#0C831F] text-white p-4 rounded-2xl shadow-lg flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-white/20 rounded-lg">
+              <Clock className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-[10px] uppercase font-black tracking-widest opacity-80">Estimated Delivery</p>
+              <p className="text-xl font-black">20-30 minutes</p>
+            </div>
+          </div>
+          <div className="text-right">
+             <p className="text-[10px] uppercase font-black tracking-widest opacity-80">Payment</p>
+             <p className="text-sm font-black">Cash on Delivery</p>
+          </div>
+        </div>
+
+        {/* COD Notice Box */}
+        <div className="bg-[#FFF9E0] border border-[#F8C200] p-4 rounded-2xl flex items-center gap-4">
+          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm flex-shrink-0">
+            <span className="text-2xl">🛵</span>
+          </div>
+          <p className="font-bold text-[#1C1C1C]">
+            Pay <span className="text-xl font-black">₹{total}</span> when your order arrives
+          </p>
+        </div>
+
+        {/* Delivery Address */}
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex items-center gap-3 mb-4">
             <MapPin className="w-5 h-5 text-[#0C831F]" />
-            <h3 className="font-black text-[#1C1C1C]">Delivery to</h3>
+            <h3 className="font-black text-[#1C1C1C]">Delivery Address</h3>
           </div>
-          <p className="text-sm text-[#666666] leading-relaxed pl-8">
+          <p className="text-sm text-gray-500 font-medium leading-relaxed">
             {order.deliveryAddress}
           </p>
         </div>
 
         {/* Order Items */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E8E8] overflow-hidden">
-          <div className="px-6 py-4 bg-gray-50 border-b border-[#E8E8E8] flex items-center gap-3">
-            <Package className="w-5 h-5 text-[#999999]" />
-            <h3 className="font-black text-[#1C1C1C]">Order Details</h3>
-          </div>
-          <div className="p-6 space-y-6">
-            {order.items.map((item: any) => (
-              <div key={item.id} className="flex gap-4">
-                <div className="relative w-14 h-14 bg-gray-50 rounded-xl flex-shrink-0 flex items-center justify-center border border-[#E8E8E8] overflow-hidden">
-                  <Image src={item.product.images[0] || "https://placehold.co/48x48/F4F6FA/1C1C1C?text=P"} alt={item.product.name} fill className="object-contain p-2" sizes="56px" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-[#1C1C1C] truncate">{item.product.name}</p>
-                  <p className="text-xs text-[#666666] font-medium">{item.quantity} × {item.product.unit}</p>
-                </div>
-                <p className="text-sm font-black text-[#1C1C1C]">₹{item.price * item.quantity}</p>
-              </div>
-            ))}
-
-            <div className="pt-6 border-t border-[#E8E8E8] flex justify-between items-center">
-              <div>
-                <p className="text-xs font-bold text-[#999999] uppercase tracking-widest">Total Paid via COD</p>
-                <p className="text-2xl font-black text-[#1C1C1C]">₹{order.totalAmount}</p>
-              </div>
-              <Link 
-                href="/" 
-                className="bg-[#F8C200] text-[#1C1C1C] font-black px-6 py-3 rounded-xl hover:bg-[#E6B400] transition-all flex items-center gap-2 group shadow-sm"
-              >
-                Keep Shopping
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Package className="w-5 h-5 text-gray-400" />
+              <h3 className="font-black text-[#1C1C1C]">Items ({order.items.length})</h3>
             </div>
           </div>
+          <div className="divide-y divide-gray-50">
+            {order.items.map((item: any) => (
+              <div key={item.id} className="p-4 flex gap-4">
+                <div className="relative w-16 h-16 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex-shrink-0">
+                  <Image 
+                    src={item.product.images?.[0] || "https://placehold.co/100x100/F4F6FA/1C1C1C?text=Product"} 
+                    alt={item.product.name} 
+                    fill 
+                    className="object-contain p-2"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-black text-[#1C1C1C] line-clamp-1">{item.product.name}</p>
+                  <p className="text-xs text-gray-500 font-bold">{item.product.unit} × {item.quantity}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-black text-[#1C1C1C]">₹{item.price * item.quantity}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Price Breakdown */}
+          <div className="p-6 bg-gray-50/30 border-t border-gray-50 space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500 font-bold">Subtotal</span>
+              <span className="text-[#1C1C1C] font-black">₹{subtotal}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500 font-bold">Delivery Fee</span>
+              <span className="text-[#1C1C1C] font-black">{deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}</span>
+            </div>
+            <div className="flex justify-between pt-3 border-t border-gray-200">
+              <span className="text-[#1C1C1C] font-black text-lg">Total Amount</span>
+              <span className="text-[#1C1C1C] font-black text-lg">₹{total}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+          <Link 
+            href={`/orders/${order.id}`}
+            className="bg-[#F8C200] text-[#1C1C1C] font-black py-4 rounded-2xl text-center shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2"
+          >
+            Track Order
+            <ChevronRight className="w-5 h-5" />
+          </Link>
+          <Link 
+            href="/"
+            className="bg-white text-[#1C1C1C] border-2 border-gray-100 font-black py-4 rounded-2xl text-center hover:bg-gray-50 transition-all active:scale-95"
+          >
+            Continue Shopping
+          </Link>
         </div>
       </div>
     </div>
@@ -141,9 +196,9 @@ function OrderConfirmedContent() {
 export default function OrderConfirmedPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F6FA] gap-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-4">
         <Loader2 className="w-10 h-10 text-[#0C831F] animate-spin" />
-        <p className="text-[#666666] font-bold">Verifying your order...</p>
+        <p className="text-[#1C1C1C] font-bold">Loading confirmation...</p>
       </div>
     }>
       <OrderConfirmedContent />

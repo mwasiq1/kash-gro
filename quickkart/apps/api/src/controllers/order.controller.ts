@@ -113,7 +113,13 @@ export const createOrder = async (
       return newOrder;
     });
 
-    res.status(201).json({ success: true, orderId: order.id, orderNumber: order.orderNumber });
+    res.status(201).json({ 
+      success: true, 
+      data: { 
+        id: order.id, 
+        orderNumber: order.orderNumber 
+      } 
+    });
   } catch (error: any) {
     if (error.message === "USER_NOT_FOUND") {
       res.status(404).json({ success: false, error: "User not found in database" });
