@@ -1,5 +1,3 @@
 {
-  "buildCommand": "cd ../.. && npm run build --filter=admin",
-  "outputDirectory": "apps/admin/.next",
-  "installCommand": "npm install"
+  "outputDirectory": ".next"
 }
