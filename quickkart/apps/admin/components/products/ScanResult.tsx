@@ -29,7 +29,7 @@ export default function ScanResult({
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Product Not Found</h2>
           <p className="text-gray-500 mb-6">
-            We couldn't find any product details for barcode: <span className="font-mono font-bold text-gray-900">{barcode}</span> in the Open Food Facts database.
+            We couldn&apos;t find any product details for barcode: <span className="font-mono font-bold text-gray-900">{barcode}</span> in the Open Food Facts database.
           </p>
           
           <div className="flex flex-col w-full gap-3">
