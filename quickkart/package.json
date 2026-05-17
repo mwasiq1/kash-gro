@@ -13,9 +13,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "turbo run db:generate",
     "db:push": "turbo run db:push",
-    "db:seed": "turbo run db:seed",
-    "testenv": "node test-env.js",
-    "testturbo": "echo turbo run build "
+    "db:seed": "turbo run db:seed"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
