@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckCircle2, Circle } from "lucide-react";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus } from "@quickkart/shared";
 
 const steps = [
   { status: "PLACED", label: "Order Placed", desc: "We've received your order" },

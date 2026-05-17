@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ChevronRight, Package } from "lucide-react";
 import StatusBadge from "./StatusBadge";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus } from "@quickkart/shared";
 
 interface OrderCardProps {
   order: {

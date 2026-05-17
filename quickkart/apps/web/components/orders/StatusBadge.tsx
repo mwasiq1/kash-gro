@@ -1,6 +1,6 @@
 "use client";
 
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus } from "@quickkart/shared";
 
 const statusConfig: Record<OrderStatus, { label: string; classes: string }> = {
   PENDING: {

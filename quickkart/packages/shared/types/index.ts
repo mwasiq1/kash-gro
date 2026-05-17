@@ -2,6 +2,10 @@ export type Role = "USER" | "ADMIN" | "RIDER";
 
 export type OrderStatus =
   | "PENDING"
+  | "PLACED"
+  | "CONFIRMED"
+  | "PICKING"
+  | "PACKED"
   | "PROCESSING"
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
