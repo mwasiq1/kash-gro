@@ -2,10 +2,14 @@
 
 import { OrderStatus } from "@prisma/client";
 
-const statusConfig = {
+const statusConfig: Record<OrderStatus, { label: string; classes: string }> = {
   PENDING: {
     label: "Pending",
     classes: "bg-gray-100 text-[#666666]",
+  },
+  CONFIRMED: {
+    label: "Confirmed",
+    classes: "bg-cyan-50 text-cyan-600",
   },
   PLACED: {
     label: "Placed",
@@ -14,6 +18,14 @@ const statusConfig = {
   PROCESSING: {
     label: "Processing",
     classes: "bg-[#FFF9E6] text-[#F8C200]",
+  },
+  PICKING: {
+    label: "Picking",
+    classes: "bg-orange-50 text-orange-600",
+  },
+  PACKED: {
+    label: "Packed",
+    classes: "bg-indigo-50 text-indigo-600",
   },
   OUT_FOR_DELIVERY: {
     label: "Out for Delivery",
