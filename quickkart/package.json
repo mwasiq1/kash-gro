@@ -7,13 +7,15 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build ${TURBO_FILTER:-}",
+    "build": "node scripts/build.js",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "db:generate": "turbo run db:generate",
     "db:push": "turbo run db:push",
-    "db:seed": "turbo run db:seed"
+    "db:seed": "turbo run db:seed",
+    "testenv": "node test-env.js",
+    "testturbo": "echo turbo run build "
   },
   "devDependencies": {
     "prettier": "^3.2.5",
