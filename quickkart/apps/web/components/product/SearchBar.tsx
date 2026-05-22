@@ -102,7 +102,7 @@ export default function SearchBar() {
                 >
                   <div className="relative w-10 h-10 bg-[#F4F6FA] rounded-md flex-shrink-0 flex items-center justify-center overflow-hidden border border-[#E8E8E8]">
                     <Image 
-                      src={product.images[0] || "https://placehold.co/32x32?text=P"} 
+                      src={product.imageUrl || product.images?.[0] || "https://placehold.co/32x32?text=P"} 
                       alt={product.name} 
                       fill
                       className="object-contain p-1"

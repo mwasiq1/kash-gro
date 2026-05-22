@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { X, MapPin, User, Phone, Mail, CheckCircle2, Circle, Loader2 } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "../../hooks/useAuth";
 import { STATUS_COLORS } from "./OrderStatusSelect";
 import { fetchApi } from "@/lib/api";
 

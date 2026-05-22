@@ -18,12 +18,15 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
 }
 
 const api = {
-  get: async (endpoint: string) => {
+  get: async (endpoint: string, options: any = {}) => {
     let token = undefined;
     if (typeof window !== "undefined" && (window as any).Clerk) {
       token = await (window as any).Clerk.session?.getToken();
     }
-    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+    const headers = {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    };
     const data = await fetchApi(endpoint, { method: "GET", headers });
     return { data }; // Mimic axios { data: { success, data } }
   },

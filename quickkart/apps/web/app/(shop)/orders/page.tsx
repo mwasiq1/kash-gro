@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "../../../hooks/useAuth";
 import { fetchApi } from "../../../lib/api";
 import OrderCard from "../../../components/orders/OrderCard";
 import { ShoppingBag, Loader2 } from "lucide-react";

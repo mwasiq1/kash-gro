@@ -7,6 +7,8 @@ import {
   ShoppingBag, Loader2
 } from 'lucide-react'
 import api from '@/lib/api'
+import { useAuth } from "../../../hooks/useAuth"
+import Image from 'next/image'
 
 interface OrderDetail {
   id: string
@@ -41,17 +43,28 @@ function OrderConfirmedContent() {
   const [order, setOrder] = useState<OrderDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const { getToken } = useAuth()
 
   useEffect(() => {
     if (!orderId) {
       router.push('/')
       return
     }
-    api.get(`/orders/${orderId}`)
-      .then(res => setOrder(res.data.data))
-      .catch(() => setError(true))
-      .finally(() => setLoading(false))
-  }, [orderId])
+    const fetchOrder = async () => {
+      try {
+        const token = await getToken()
+        const res = await api.get(`/orders/${orderId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        setOrder(res.data.data)
+      } catch (err) {
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchOrder()
+  }, [orderId, getToken, router])
 
   const formatPrice = (amount: number) =>
     new Intl.NumberFormat('en-IN', {
@@ -155,10 +168,20 @@ function OrderConfirmedContent() {
             {order.items.map(item => (
               <div key={item.id} className="flex items-center
                 gap-3">
-                <div className="w-11 h-11 rounded-lg bg-bg
-                  flex items-center justify-center flex-shrink-0">
-                  <ShoppingBag className="w-5 h-5
-                    text-text-muted" />
+                <div className="relative w-11 h-11 rounded-lg bg-bg
+                  flex items-center justify-center flex-shrink-0 overflow-hidden border border-border">
+                  {item.image ? (
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-contain p-1"
+                      sizes="44px"
+                    />
+                  ) : (
+                    <ShoppingBag className="w-5 h-5
+                      text-text-muted" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold

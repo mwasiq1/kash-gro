@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useMemo } from "react";
 import HeroCarousel from "./HeroCarousel";
 import CategoryBar from "./CategoryBar";
 import ProductCard from "../product/ProductCard";
@@ -31,16 +30,7 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ categories, allProducts }: HomeClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-  const filteredProducts = useMemo(() => {
-    if (!selectedCategory) return allProducts;
-    return allProducts.filter((p) => p.categoryId === selectedCategory);
-  }, [selectedCategory, allProducts]);
-
-  const categoryLabel = selectedCategory
-    ? categories.find((c) => c.id === selectedCategory)?.name ?? "Products"
-    : "All Products";
+  const categoryLabel = "All Products";
 
   return (
     <div className="min-h-screen bg-[#F4F6FA]">
@@ -50,18 +40,17 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
         <HeroCarousel />
         <CategoryBar
           categories={categories}
-          selected={selectedCategory}
-          onSelect={setSelectedCategory}
+          selected={null}
         />
 
         {/* Product Grid */}
         <section className="mt-5 px-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-bold text-[#1C1C1C]">{categoryLabel}</h2>
-            <span className="text-xs text-[#999999] font-medium">{filteredProducts.length} items</span>
+            <span className="text-xs text-[#999999] font-medium">{allProducts.length} items</span>
           </div>
 
-          {filteredProducts.length === 0 ? (
+          {allProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-[#999999] gap-3">
               <Package className="w-14 h-14 text-gray-200" />
               <p className="font-semibold">No products found</p>
@@ -69,7 +58,7 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {filteredProducts.map((product) => (
+              {allProducts.map((product) => (
                 <ProductCard key={product.id} product={product as any} />
               ))}
             </div>

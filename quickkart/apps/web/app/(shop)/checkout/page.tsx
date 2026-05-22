@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "../../../hooks/useCart";
 import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
 import api from "../../../lib/api";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "../../../hooks/useAuth";
 import AddressSelector from "../../../components/checkout/AddressSelector";
 import OrderSummary from "../../../components/checkout/OrderSummary";
 import Link from "next/link";
@@ -52,9 +52,12 @@ export default function CheckoutPage() {
     try {
       const token = await getToken();
       
-      const deliveryFee = cartTotal >= 200 ? 0 : 25;
-      const grandTotal = cartTotal + deliveryFee;
-      const discountAmount = promoCode ? 0 : 0; // If promoCode logic is needed, calculate it here
+      let deliveryFee = 0;
+      if (cartTotal > 0 && cartTotal < 99) deliveryFee = 40;
+      else if (cartTotal > 0 && cartTotal < 199) deliveryFee = 25;
+
+      const discountAmount = promoCode ? promoCode.discount : 0;
+      const grandTotal = Math.max(0, cartTotal + deliveryFee - discountAmount);
 
       const orderData = {
         addressId: selectedAddressId,
@@ -64,7 +67,7 @@ export default function CheckoutPage() {
         discount: discountAmount,
         total: grandTotal,
         totalAmount: grandTotal, // Keep totalAmount for backward compatibility with the backend
-        promoCode: promoCode || undefined,
+        promoCode: promoCode ? promoCode.code : undefined,
       };
 
       const response = await api.post("/orders", orderData, {

@@ -86,15 +86,26 @@ export const createOrder = async (
 
       // Generate order number: KG-YYYYMMDD-XXXX
       const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const orderCountToday = await tx.order.count({
+      const lastOrderToday = await tx.order.findFirst({
         where: {
-          createdAt: {
-            gte: new Date(new Date().setHours(0, 0, 0, 0)),
-            lt: new Date(new Date().setHours(23, 59, 59, 999)),
+          orderNumber: {
+            startsWith: `KG-${dateStr}-`,
           },
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
-      const orderNumber = `KG-${dateStr}-${(orderCountToday + 1).toString().padStart(4, "0")}`;
+
+      let nextSuffix = 1;
+      if (lastOrderToday) {
+        const parts = lastOrderToday.orderNumber.split("-");
+        const lastSuffix = parseInt(parts[2], 10);
+        if (!isNaN(lastSuffix)) {
+          nextSuffix = lastSuffix + 1;
+        }
+      }
+      const orderNumber = `KG-${dateStr}-${nextSuffix.toString().padStart(4, "0")}`;
 
       // Create the Order record
       const newOrder = await tx.order.create({

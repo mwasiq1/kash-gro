@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Search, ShoppingBag } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "../../../hooks/useAuth";
 import { fetchApi } from "@/lib/api";
 import OrderTable from "../../../components/orders/OrderTable";
 import OrderDetailModal from "../../../components/orders/OrderDetailModal";

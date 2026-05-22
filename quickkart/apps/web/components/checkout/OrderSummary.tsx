@@ -8,7 +8,9 @@ export default function OrderSummary() {
   const { items, cartTotal, promoCode } = useCart();
   
   const subtotal = cartTotal;
-  const deliveryFee = subtotal >= 200 ? 0 : 25;
+  let deliveryFee = 0;
+  if (subtotal > 0 && subtotal < 99) deliveryFee = 40;
+  else if (subtotal > 0 && subtotal < 199) deliveryFee = 25;
 
   const discount = promoCode ? promoCode.discount : 0;
   const grandTotal = Math.max(0, subtotal + deliveryFee - discount);

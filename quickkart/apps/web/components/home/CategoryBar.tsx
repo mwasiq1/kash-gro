@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { ShoppingBasket, Milk, Apple, Cookie, Coffee, Zap, ShoppingBag } from "lucide-react";
 
 interface Category {
   id: string;
   name: string;
+  slug: string | null;
   _count?: { products: number };
 }
 
@@ -20,41 +22,40 @@ const DEFAULT_CONFIG = { icon: <ShoppingBag className="w-6 h-6" />, color: "text
 
 interface CategoryBarProps {
   categories: Category[];
-  selected: string | null;
-  onSelect: (id: string | null) => void;
+  selected?: string | null;
 }
 
-export default function CategoryBar({ categories, selected, onSelect }: CategoryBarProps) {
+export default function CategoryBar({ categories, selected }: CategoryBarProps) {
   return (
     <div className="mt-5 px-4">
       <h2 className="text-base font-bold text-[#1C1C1C] mb-3">Shop by Category</h2>
       <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
         {/* All */}
-        <button
-          onClick={() => onSelect(null)}
+        <Link
+          href="/"
           className="flex flex-col items-center gap-1.5 min-w-[64px] group"
         >
           <div
             className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${
-              selected === null
+              selected === null || selected === undefined
                 ? "bg-[#F8C200] shadow-md scale-105"
                 : "bg-gray-100 group-hover:bg-gray-200"
             }`}
           >
-            <ShoppingBasket className={`w-6 h-6 ${selected === null ? "text-[#1C1C1C]" : "text-[#666666]"}`} />
+            <ShoppingBasket className={`w-6 h-6 ${selected === null || selected === undefined ? "text-[#1C1C1C]" : "text-[#666666]"}`} />
           </div>
-          <span className={`text-[11px] font-semibold text-center leading-tight ${selected === null ? "text-[#1C1C1C]" : "text-[#666666]"}`}>
+          <span className={`text-[11px] font-semibold text-center leading-tight ${selected === null || selected === undefined ? "text-[#1C1C1C]" : "text-[#666666]"}`}>
             All
           </span>
-        </button>
+        </Link>
 
         {categories.map((cat) => {
           const config = CATEGORY_CONFIG[cat.name] ?? DEFAULT_CONFIG;
-          const isSelected = selected === cat.id;
+          const isSelected = selected === cat.id || selected === cat.slug;
           return (
-            <button
+            <Link
               key={cat.id}
-              onClick={() => onSelect(isSelected ? null : cat.id)}
+              href={`/category/${cat.slug || cat.id}`}
               className="flex flex-col items-center gap-1.5 min-w-[64px] group"
             >
               <div
@@ -73,7 +74,7 @@ export default function CategoryBar({ categories, selected, onSelect }: Category
               >
                 {cat.name.split(" & ")[0]}
               </span>
-            </button>
+            </Link>
           );
         })}
       </div>

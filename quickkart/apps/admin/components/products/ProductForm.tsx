@@ -8,7 +8,7 @@ import { fetchApi } from "@/lib/api";
 import ImageUpload from "./ImageUpload";
 import MultiImageUpload from "./MultiImageUpload";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "../../hooks/useAuth";
 import { Loader2, Camera, Search, Sparkles } from "lucide-react";
 import BarcodeScanner from "./BarcodeScanner";
 import ScanResult from "./ScanResult";

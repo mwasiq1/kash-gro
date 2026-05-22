@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useCartStore } from "../../stores/cart.store";
+import { useCart } from "../../hooks/useCart";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { Product } from "@/types";
 
@@ -10,7 +10,7 @@ interface AddToCartButtonProps {
 }
 
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
-  const { items, addItem, updateQuantity } = useCartStore();
+  const { items, addItem, updateQuantity } = useCart();
   const cartItem = items.find((item) => item.id === product.id);
   const quantity = cartItem?.quantity || 0;
 
@@ -23,7 +23,7 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
         name: product.name,
         price: product.price,
         unit: product.unit,
-        image: product.images[0] || "",
+        image: product.imageUrl || product.images?.[0] || "",
       });
     }
   };

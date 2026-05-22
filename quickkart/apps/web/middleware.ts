@@ -5,6 +5,10 @@ const isProtectedRoute = createRouteMatcher(["/checkout(.*)", "/orders(.*)"]);
 import { NextResponse } from "next/server";
 
 export default clerkMiddleware(async (auth, req) => {
+  if (process.env.NODE_ENV === "development") {
+    return;
+  }
+  
   if (isProtectedRoute(req)) {
     const authObj = await auth();
     const userId = authObj.userId;

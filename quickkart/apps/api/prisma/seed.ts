@@ -19,26 +19,26 @@ async function main() {
 
   // 2. Categories
   const categoriesData = [
-    { name: 'Dairy & Breakfast' },
-    { name: 'Fruits & Vegetables' },
-    { name: 'Snacks & Munchies' },
-    { name: 'Cold Drinks & Juices' },
-    { name: 'Instant Food' },
-    { name: 'Bakery & Biscuits' },
-    { name: 'Personal Care' },
-    { name: 'Household & Cleaning' },
+    { name: 'Dairy & Breakfast', slug: 'dairy-breakfast' },
+    { name: 'Fruits & Vegetables', slug: 'fruits-vegetables' },
+    { name: 'Snacks & Munchies', slug: 'snacks-munchies' },
+    { name: 'Cold Drinks & Juices', slug: 'cold-drinks-juices' },
+    { name: 'Instant Food', slug: 'instant-food' },
+    { name: 'Bakery & Biscuits', slug: 'bakery-biscuits' },
+    { name: 'Personal Care', slug: 'personal-care' },
+    { name: 'Household & Cleaning', slug: 'household-cleaning' },
   ];
 
   const categories = [];
   for (const c of categoriesData) {
     const category = await prisma.category.upsert({
       where: { name: c.name },
-      update: {},
+      update: { slug: c.slug },
       create: c,
     });
     categories.push(category);
   }
-  console.log(`Created ${categories.length} categories`);
+  console.log(`Created/updated ${categories.length} categories`);
 
   // 3. Products
   const productsData = [
@@ -81,6 +81,18 @@ async function main() {
     { name: 'Bambino Roasted Vermicelli', description: 'Roasted sevaian', mrp: 60, price: 58, unit: '500g', images: ['https://via.placeholder.com/150'], categoryId: categories[4].id },
     { name: 'MTR Rava Idli Mix', description: 'Ready to cook mix', mrp: 115, price: 110, unit: '500g', images: ['https://via.placeholder.com/150'], categoryId: categories[4].id },
     { name: 'Tata Sampann Poha', description: 'Thick poha', mrp: 55, price: 50, unit: '500g', images: ['https://via.placeholder.com/150'], categoryId: categories[4].id },
+
+    // Bakery & Biscuits
+    { name: 'Britannia Bourbon Biscuits', description: 'Chocolate cream biscuits', mrp: 30, price: 28, unit: '150g', images: ['https://via.placeholder.com/150'], categoryId: categories[5].id },
+    { name: 'Oreo Chocolate Sandwich Biscuits', description: 'Oreo biscuits', mrp: 40, price: 38, unit: '120g', images: ['https://via.placeholder.com/150'], categoryId: categories[5].id },
+
+    // Personal Care
+    { name: 'Dettol Liquid Handwash', description: 'Germ protection handwash', mrp: 99, price: 89, unit: '200ml', images: ['https://via.placeholder.com/150'], categoryId: categories[6].id },
+    { name: 'Colgate MaxFresh Toothpaste', description: 'Fresh breath toothpaste', mrp: 110, price: 98, unit: '150g', images: ['https://via.placeholder.com/150'], categoryId: categories[6].id },
+
+    // Household & Cleaning
+    { name: 'Vim Dishwash Gel', description: 'Lemon dishwash gel', mrp: 60, price: 55, unit: '250ml', images: ['https://via.placeholder.com/150'], categoryId: categories[7].id },
+    { name: 'Lizol Disinfectant Floor Cleaner', description: 'Pine floor cleaner', mrp: 120, price: 110, unit: '500ml', images: ['https://via.placeholder.com/150'], categoryId: categories[7].id },
   ];
 
   let createdProducts = 0;
@@ -115,6 +127,7 @@ async function main() {
   const promoData = [
     { code: 'WELCOME50', discountValue: 50, minOrderAmount: 200 },
     { code: 'SAVE100', discountValue: 100, minOrderAmount: 500 },
+    { code: 'SAVE10', discountValue: 10, minOrderAmount: 50 },
   ];
 
   for (const promo of promoData) {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 const prisma = new PrismaClient();
 export interface AuthenticatedRequest extends Request {
   user?: {
@@ -43,6 +43,7 @@ export const requireClerkAuth = async (
         clerkId: payload.sub,
         email,
         name,
+        role: email === "admin@kashgro.com" ? Role.ADMIN : Role.USER,
       },
     });
     req.user = { uid: user.clerkId!, email: user.email ?? undefined, role: user.role };

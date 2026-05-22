@@ -5,7 +5,7 @@ import { MapPin, Plus, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import AddressForm from "./AddressForm";
 import { AddressInput } from "@quickkart/shared";
 import { fetchApi } from "../../lib/api";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "../../hooks/useAuth";
 
 interface Address {
   id: string;

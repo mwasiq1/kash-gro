@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "../../../../hooks/useAuth";
 import { fetchApi } from "../../../../lib/api";
 import StatusTimeline from "../../../../components/orders/StatusTimeline";
 import { ArrowLeft, MapPin, Package, Clock, Loader2, XCircle } from "lucide-react";
@@ -97,7 +97,7 @@ export default function OrderDetailPage() {
             <div>
               <h1 className="text-xl font-black text-[#1C1C1C]">Order #{order.orderNumber}</h1>
               <p className="text-xs font-bold text-[#999999] uppercase tracking-widest">
-                Placed on {new Date(order.createdAt).toLocaleDateString()}
+                Placed on {new Date(order.placedAt ?? order.createdAt).toLocaleDateString()}
               </p>
             </div>
           </div>
@@ -132,9 +132,21 @@ export default function OrderDetailPage() {
               Delivery Address
             </h3>
             <div className="bg-gray-50 p-6 rounded-2xl">
-              <p className="text-sm font-bold text-[#1C1C1C] leading-relaxed">
-                {order.deliveryAddress}
-              </p>
+              <div className="text-sm text-[#1C1C1C] leading-relaxed">
+                {order.address ? (
+                  <>
+                    <p className="font-black mb-1">{order.address.label}</p>
+                    <p className="font-medium text-xs text-[#666666]">
+                      {order.address.line1}
+                      {order.address.line2 ? `, ${order.address.line2}` : ""}
+                      <br />
+                      {order.address.city}, {order.address.state} — {order.address.pincode}
+                    </p>
+                  </>
+                ) : (
+                  <p className="font-bold">{order.deliveryAddress}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -165,7 +177,7 @@ export default function OrderDetailPage() {
               <div className="pt-6 border-t border-[#E8E8E8] space-y-3">
                 <div className="flex justify-between text-sm text-[#666666]">
                   <span className="font-medium">Total Amount</span>
-                  <span className="font-black text-[#1C1C1C]">₹{order.totalAmount}</span>
+                  <span className="font-black text-[#1C1C1C]">₹{order.total ?? order.totalAmount}</span>
                 </div>
                 <div className="flex justify-between text-sm text-[#666666]">
                   <span className="font-medium">Payment Mode</span>
