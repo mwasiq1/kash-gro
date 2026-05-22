@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import { sendOrderNotification } from "../services/telegram.service";
 
 const prisma = new PrismaClient();
 
@@ -121,10 +122,29 @@ export const createOrder = async (
         },
       });
 
-      return { newOrder, selectedAddress, productsInDb, orderItemsData };
+      return { newOrder, selectedAddress, productsInDb, orderItemsData, internalUser, addressString };
     });
 
-    const { newOrder, selectedAddress, productsInDb, orderItemsData } = order;
+    const { newOrder, selectedAddress, productsInDb, orderItemsData, internalUser, addressString } = order;
+
+    // Send Telegram notification (non-blocking)
+    sendOrderNotification({
+      orderNumber: newOrder.orderNumber,
+      customerName: internalUser.name,
+      customerPhone: internalUser.phone,
+      customerEmail: internalUser.email,
+      deliveryAddress: addressString,
+      items: orderItemsData.map((item: any) => {
+        const product = productsInDb.find((p) => p.id === item.productId);
+        return {
+          name: product?.name || "Unknown Product",
+          quantity: item.quantity,
+          price: item.price,
+        };
+      }),
+      totalAmount: newOrder.totalAmount,
+      createdAt: newOrder.createdAt,
+    });
 
     res.status(201).json({ 
       success: true, 
