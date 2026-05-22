@@ -6,7 +6,7 @@ import { ShoppingBasket, Milk, Apple, Cookie, Coffee, Zap, ShoppingBag } from "l
 interface Category {
   id: string;
   name: string;
-  slug: string | null;
+  slug?: string | null;
   _count?: { products: number };
 }
 

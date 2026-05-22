@@ -59,3 +59,5 @@ export default function RootLayout({
     </html>
   );
 }
+// Triggering Next.js re-compilation after manual file edits.
+

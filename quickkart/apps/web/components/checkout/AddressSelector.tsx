@@ -82,7 +82,7 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
   if (loading && addresses.length === 0) {
     return (
       <div className="flex items-center justify-center p-8 bg-white rounded-2xl border border-[#E8E8E8] shadow-sm">
-        <Loader2 className="w-6 h-6 text-[#0C831F] animate-spin" />
+        <Loader2 className="w-6 h-6 text-[#F8C200] animate-spin" />
       </div>
     );
   }
@@ -94,7 +94,7 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
         {!showAddForm && (
           <button
             onClick={() => setShowAddForm(true)}
-            className="text-[#0C831F] text-sm font-bold flex items-center gap-1 hover:underline"
+            className="text-[#F8C200] text-sm font-bold flex items-center gap-1 hover:underline"
           >
             <Plus className="w-4 h-4" /> Add New
           </button>
@@ -137,14 +137,14 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
               onClick={() => onSelect(addr.id)}
               className={`relative p-5 rounded-2xl border-2 cursor-pointer transition-all duration-300 group ${
                 selectedId === addr.id
-                  ? "border-[#0C831F] bg-[#F8FFF9] shadow-md scale-[1.02] ring-2 ring-[#0C831F] ring-opacity-20"
+                  ? "border-[#F8C200] bg-yellow-50 shadow-md scale-[1.02] ring-2 ring-[#F8C200] ring-opacity-20"
                   : "border-[#E8E8E8] bg-white hover:border-[#E8E8E8] hover:shadow-sm"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded-md tracking-wider ${
-                    selectedId === addr.id ? "bg-[#0C831F] text-white" : "bg-gray-100 text-[#666666]"
+                    selectedId === addr.id ? "bg-[#F8C200] text-[#1C1C1C]" : "bg-gray-100 text-[#666666]"
                   }`}>
                     {addr.label}
                   </span>
@@ -153,7 +153,7 @@ export default function AddressSelector({ onSelect, selectedId }: AddressSelecto
                   )}
                 </div>
                 {selectedId === addr.id && (
-                  <CheckCircle2 className="w-5 h-5 text-[#0C831F]" />
+                  <CheckCircle2 className="w-5 h-5 text-[#F8C200]" />
                 )}
               </div>
               <p className="text-sm font-bold text-[#1C1C1C] line-clamp-1">{addr.line1}</p>

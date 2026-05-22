@@ -4,8 +4,31 @@ import React, { useState, useEffect } from "react";
 import { fetchApi } from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
-import { Edit, Search, Trash2, Plus, AlertTriangle } from "lucide-react";
+import { Edit, Search, Trash2, Plus, AlertTriangle, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+function TableProductImage({ src, alt }: { src: string; alt: string }) {
+  const [imgError, setImgError] = useState(false);
+  return (
+    <div className="flex-shrink-0 h-10 w-10 relative rounded border overflow-hidden bg-gray-100 flex items-center justify-center">
+      {!imgError && src ? (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          onError={(e) => {
+            e.currentTarget.src = "";
+            e.currentTarget.onerror = null;
+            setImgError(true);
+          }}
+        />
+      ) : (
+        <ShoppingBag className="text-[#666666]" size={20} />
+      )}
+    </div>
+  );
+}
 
 export default function ProductTable() {
   const router = useRouter();
@@ -116,14 +139,7 @@ export default function ProductTable() {
                   <tr key={product.id} className={!product.isActive ? "bg-gray-50" : ""}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10 relative rounded border overflow-hidden bg-gray-100">
-                          <Image
-                            src={product.images[0] || ""}
-                            alt={product.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
+                        <TableProductImage src={product.imageUrl || ""} alt={product.name} />
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">{product.name}</div>
                           <div className="text-sm text-gray-500">{product.category?.name} • {product.unit}</div>

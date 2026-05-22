@@ -34,7 +34,7 @@ export default function CheckoutPage() {
   if (!isMounted || !isLoaded || !isSignedIn) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <Loader2 className="w-10 h-10 text-[#0C831F] animate-spin" />
+        <Loader2 className="w-10 h-10 text-[#F8C200] animate-spin" />
         <p className="text-[#666666] font-bold">Securing your checkout...</p>
       </div>
     );
@@ -78,7 +78,6 @@ export default function CheckoutPage() {
         const order = response.data.data;
         clearCart();
         router.push(`/order-confirmed?id=${order.id}`);
-        // Do not reset isPlacingOrder here to prevent the empty cart useEffect from redirecting to "/"
       } else {
         throw new Error(response.data?.message || response.data?.error || "Failed to place order");
       }
@@ -86,13 +85,12 @@ export default function CheckoutPage() {
       console.error('Order failed:', err);
       const message = err?.response?.data?.error || err.message || 'Failed to place order. Please try again.';
       setError(message);
-      // Ensure we re-enable the button if it failed
       setIsPlacingOrder(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F6FA] pb-24">
+    <div className="min-h-screen bg-[#F4F6FA] pb-32 md:pb-24">
       {/* Header */}
       <div className="bg-white sticky top-0 z-20 border-b border-[#E8E8E8] px-4 py-4 md:px-8">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
@@ -126,25 +124,47 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            <button
-              onClick={handlePlaceOrder}
-              disabled={isPlacingOrder || !selectedAddressId || items.length === 0}
-              className="w-full bg-[#F8C200] text-[#1C1C1C] font-black py-5 rounded-2xl text-xl shadow-lg hover:bg-[#e6b400] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 group"
-            >
-              {isPlacingOrder ? (
-                <Loader2 className="w-6 h-6 animate-spin" />
-              ) : (
-                <>
-                  Place Order
-                  <CheckCircle2 className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                </>
-              )}
-            </button>
-            <p className="text-[10px] text-[#999999] text-center font-medium uppercase tracking-widest">
+            {/* Desktop Place Order Button (hidden on mobile) */}
+            <div className="hidden md:block">
+              <button
+                onClick={handlePlaceOrder}
+                disabled={isPlacingOrder || !selectedAddressId || items.length === 0}
+                className="w-full bg-[#F8C200] text-[#1C1C1C] font-black py-5 rounded-2xl text-xl shadow-lg hover:bg-[#e6b400] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-3 group"
+              >
+                {isPlacingOrder ? (
+                  <Loader2 className="w-6 h-6 animate-spin" />
+                ) : (
+                  <>
+                    Place Order
+                    <CheckCircle2 className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                  </>
+                )}
+              </button>
+            </div>
+            
+            <p className="text-[10px] text-[#999999] text-center font-medium uppercase tracking-widest hidden md:block">
               By placing this order, you agree to our Terms & Conditions
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Sticky Bottom Bar on Mobile */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-[#E8E8E8] px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+12px)] shadow-[0_-4px_12px_rgba(0,0,0,0.05)] md:hidden">
+        <button
+          onClick={handlePlaceOrder}
+          disabled={isPlacingOrder || !selectedAddressId || items.length === 0}
+          className="w-full bg-[#F8C200] text-[#1C1C1C] font-bold h-12 rounded-2xl text-base hover:bg-[#e6b400] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          {isPlacingOrder ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <>
+              Place Order
+              <CheckCircle2 className="w-5 h-5" />
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

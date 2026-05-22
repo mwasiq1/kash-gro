@@ -28,3 +28,5 @@ export default function RootLayout({
     </ClerkProvider>
   );
 }
+// Triggering Next.js re-compilation after manual file edits.
+

@@ -16,7 +16,7 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
 
   return (
-    <div className="min-h-screen bg-white md:bg-[#F4F6FA] pb-24">
+    <div className="min-h-screen bg-white md:bg-[#F4F6FA] pb-32 md:pb-24">
       {/* Header / Breadcrumb */}
       <div className="bg-white border-b border-[#E8E8E8]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center text-[10px] md:text-xs font-medium text-[#666666] overflow-hidden whitespace-nowrap">
@@ -39,8 +39,8 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
       <main className="max-w-7xl mx-auto md:p-6">
         <div className="flex flex-col md:flex-row gap-8 bg-white md:rounded-3xl md:p-8 md:shadow-sm border border-[#E8E8E8]">
           {/* Left: Gallery */}
-          <div className="w-full md:w-[45%]">
-            <ProductGallery images={product.images} />
+          <div className="w-full md:w-[45%] bg-white rounded-2xl p-4 md:p-0">
+            <ProductGallery imageUrl={product.imageUrl} />
           </div>
 
           {/* Right: Details */}
@@ -82,8 +82,8 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
               </div>
             ) : null}
 
-            {/* Action Area */}
-            <div className="w-full md:max-w-xs mb-8">
+            {/* Action Area (hidden on mobile, sticky bottom bar is used instead) */}
+            <div className="hidden md:block w-full md:max-w-xs mb-8">
               <AddToCartButton product={product} />
             </div>
 
@@ -105,6 +105,22 @@ export default function ProductDetailContent({ product }: ProductDetailContentPr
           />
         </div>
       </main>
+
+      {/* Sticky Bottom Bar on Mobile */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#E8E8E8] px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+12px)] flex items-center justify-between shadow-[0_-4px_12px_rgba(0,0,0,0.05)] rounded-t-2xl md:hidden">
+        <div>
+          <span className="text-[10px] text-[#666666] uppercase font-bold tracking-wider">Price</span>
+          <div className="flex items-baseline gap-1">
+            <span className="text-lg font-black text-[#1C1C1C]">₹{product.price}</span>
+            {discount > 0 && (
+              <span className="text-xs text-[#999999] line-through">₹{product.mrp}</span>
+            )}
+          </div>
+        </div>
+        <div className="w-44">
+          <AddToCartButton product={product} />
+        </div>
+      </div>
     </div>
   );
 }

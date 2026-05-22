@@ -9,6 +9,7 @@ import { Package } from "lucide-react";
 interface Category {
   id: string;
   name: string;
+  slug?: string | null;
   _count?: { products: number };
 }
 
@@ -20,6 +21,7 @@ interface Product {
   price: number;
   unit: string;
   images: string[];
+  imageUrl?: string;
   categoryId: string;
   category?: { name: string };
 }

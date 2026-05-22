@@ -9,11 +9,11 @@ const statusConfig: Record<OrderStatus, { label: string; classes: string }> = {
   },
   CONFIRMED: {
     label: "Confirmed",
-    classes: "bg-cyan-50 text-cyan-600",
+    classes: "bg-blue-100 text-blue-800",
   },
   PLACED: {
     label: "Placed",
-    classes: "bg-blue-50 text-blue-600",
+    classes: "bg-yellow-100 text-yellow-800",
   },
   PROCESSING: {
     label: "Processing",
@@ -33,11 +33,11 @@ const statusConfig: Record<OrderStatus, { label: string; classes: string }> = {
   },
   DELIVERED: {
     label: "Delivered",
-    classes: "bg-[#EBF9EE] text-[#0C831F]",
+    classes: "bg-green-100 text-[#0C831F]",
   },
   CANCELLED: {
     label: "Cancelled",
-    classes: "bg-[#FEF0EF] text-[#D0190A]",
+    classes: "bg-red-100 text-[#D0190A]",
   },
 };
 

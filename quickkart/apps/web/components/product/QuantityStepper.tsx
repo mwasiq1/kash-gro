@@ -9,7 +9,7 @@ interface QuantityStepperProps {
     name: string;
     price: number;
     unit: string;
-    images: string[];
+    imageUrl?: string;
     stock: number;
   };
 }
@@ -26,7 +26,7 @@ export default function QuantityStepper({ product }: QuantityStepperProps) {
         name: product.name,
         price: product.price,
         unit: product.unit,
-        image: product.images[0] || "",
+        image: product.imageUrl || "",
       });
     }
   };

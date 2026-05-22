@@ -23,7 +23,7 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
         name: product.name,
         price: product.price,
         unit: product.unit,
-        image: product.imageUrl || product.images?.[0] || "",
+        image: product.imageUrl || "",
       });
     }
   };

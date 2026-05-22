@@ -42,6 +42,7 @@ export interface Product {
   price: number;
   unit: string;
   images: string[];
+  imageUrl?: string;
   categoryId: string;
   category?: Partial<Category>;
   stock: number;
