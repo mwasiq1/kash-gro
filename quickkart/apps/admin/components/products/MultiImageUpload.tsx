@@ -68,7 +68,7 @@ export default function MultiImageUpload({
           <div key={url + index} className="relative aspect-square rounded-xl overflow-hidden border border-gray-100 group">
             <Image
               src={url}
-              alt={`Product image ${index + 1}`}
+              alt={`Image ${index + 1}`}
               fill
               className="object-cover"
             />

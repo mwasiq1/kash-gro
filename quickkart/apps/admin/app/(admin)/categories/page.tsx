@@ -5,6 +5,7 @@ import { Plus, FolderOpen } from "lucide-react";
 import CategoryTable from "../../../components/categories/CategoryTable";
 import CategoryModal from "../../../components/categories/CategoryModal";
 import { fetchApi } from "@/lib/api";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface Category {
   id: string;
@@ -17,6 +18,7 @@ interface Category {
 }
 
 export default function CategoriesPage() {
+  const { getToken } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -24,12 +26,15 @@ export default function CategoriesPage() {
 
   const loadCategories = useCallback(async () => {
     setLoading(true);
-    const res = await fetchApi("/admin/categories");
+    const token = await getToken();
+    const res = await fetchApi("/admin/categories", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (res.success) {
       setCategories(res.data);
     }
     setLoading(false);
-  }, []);
+  }, [getToken]);
 
   useEffect(() => {
     loadCategories();

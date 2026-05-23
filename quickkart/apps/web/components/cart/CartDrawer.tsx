@@ -67,7 +67,7 @@ export default function CartDrawer() {
             My Cart
             {items.length > 0 && (
               <span className="bg-[#1C1C1C] text-white text-xs px-2 py-0.5 rounded-full">
-                {items.reduce((acc, i) => acc + i.quantity, 0)} items
+                {items.reduce((acc, i) => acc + i.quantity, 0)} {items.reduce((acc, i) => acc + i.quantity, 0) === 1 ? "item" : "items"}
               </span>
             )}
           </h2>
@@ -126,8 +126,9 @@ export default function CartDrawer() {
               className="w-full bg-[#F8C200] text-[#1C1C1C] font-bold text-lg px-6 py-4 rounded-xl hover:bg-[#e6b400] transition-all active:scale-[0.98] shadow-sm flex items-center justify-between"
             >
               <div className="flex flex-col items-start">
-                <span className="text-sm font-semibold opacity-90">
-                  {items.reduce((acc, i) => acc + i.quantity, 0)} items
+                <span className="text-sm font-semibold opacity-90 flex gap-1">
+                  <span>{items.reduce((acc, i) => acc + i.quantity, 0)}</span>
+                  <span>{items.reduce((acc, i) => acc + i.quantity, 0) === 1 ? "item" : "items"}</span>
                 </span>
                 <span className="text-xl">₹{grandTotal}</span>
               </div>

@@ -5,7 +5,7 @@ import { fetchApi } from "@/lib/api";
 import Image from "next/image";
 import Link from "next/link";
 import { Edit, Search, Trash2, Plus, AlertTriangle, ShoppingBag } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useAuth } from "../../hooks/useAuth";
 
 function TableProductImage({ src, alt }: { src: string; alt: string }) {
   const [imgError, setImgError] = useState(false);
@@ -17,11 +17,7 @@ function TableProductImage({ src, alt }: { src: string; alt: string }) {
           alt={alt}
           fill
           className="object-cover"
-          onError={(e) => {
-            e.currentTarget.src = "";
-            e.currentTarget.onerror = null;
-            setImgError(true);
-          }}
+          onError={() => setImgError(true)}
         />
       ) : (
         <ShoppingBag className="text-[#666666]" size={20} />
@@ -31,7 +27,7 @@ function TableProductImage({ src, alt }: { src: string; alt: string }) {
 }
 
 export default function ProductTable() {
-  const router = useRouter();
+  const { getToken } = useAuth();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -40,10 +36,17 @@ export default function ProductTable() {
 
   const loadProducts = async () => {
     setLoading(true);
-    const res = await fetchApi(`/admin/products?page=${page}&limit=10&search=${search}`);
-    if (res.success) {
-      setProducts(res.data);
-      setTotalPages(res.pagination.totalPages);
+    try {
+      const token = await getToken();
+      const res = await fetchApi(`/admin/products?page=${page}&limit=10&search=${search}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.success) {
+        setProducts(res.data);
+        setTotalPages(res.pagination?.totalPages || 1);
+      }
+    } catch (err) {
+      console.error("Failed to load products", err);
     }
     setLoading(false);
   };
@@ -64,8 +67,10 @@ export default function ProductTable() {
 
   const handleDelete = async (id: string, name: string) => {
     if (confirm(`Are you sure you want to deactivate ${name}?`)) {
+      const token = await getToken();
       const res = await fetchApi(`/admin/products/${id}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.success) {
         loadProducts();
@@ -147,9 +152,9 @@ export default function ProductTable() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">₹{product.price.toFixed(2)}</div>
+                      <div className="text-sm text-gray-900">₹{Number(product.price).toFixed(2)}</div>
                       {product.mrp > product.price && (
-                        <div className="text-xs text-gray-500 line-through">₹{product.mrp.toFixed(2)}</div>
+                        <div className="text-xs text-gray-500 line-through">₹{Number(product.mrp).toFixed(2)}</div>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, Loader2 } from "lucide-react";
 import { fetchApi } from "../../lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 export default function SearchBar() {
@@ -12,7 +12,19 @@ export default function SearchBar() {
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Sync URL search query back to local input on mount/change if on /search page
+  useEffect(() => {
+    if (pathname === "/search") {
+      const q = searchParams.get("q") || "";
+      setQuery(q);
+      setShowDropdown(false);
+    }
+  }, [searchParams, pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -34,8 +46,9 @@ export default function SearchBar() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Fetch results for dropdown ONLY if NOT on /search page
   useEffect(() => {
-    if (query.trim().length < 2) {
+    if (pathname === "/search" || query.trim().length < 2) {
       setResults([]);
       setShowDropdown(false);
       return;
@@ -45,7 +58,6 @@ export default function SearchBar() {
       try {
         setLoading(true);
         setShowDropdown(true);
-        // Explicitly passing search parameter as requested
         const response = await fetchApi(`/products?search=${encodeURIComponent(query)}`);
         setResults(response.data || []);
       } catch (err) {
@@ -56,12 +68,41 @@ export default function SearchBar() {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, pathname]);
 
   const handleProductClick = (productId: string) => {
     setShowDropdown(false);
     setQuery("");
     router.push(`/product/${productId}`);
+  };
+
+  const handleFocus = () => {
+    if (pathname !== "/search") {
+      router.push("/search");
+    }
+  };
+
+  const handleChange = (val: string) => {
+    setQuery(val);
+    if (pathname === "/search") {
+      const params = new URLSearchParams(searchParams.toString());
+      if (val) {
+        params.set("q", val);
+      } else {
+        params.delete("q");
+      }
+      router.replace(`/search?${params.toString()}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setShowDropdown(false);
+      if (pathname !== "/search") {
+        router.push(`/search?q=${encodeURIComponent(query)}`);
+      }
+    }
   };
 
   return (
@@ -72,17 +113,18 @@ export default function SearchBar() {
           type="text"
           placeholder='Search "milk", "bread"...'
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => {
-            if (query.length >= 2) setShowDropdown(true);
-          }}
+          onChange={(e) => handleChange(e.target.value)}
+          onFocus={handleFocus}
+          onKeyDown={handleKeyDown}
           className="bg-transparent text-sm flex-1 outline-none text-[#1C1C1C] placeholder-gray-400"
         />
-        {loading && <Loader2 className="w-4 h-4 animate-spin text-[#999999] flex-shrink-0" />}
+        {loading && pathname !== "/search" && (
+          <Loader2 className="w-4 h-4 animate-spin text-[#999999] flex-shrink-0" />
+        )}
       </div>
 
-      {/* Dropdown */}
-      {showDropdown && query.length >= 2 && (
+      {/* Dropdown - only shown when not on dedicated search page */}
+      {showDropdown && pathname !== "/search" && query.length >= 2 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-lg border border-[#E8E8E8] overflow-hidden z-50 max-h-80 overflow-y-auto">
           {loading ? (
             <div className="p-4 flex items-center justify-center text-sm text-[#666666]">

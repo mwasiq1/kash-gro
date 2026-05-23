@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import CartDrawer from "../components/cart/CartDrawer";
+import CartBottomSheet from "../components/cart/CartBottomSheet";
 import Navbar from "../components/layout/Navbar";
 import BottomNav from "../components/layout/BottomNav";
 
@@ -35,11 +36,12 @@ export default function RootLayout({
       <body className={`${plusJakartaSans.variable} ${plusJakartaSans.className} bg-[#F4F6FA] text-[#1C1C1C] antialiased`}>
         <ClerkProvider>
           <Navbar />
-          <div className="pt-[60px] pb-[64px] md:pb-0">
+          <div className="pt-[60px] pb-[140px] md:pb-0">
             {children}
           </div>
           {/* Global cart UI — persists across all pages, powered by Zustand */}
           <CartDrawer />
+          <CartBottomSheet />
           <div className="md:hidden">
             <BottomNav />
           </div>
@@ -48,5 +50,3 @@ export default function RootLayout({
     </html>
   );
 }
-// Triggering Next.js re-compilation after manual file edits.
-

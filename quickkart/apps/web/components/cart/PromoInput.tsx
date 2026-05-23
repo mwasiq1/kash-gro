@@ -77,13 +77,13 @@ export default function PromoInput() {
               setError("");
             }}
             placeholder="Enter promo code"
-            className="w-full pl-9 pr-3 py-3 rounded-xl border border-[#E8E8E8] focus:outline-none focus:border-[#0C831F] focus:ring-1 focus:ring-[#0C831F] text-sm font-bold uppercase transition"
+            className="w-full pl-9 pr-3 py-3 rounded-xl border border-[#E8E8E8] focus:outline-none focus:border-[#F8C200] focus:ring-1 focus:ring-[#F8C200] text-sm font-bold uppercase transition"
           />
         </div>
         <button
           onClick={handleApply}
           disabled={!code.trim() || loading}
-          className="bg-[#1C1C1C] text-white px-5 py-3 rounded-xl font-bold text-sm hover:bg-black transition disabled:opacity-50 min-w-[80px] flex justify-center"
+          className="bg-[#F8C200] text-[#1C1C1C] px-5 py-3 rounded-xl font-bold text-sm hover:bg-[#E6B400] transition disabled:opacity-50 min-w-[80px] flex justify-center"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Apply"}
         </button>

@@ -51,7 +51,7 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
         <section className="mt-5 px-4">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-base font-bold text-[#1C1C1C]">{categoryLabel}</h2>
-            <span className="text-xs text-[#999999] font-medium">{allProducts.length} items</span>
+            <span className="text-xs text-[#999999] font-medium">{allProducts.length} {allProducts.length === 1 ? "item" : "items"}</span>
           </div>
 
           {allProducts.length === 0 ? (

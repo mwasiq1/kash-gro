@@ -69,7 +69,7 @@ export default function OrderDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F4F6FA]">
-        <Loader2 className="w-10 h-10 text-[#0C831F] animate-spin" />
+        <Loader2 className="w-10 h-10 text-[#F8C200] animate-spin" />
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function OrderDetailPage() {
     <div className="min-h-screen bg-[#F4F6FA] pb-24">
       {/* Header */}
       <div className="bg-white sticky top-0 z-20 border-b border-[#E8E8E8] px-4 py-4 md:px-8">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-4">
             <Link href="/orders" className="p-2 hover:bg-gray-50 rounded-full transition-colors">
               <ArrowLeft className="w-6 h-6 text-[#1C1C1C]" />
@@ -106,7 +106,7 @@ export default function OrderDetailPage() {
             <button
               onClick={handleCancel}
               disabled={cancelling}
-              className="bg-red-50 text-red-600 font-black px-6 py-2.5 rounded-xl hover:bg-red-100 transition-all flex items-center gap-2 text-sm disabled:opacity-50"
+              className="bg-[#D0190A]/10 text-[#D0190A] font-black px-6 py-2.5 rounded-xl hover:bg-[#D0190A]/20 transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50 w-full sm:w-auto"
             >
               {cancelling ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
               Cancel Order
@@ -120,7 +120,7 @@ export default function OrderDetailPage() {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#E8E8E8]">
             <h3 className="text-lg font-black text-[#1C1C1C] mb-8 flex items-center gap-3">
-              <Clock className="w-5 h-5 text-[#0C831F]" />
+              <Clock className="w-5 h-5 text-[#F8C200]" />
               Order Status
             </h3>
             <StatusTimeline currentStatus={order.status} cancelledAt={order.cancelledAt} />
@@ -128,7 +128,7 @@ export default function OrderDetailPage() {
 
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-[#E8E8E8]">
             <h3 className="text-lg font-black text-[#1C1C1C] mb-6 flex items-center gap-3">
-              <MapPin className="w-5 h-5 text-[#0C831F]" />
+              <MapPin className="w-5 h-5 text-[#F8C200]" />
               Delivery Address
             </h3>
             <div className="bg-gray-50 p-6 rounded-2xl">

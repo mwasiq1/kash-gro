@@ -18,10 +18,10 @@ const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
   slug: z.string().optional(),
   description: z.string().min(1, "Description is required"),
-  mrp: z.coerce.number().positive(),
-  price: z.coerce.number().positive(),
+  mrp: z.coerce.number().positive("MRP must be greater than 0"),
+  price: z.coerce.number().positive("Selling price must be greater than 0"),
   unit: z.string().min(1, "Unit is required"),
-  images: z.array(z.string()).min(1, "At least one image is required"),
+  images: z.array(z.string()).optional().default([]),
   categoryId: z.string().min(1, "Category is required"),
   stock: z.coerce.number().int().min(0),
   lowStockAt: z.coerce.number().int().min(0),
@@ -61,13 +61,13 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       name: initialData?.name || "",
       slug: initialData?.slug || "",
       description: initialData?.description || "",
-      mrp: initialData?.mrp || 0,
-      price: initialData?.price || 0,
+      mrp: initialData?.mrp ?? ("" as any),
+      price: initialData?.price ?? ("" as any),
       unit: initialData?.unit || "1 pc",
       images: initialData?.images || [],
       categoryId: initialData?.categoryId || "",
-      stock: initialData?.stock || 10,
-      lowStockAt: initialData?.lowStockAt || 5,
+      stock: initialData?.stock ?? 10,
+      lowStockAt: initialData?.lowStockAt ?? 5,
       isFeatured: initialData?.isFeatured ?? false,
       isActive: initialData?.isActive ?? true,
       tags: initialData?.tags ? initialData.tags.join(", ") : "",
@@ -106,14 +106,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
       setValue("images", [scanResult.imageUrl], { shouldValidate: true });
     }
 
-    // Add barcode to tags
-    const currentTags = watch("tags");
-    if (!currentTags.includes(scanResult.barcode)) {
-      setValue("tags", currentTags ? `${currentTags}, ${scanResult.barcode}` : scanResult.barcode);
-    }
+    // Note: barcode is stored in scannedBarcode state and NOT added to visible tags
+    // to keep the tags field clean for descriptive product tags only.
 
     setShowResult(false);
-    alert("Product details filled!");
+    alert("Product details filled! Please set MRP and Selling Price.");
   };
 
   const { getToken } = useAuth();
@@ -256,27 +253,28 @@ export default function ProductForm({ initialData }: ProductFormProps) {
 
         {/* Right Column - Details */}
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                {...register("name")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F8C200] focus:ring-[#F8C200] sm:text-sm p-2 border"
-                placeholder="Fresh Apples"
-              />
-              {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Slug (optional)</label>
-              <input
-                type="text"
-                {...register("slug")}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F8C200] focus:ring-[#F8C200] sm:text-sm p-2 border"
-                placeholder="fresh-apples"
-              />
-              {errors.slug && <p className="mt-1 text-sm text-red-600">{errors.slug.message}</p>}
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <input
+              type="text"
+              {...register("name")}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F8C200] focus:ring-[#F8C200] sm:text-sm p-2 border"
+              placeholder="Fresh Apples"
+            />
+            {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Slug <span className="text-gray-400 font-normal">(optional — auto-filled from name)</span>
+            </label>
+            <input
+              type="text"
+              {...register("slug")}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F8C200] focus:ring-[#F8C200] sm:text-sm p-2 border font-mono text-xs"
+              placeholder="fresh-apples"
+            />
+            {errors.slug && <p className="mt-1 text-sm text-red-600">{errors.slug.message}</p>}
           </div>
 
           <div>

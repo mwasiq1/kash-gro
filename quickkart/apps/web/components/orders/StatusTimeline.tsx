@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Circle } from "lucide-react";
+import { Check, Circle } from "lucide-react";
 import { OrderStatus } from "@quickkart/shared";
 
 const steps = [
@@ -20,7 +20,7 @@ export default function StatusTimeline({ currentStatus, cancelledAt }: StatusTim
     return (
       <div className="bg-[#D0190A]/5 border border-[#D0190A]/10 p-6 rounded-2xl flex items-center gap-4">
         <div className="w-12 h-12 bg-[#D0190A]/10 rounded-full flex items-center justify-center flex-shrink-0">
-          <CheckCircle2 className="w-6 h-6 text-[#D0190A]" />
+          <Check className="w-6 h-6 text-[#D0190A]" />
         </div>
         <div>
           <h4 className="font-black text-[#D0190A]">Order Cancelled</h4>
@@ -46,15 +46,29 @@ export default function StatusTimeline({ currentStatus, cancelledAt }: StatusTim
             {!isLast && (
               <div 
                 className={`absolute left-3 top-8 w-0.5 h-12 -ml-[1px] ${
-                  isCompleted && index < currentStepIndex ? "bg-[#0C831F]" : "bg-gray-100"
+                  isCompleted && index < currentStepIndex ? "bg-[#F8C200]" : "bg-gray-100"
                 }`} 
               />
             )}
             
             <div className="relative z-10">
               {isCompleted ? (
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${isCurrent ? "bg-[#0C831F] ring-4 ring-[#0C831F]/15" : "bg-[#0C831F]"}`}>
-                  <CheckCircle2 className="w-4 h-4 text-white" />
+                <div 
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                    step.status === "DELIVERED"
+                      ? isCurrent 
+                        ? "bg-[#0C831F] ring-4 ring-[#0C831F]/15" 
+                        : "bg-[#0C831F]"
+                      : isCurrent
+                        ? "bg-[#F8C200] ring-4 ring-[#F8C200]/15"
+                        : "bg-[#F8C200]"
+                  }`}
+                >
+                  <Check 
+                    className={`w-3.5 h-3.5 stroke-[3] ${
+                      step.status === "DELIVERED" ? "text-white" : "text-[#1C1C1C]"
+                    }`} 
+                  />
                 </div>
               ) : (
                 <div className="w-6 h-6 rounded-full bg-white border-2 border-[#E8E8E8] flex items-center justify-center">
