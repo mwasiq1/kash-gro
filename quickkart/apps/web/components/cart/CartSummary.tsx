@@ -16,7 +16,6 @@ export default function CartSummary() {
   }
 
   const discount = promoCode ? promoCode.discount : 0;
-  // Ensure grand total doesn't go below 0 (though practically shouldn't happen unless promo > subtotal+fee)
   const grandTotal = Math.max(0, subtotal + deliveryFee - discount);
 
   // Free delivery progress logic
@@ -34,9 +33,9 @@ export default function CartSummary() {
             </span>
             <span className="text-xs font-bold text-[#999999]">₹199</span>
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
             <div 
-              className="bg-[#0C831F] h-full rounded-full transition-all duration-500 ease-out" 
+              className="bg-[#F8C200] h-full rounded-full transition-all duration-500 ease-out" 
               style={{ width: `${progressPercent}%` }} 
             />
           </div>
