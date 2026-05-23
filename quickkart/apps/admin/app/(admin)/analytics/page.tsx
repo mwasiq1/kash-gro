@@ -69,14 +69,14 @@ export default function AnalyticsPage() {
           title="Today's Revenue"
           value={`₹${today?.revenue.toLocaleString() || 0}`}
           icon={<IndianRupee size={20} className="text-[#0C831F]" />}
-          trend={{ value: 12, isPositive: true }}
+          trend={today?.revenueGrowth !== undefined ? { value: Math.abs(today.revenueGrowth), isPositive: today.revenueGrowth >= 0 } : undefined}
           subtitle="Compared to yesterday"
         />
         <StatCard
           title="Today's Orders"
           value={today?.orders || 0}
           icon={<ShoppingBag size={20} className="text-blue-500" />}
-          trend={{ value: 5, isPositive: true }}
+          trend={today?.ordersGrowth !== undefined ? { value: Math.abs(today.ordersGrowth), isPositive: today.ordersGrowth >= 0 } : undefined}
           subtitle="Active orders today"
         />
         <StatCard
@@ -89,7 +89,7 @@ export default function AnalyticsPage() {
           title="New Customers"
           value={today?.newCustomers || 0}
           icon={<Users size={20} className="text-orange-500" />}
-          trend={{ value: 8, isPositive: true }}
+          trend={today?.newCustomersGrowth !== undefined ? { value: Math.abs(today.newCustomersGrowth), isPositive: today.newCustomersGrowth >= 0 } : undefined}
           subtitle="Joined in last 24h"
         />
       </div>

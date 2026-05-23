@@ -19,6 +19,17 @@ export function useCart() {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "kashgro-cart") {
+        useCartStore.persist.rehydrate();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   // Always subscribe so components re-render when cart changes after mount
@@ -56,11 +67,31 @@ export function useCart() {
     };
   }
 
+  const subtotal = _cartTotal();
+  let promoCodeWithDynamicDiscount = null;
+  if (promoCode) {
+    let dynamicDiscount = promoCode.discount;
+    if (promoCode.discountType === "PERCENTAGE") {
+      dynamicDiscount = (promoCode.discountValue / 100) * subtotal;
+      if (promoCode.maxDiscountAmount) {
+        dynamicDiscount = Math.min(dynamicDiscount, promoCode.maxDiscountAmount);
+      }
+    } else {
+      dynamicDiscount = promoCode.discountValue;
+    }
+    dynamicDiscount = Math.round(dynamicDiscount * 100) / 100;
+    
+    promoCodeWithDynamicDiscount = {
+      ...promoCode,
+      discount: dynamicDiscount,
+    };
+  }
+
   return {
     isMounted: true,
     items,
     isOpen,
-    promoCode,
+    promoCode: promoCodeWithDynamicDiscount,
     addItem,
     removeItem,
     updateQuantity,
@@ -69,7 +100,7 @@ export function useCart() {
     closeCart,
     applyPromo,
     removePromo,
-    cartTotal: _cartTotal(),
+    cartTotal: subtotal,
     itemCount: _itemCount(),
   };
 }

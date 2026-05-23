@@ -16,6 +16,7 @@ interface Product {
   images?: string[];
   imageUrl?: string;
   category?: { name: string };
+  stock: number;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -33,6 +34,8 @@ export default function ProductCard({ product }: { product: Product }) {
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (product.stock <= 0) return;
+    if (quantity >= product.stock) return;
     addItem({
       id: product.id,
       name: product.name,
@@ -54,22 +57,20 @@ export default function ProductCard({ product }: { product: Product }) {
       className="bg-white rounded-2xl p-3 flex flex-col shadow-sm hover:shadow-md transition-all border border-[#E8E8E8] h-full"
     >
       <div className="relative bg-gray-50 rounded-t-2xl aspect-square mb-3 overflow-hidden">
-        {!imgError && imageSrc ? (
+        {(!imgError && imageSrc && imageSrc !== "https://via.placeholder.com/150") ? (
           <Image
             src={imageSrc}
             alt={product.name}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 50vw, 33vw"
-            onError={(e) => {
-              e.currentTarget.src = "";
-              e.currentTarget.onerror = null;
+            onError={() => {
               setImgError(true);
             }}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100">
-            <ShoppingBag className="w-8 h-8 text-[#666666]" size={32} />
+          <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-xl">
+            <ShoppingBag className="w-8 h-8 text-[#666666]" />
           </div>
         )}
 
@@ -95,31 +96,40 @@ export default function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        <div>
-          {quantity === 0 ? (
+        <div className="w-20">
+          {product.stock <= 0 ? (
+            <button
+              disabled
+              className="w-full bg-[#D0190A]/10 text-[#D0190A] border border-[#D0190A]/20 font-extrabold text-[9px] py-2.5 rounded-full cursor-not-allowed flex items-center justify-center shadow-sm"
+            >
+              OUT OF STOCK
+            </button>
+          ) : quantity === 0 ? (
             <button
               onClick={handleAdd}
-              className="flex items-center justify-center gap-1 bg-[#F8C200] text-[#1C1C1C] font-bold text-sm px-3 rounded-full min-h-[44px] min-w-[44px] hover:bg-[#E6B400] transition-all active:scale-95"
+              className="w-full bg-[#F8C200] text-[#1C1C1C] font-extrabold text-xs py-2.5 rounded-full hover:bg-[#E6B400] transition-all active:scale-95 flex items-center justify-center shadow-sm"
             >
-              <Plus className="w-4 h-4" />
               ADD
             </button>
           ) : (
-            <div className="flex items-center bg-[#F8C200] rounded-full overflow-hidden min-h-[44px]">
+            <div className="flex items-center justify-between bg-[#F8C200] rounded-full overflow-hidden w-full py-1">
               <button
                 onClick={(e) => handleUpdateQuantity(e, quantity - 1)}
-                className="px-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-[#1C1C1C] hover:bg-[#E6B400] transition"
+                className="px-2 py-1.5 flex items-center justify-center text-[#1C1C1C] hover:bg-[#E6B400] transition"
               >
-                <Minus className="w-4 h-4" />
+                <Minus className="w-3 h-3" />
               </button>
-              <span className="text-[#1C1C1C] font-bold text-sm w-6 text-center">
+              <span className="text-[#1C1C1C] font-extrabold text-xs">
                 {quantity}
               </span>
               <button
                 onClick={handleAdd}
-                className="px-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-[#1C1C1C] hover:bg-[#E6B400] transition"
+                disabled={quantity >= product.stock}
+                className={`px-2 py-1.5 flex items-center justify-center text-[#1C1C1C] hover:bg-[#E6B400] transition ${
+                  quantity >= product.stock ? "opacity-30 cursor-not-allowed" : ""
+                }`}
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3 h-3" />
               </button>
             </div>
           )}

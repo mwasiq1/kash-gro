@@ -124,9 +124,9 @@ export default function OrderDetailModal({ order, onClose, onStatusUpdated }: Or
           </div>
           <div className="flex items-center gap-3">
             <span
-              className={`px-3 py-1 text-xs font-semibold rounded-full ${STATUS_COLORS[order.status] ?? "bg-gray-100 text-gray-700"}`}
+              className={`px-3 py-1 text-xs font-semibold rounded-full ${STATUS_COLORS[order.status || ""] ?? "bg-gray-100 text-gray-700"}`}
             >
-              {order.status.replace(/_/g, " ")}
+              {(order.status || "UNKNOWN").replace(/_/g, " ")}
             </span>
             <button
               onClick={onClose}

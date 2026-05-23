@@ -57,10 +57,16 @@ export default function BulkUpdateModal({ onClose, onSuccess, data }: BulkUpdate
             continue;
           }
 
+          const stockNum = Number(row.stock);
+          if (isNaN(stockNum) || stockNum < 0 || !Number.isInteger(stockNum)) {
+            failedCount++;
+            continue;
+          }
+
           try {
             const res = await fetchApi(`/admin/inventory/${row.id}`, {
               method: "PATCH",
-              body: JSON.stringify({ stock: Number(row.stock) }),
+              body: JSON.stringify({ stock: stockNum }),
             });
 
             if (res.success) {

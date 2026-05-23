@@ -30,6 +30,12 @@ export default function BarcodeScanner({ onScan, onCancel }: BarcodeScannerProps
 
     const startScanner = async () => {
       try {
+        if (typeof window === "undefined" || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          setError("Camera access is not supported by your browser or requires a secure HTTPS connection.");
+          setIsInitializing(false);
+          return;
+        }
+
         const videoInputDevices = await reader.listVideoInputDevices();
         
         if (videoInputDevices.length === 0) {
@@ -60,10 +66,12 @@ export default function BarcodeScanner({ onScan, onCancel }: BarcodeScannerProps
         setIsInitializing(false);
       } catch (err: any) {
         console.error("Camera Error:", err);
-        if (err.name === "NotAllowedError") {
-          setError("Camera permission denied. Please allow camera access.");
+        if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError" || err.message?.includes("Permission denied")) {
+          setError("Camera permission denied. Please enable camera access in your browser settings and try again.");
+        } else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") {
+          setError("No camera device was found.");
         } else {
-          setError("Could not initialize camera.");
+          setError("Could not initialize camera: " + (err.message || String(err)));
         }
         setIsInitializing(false);
       }
@@ -73,7 +81,23 @@ export default function BarcodeScanner({ onScan, onCancel }: BarcodeScannerProps
 
     return () => {
       if (readerRef.current) {
-        readerRef.current.reset();
+        try {
+          readerRef.current.reset();
+        } catch (e) {
+          console.error("Failed to reset zxing reader:", e);
+        }
+      }
+      if (videoRef.current && videoRef.current.srcObject) {
+        try {
+          const stream = videoRef.current.srcObject as MediaStream;
+          if (stream && typeof stream.getTracks === "function") {
+            const tracks = stream.getTracks();
+            tracks.forEach((track) => track.stop());
+          }
+          videoRef.current.srcObject = null;
+        } catch (e) {
+          console.error("Failed to stop media stream tracks:", e);
+        }
       }
     };
   }, [onScan]);

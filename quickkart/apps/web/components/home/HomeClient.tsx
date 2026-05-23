@@ -4,6 +4,7 @@ import HeroCarousel from "./HeroCarousel";
 import CategoryBar from "./CategoryBar";
 import ProductCard from "../product/ProductCard";
 import TopNav from "./TopNav";
+import DeliveryStrip from "./DeliveryStrip";
 import { Package } from "lucide-react";
 
 interface Category {
@@ -36,6 +37,7 @@ export default function HomeClient({ categories, allProducts }: HomeClientProps)
 
   return (
     <div className="min-h-screen bg-[#F4F6FA]">
+      <DeliveryStrip />
       <TopNav />
 
       <main className="pb-24">

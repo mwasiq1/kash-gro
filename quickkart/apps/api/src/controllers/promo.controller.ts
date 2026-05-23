@@ -46,11 +46,18 @@ export const validatePromo = async (req: Request, res: Response) => {
       });
     }
 
+    const discountAmount = promo.discountType === "PERCENTAGE"
+      ? Math.min((promo.discountValue / 100) * subtotal, promo.maxDiscountAmount || Infinity)
+      : promo.discountValue;
+
     return res.status(200).json({
       success: true,
       data: {
         code: promo.code,
-        discount: promo.discountValue,
+        discountType: promo.discountType,
+        discountValue: promo.discountValue,
+        maxDiscountAmount: promo.maxDiscountAmount,
+        discount: discountAmount,
       },
     });
   } catch (error) {

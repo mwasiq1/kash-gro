@@ -9,6 +9,7 @@ import promoRouter from "./promo.routes";
 import addressRouter from "./address.routes";
 import uploadRouter from "./upload.routes";
 import adminRouter from "./admin.routes";
+import webhookRouter from "./webhook.routes";
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use("/promo", promoRouter);
 router.use("/addresses", addressRouter);
 router.use("/upload", uploadRouter);
 router.use("/admin", adminRouter);
+router.use("/webhooks", webhookRouter);
 
 export default router;

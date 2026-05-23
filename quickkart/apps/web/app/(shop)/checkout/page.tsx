@@ -41,6 +41,7 @@ export default function CheckoutPage() {
   }
 
   const handlePlaceOrder = async () => {
+    if (isPlacingOrder) return;
     if (!selectedAddressId) {
       setError("Please select a delivery address");
       return;

@@ -5,39 +5,39 @@ import { OrderStatus } from "@quickkart/shared";
 const statusConfig: Record<OrderStatus, { label: string; classes: string }> = {
   PENDING: {
     label: "Pending",
-    classes: "bg-gray-100 text-[#666666]",
+    classes: "bg-[#F4F6FA] text-[#666666]",
   },
   CONFIRMED: {
     label: "Confirmed",
-    classes: "bg-blue-100 text-blue-800",
+    classes: "bg-[#F8C200]/15 text-[#1C1C1C]",
   },
   PLACED: {
     label: "Placed",
-    classes: "bg-yellow-100 text-yellow-800",
+    classes: "bg-[#F8C200]/15 text-[#1C1C1C]",
   },
   PROCESSING: {
     label: "Processing",
-    classes: "bg-[#FFF9E6] text-[#F8C200]",
+    classes: "bg-[#F8C200]/15 text-[#1C1C1C]",
   },
   PICKING: {
     label: "Picking",
-    classes: "bg-orange-50 text-orange-600",
+    classes: "bg-[#F8C200]/15 text-[#1C1C1C]",
   },
   PACKED: {
     label: "Packed",
-    classes: "bg-indigo-50 text-indigo-600",
+    classes: "bg-[#F8C200]/15 text-[#1C1C1C]",
   },
   OUT_FOR_DELIVERY: {
     label: "Out for Delivery",
-    classes: "bg-purple-50 text-purple-600",
+    classes: "bg-[#F8C200]/15 text-[#1C1C1C]",
   },
   DELIVERED: {
     label: "Delivered",
-    classes: "bg-green-100 text-[#0C831F]",
+    classes: "bg-[#0C831F]/10 text-[#0C831F]",
   },
   CANCELLED: {
     label: "Cancelled",
-    classes: "bg-red-100 text-[#D0190A]",
+    classes: "bg-[#D0190A]/10 text-[#D0190A]",
   },
 };
 

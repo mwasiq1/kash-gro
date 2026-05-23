@@ -77,20 +77,20 @@ export default function InventoryTable({ data, onUpdate }: InventoryTableProps) 
           <tbody className="divide-y divide-gray-100">
             {data.map((item) => {
               const isOutOfStock = item.stock === 0;
-              const isLowStock = item.stock > 0 && item.stock <= item.lowStockAt;
+              const isLowStock = item.stock > 0 && item.stock < 10;
               const isEditing = editingId === item.id;
 
               return (
                 <tr 
                   key={item.id} 
                   className={`transition-colors duration-200 ${
-                    isOutOfStock ? "bg-red-50/50" : isLowStock ? "bg-yellow-50/50" : "hover:bg-gray-50/30"
+                    isOutOfStock ? "bg-red-50/50" : isLowStock ? "bg-red-50/30" : "hover:bg-gray-50/30"
                   }`}
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        isOutOfStock ? "bg-red-100 text-red-600" : isLowStock ? "bg-yellow-100 text-yellow-600" : "bg-gray-100 text-gray-400"
+                        isOutOfStock ? "bg-red-100 text-red-600" : isLowStock ? "bg-red-100 text-[#D0190A]" : "bg-gray-100 text-gray-400"
                       }`}>
                         <Package className="w-4 h-4" />
                       </div>
@@ -130,11 +130,11 @@ export default function InventoryTable({ data, onUpdate }: InventoryTableProps) 
                         className="flex items-center gap-2 group cursor-pointer"
                       >
                         <span className={`text-sm font-black ${
-                          isOutOfStock ? "text-red-600" : isLowStock ? "text-[#B88E00]" : "text-gray-900"
+                          isOutOfStock ? "text-red-600" : isLowStock ? "text-[#D0190A]" : "text-gray-900"
                         }`}>
                           {item.stock}
                         </span>
-                        {isLowStock && <AlertTriangle className="w-3.5 h-3.5 text-yellow-600" />}
+                        {isLowStock && <AlertTriangle className="w-3.5 h-3.5 text-[#D0190A]" />}
                         <span className="text-[10px] font-bold text-[#F8C200] opacity-0 group-hover:opacity-100 transition-opacity">
                           Click to Edit
                         </span>
@@ -147,7 +147,7 @@ export default function InventoryTable({ data, onUpdate }: InventoryTableProps) 
                         Out of Stock
                       </span>
                     ) : isLowStock ? (
-                      <span className="text-[10px] font-black text-yellow-700 uppercase tracking-widest bg-yellow-100 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-black text-[#D0190A] uppercase tracking-widest bg-red-100 px-2 py-0.5 rounded-full">
                         Low Stock
                       </span>
                     ) : (

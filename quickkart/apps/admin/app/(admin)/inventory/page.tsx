@@ -92,8 +92,8 @@ export default function InventoryPage() {
         </div>
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Low Stock Items</p>
-          <p className="text-3xl font-black text-yellow-600">
-            {inventory.filter(i => i.stock > 0 && i.stock <= i.lowStockAt).length}
+          <p className="text-3xl font-black text-[#D0190A]">
+            {inventory.filter(i => i.stock > 0 && i.stock < 10).length}
           </p>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">

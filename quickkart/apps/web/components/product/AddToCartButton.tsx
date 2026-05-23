@@ -42,13 +42,13 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
     }
   };
 
-  if (product.stock === 0) {
+  if (product.stock <= 0) {
     return (
       <button
         disabled
-        className="w-full py-4 rounded-2xl bg-gray-100 text-[#999999] font-bold text-base cursor-not-allowed border border-[#E8E8E8]"
+        className="w-full py-4 rounded-2xl bg-[#D0190A]/10 text-[#D0190A] font-bold text-base cursor-not-allowed border border-[#D0190A]/20"
       >
-        Out of Stock
+        OUT OF STOCK
       </button>
     );
   }

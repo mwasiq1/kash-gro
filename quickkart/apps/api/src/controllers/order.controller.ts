@@ -17,7 +17,7 @@ export const createOrder = async (
       return;
     }
 
-    const { addressId, items, totalAmount: clientTotal } = req.body;
+    const { addressId, items, totalAmount: clientTotal, promoCode } = req.body;
 
     if (!addressId || !items || !Array.isArray(items) || items.length === 0) {
       res.status(400).json({ success: false, error: "Invalid request payload" });
@@ -70,13 +70,13 @@ export const createOrder = async (
       }
 
       // Calculate totalAmount server-side
-      let totalAmount = 0;
+      let subtotal = 0;
       const orderItemsData = items.map((item: any) => {
         const product = productsInDb.find((p) => p.id === item.productId);
         if (!product) throw new Error("INVALID_PRODUCT");
 
         const price = product.price;
-        totalAmount += price * item.quantity;
+        subtotal += price * item.quantity;
 
         return {
           productId: product.id,
@@ -84,6 +84,31 @@ export const createOrder = async (
           price: price,
         };
       });
+
+      let discount = 0;
+      if (promoCode) {
+        const promo = await tx.promoCode.findUnique({
+          where: { code: promoCode.toUpperCase() }
+        });
+        if (promo && promo.isActive) {
+          const now = new Date();
+          if (!promo.endDate || promo.endDate > now) {
+            if (subtotal >= promo.minOrderAmount) {
+              if (promo.discountType === "PERCENTAGE") {
+                discount = (subtotal * promo.discountValue) / 100;
+                if (promo.maxDiscountAmount) {
+                  discount = Math.min(discount, promo.maxDiscountAmount);
+                }
+              } else if (promo.discountType === "FLAT") {
+                discount = promo.discountValue;
+              }
+            }
+          }
+        }
+      }
+
+      const deliveryFee = (subtotal > 0 && subtotal < 199) ? 25 : 0;
+      const finalTotal = Math.max(0, subtotal - discount + deliveryFee);
 
       // Generate order number: KG-YYYYMMDD-XXXX
       const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -114,7 +139,7 @@ export const createOrder = async (
           orderNumber,
           userId: internalUser.id,
           deliveryAddress: addressString,
-          totalAmount: totalAmount, // We should probably include delivery fees here if applicable, but for now using items total
+          totalAmount: finalTotal,
           status: "PLACED",
           items: {
             create: orderItemsData,
@@ -122,10 +147,10 @@ export const createOrder = async (
         },
       });
 
-      return { newOrder, selectedAddress, productsInDb, orderItemsData, internalUser, addressString };
+      return { newOrder, selectedAddress, productsInDb, orderItemsData, internalUser, addressString, subtotal, discount, deliveryFee };
     });
 
-    const { newOrder, selectedAddress, productsInDb, orderItemsData, internalUser, addressString } = order;
+    const { newOrder, selectedAddress, productsInDb, orderItemsData, internalUser, addressString, subtotal, discount, deliveryFee } = order;
 
     // Send Telegram notification (non-blocking)
     sendOrderNotification({
@@ -152,9 +177,9 @@ export const createOrder = async (
         id: newOrder.id, 
         orderNumber: newOrder.orderNumber,
         total: newOrder.totalAmount,
-        subtotal: newOrder.totalAmount,
-        deliveryFee: 0,
-        discount: 0,
+        subtotal: subtotal,
+        deliveryFee: deliveryFee,
+        discount: discount,
         status: newOrder.status,
         placedAt: newOrder.createdAt.toISOString(),
         items: orderItemsData.map((item: any) => {
@@ -194,8 +219,7 @@ export const createOrder = async (
       const productName = error.message.split(":")[1];
       res.status(400).json({ 
         success: false, 
-        error: "INSUFFICIENT_STOCK", 
-        message: `Insufficient stock for ${productName}` 
+        error: `Insufficient stock for: ${productName}` 
       });
       return;
     }
@@ -253,13 +277,17 @@ export const getOrderById = async (
       pincode: ""
     };
 
+    const subtotal = order.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const deliveryFee = (subtotal > 0 && subtotal < 199) ? 25 : 0;
+    const discount = Math.max(0, subtotal + deliveryFee - order.totalAmount);
+
     const formattedOrder = {
       id: order.id,
       orderNumber: order.orderNumber,
       total: order.totalAmount,
-      subtotal: order.totalAmount,
-      deliveryFee: 0,
-      discount: 0,
+      subtotal: subtotal,
+      deliveryFee: deliveryFee,
+      discount: discount,
       status: order.status,
       placedAt: order.createdAt.toISOString(),
       items: order.items.map((item) => ({
@@ -331,13 +359,17 @@ export const getOrders = async (
         pincode: ""
       };
 
+      const subtotal = order.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const deliveryFee = (subtotal > 0 && subtotal < 199) ? 25 : 0;
+      const discount = Math.max(0, subtotal + deliveryFee - order.totalAmount);
+
       return {
         id: order.id,
         orderNumber: order.orderNumber,
         total: order.totalAmount,
-        subtotal: order.totalAmount,
-        deliveryFee: 0,
-        discount: 0,
+        subtotal: subtotal,
+        deliveryFee: deliveryFee,
+        discount: discount,
         status: order.status,
         placedAt: order.createdAt.toISOString(),
         items: order.items.map((item) => ({
@@ -370,7 +402,10 @@ export const cancelOrder = async (
 
     const order = await prisma.order.findUnique({
       where: { id },
-      include: { user: true },
+      include: {
+        user: true,
+        items: true,
+      },
     });
 
     if (!order) {
@@ -391,13 +426,28 @@ export const cancelOrder = async (
       return;
     }
 
-    const updatedOrder = await prisma.order.update({
-      where: { id },
-      data: {
-        status: "CANCELLED",
-        cancelledAt: new Date(),
-        cancelReason: reason || "Cancelled by user",
-      },
+    const updatedOrder = await prisma.$transaction(async (tx) => {
+      const ord = await tx.order.update({
+        where: { id },
+        data: {
+          status: "CANCELLED",
+          cancelledAt: new Date(),
+          cancelReason: reason || "Cancelled by user",
+        },
+      });
+
+      for (const item of order.items) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: {
+            stock: {
+              increment: item.quantity,
+            },
+          },
+        });
+      }
+
+      return ord;
     });
 
     res.status(200).json({ success: true, data: updatedOrder });

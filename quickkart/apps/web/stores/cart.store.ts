@@ -10,17 +10,25 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface PromoInfo {
+  code: string;
+  discountType: "PERCENTAGE" | "FLAT";
+  discountValue: number;
+  maxDiscountAmount: number | null;
+  discount: number;
+}
+
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
-  promoCode: { code: string; discount: number } | null;
+  promoCode: PromoInfo | null;
   addItem: (product: Omit<CartItem, "quantity">) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
-  applyPromo: (code: string, discount: number) => void;
+  applyPromo: (promo: PromoInfo) => void;
   removePromo: () => void;
   // Derived
   cartTotal: () => number;
@@ -68,7 +76,7 @@ export const useCartStore = create<CartStore>()(
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
       
-      applyPromo: (code, discount) => set({ promoCode: { code, discount } }),
+      applyPromo: (promo) => set({ promoCode: promo }),
       removePromo: () => set({ promoCode: null }),
 
       // Derived getters (called as functions)

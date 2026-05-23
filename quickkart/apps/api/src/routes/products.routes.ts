@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 const normalizeProduct = (product: any) => ({
   ...product,
+  imageUrl: product.images && product.images.length > 0 ? product.images[0] : null,
 });
 
 // GET /api/products?categoryId=xxx&limit=30&skip=0&search=xxx

@@ -27,7 +27,7 @@ export default function PromoInput() {
       });
 
       if (response.success) {
-        applyPromo(response.data.code, response.data.discount);
+        applyPromo(response.data);
         setCode("");
       } else {
         setError(response.message || "Invalid promo code");

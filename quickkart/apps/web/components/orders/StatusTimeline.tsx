@@ -18,13 +18,13 @@ interface StatusTimelineProps {
 export default function StatusTimeline({ currentStatus, cancelledAt }: StatusTimelineProps) {
   if (currentStatus === "CANCELLED") {
     return (
-      <div className="bg-red-50 border border-red-100 p-6 rounded-2xl flex items-center gap-4">
-        <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <CheckCircle2 className="w-6 h-6 text-red-600" />
+      <div className="bg-[#D0190A]/5 border border-[#D0190A]/10 p-6 rounded-2xl flex items-center gap-4">
+        <div className="w-12 h-12 bg-[#D0190A]/10 rounded-full flex items-center justify-center flex-shrink-0">
+          <CheckCircle2 className="w-6 h-6 text-[#D0190A]" />
         </div>
         <div>
-          <h4 className="font-black text-red-600">Order Cancelled</h4>
-          <p className="text-sm text-red-500 font-medium">
+          <h4 className="font-black text-[#D0190A]">Order Cancelled</h4>
+          <p className="text-sm text-[#D0190A]/90 font-medium">
             This order was cancelled on {new Date(cancelledAt!).toLocaleDateString()}
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function StatusTimeline({ currentStatus, cancelledAt }: StatusTim
             
             <div className="relative z-10">
               {isCompleted ? (
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${isCurrent ? "bg-[#0C831F] ring-4 ring-[#EBF9EE]" : "bg-[#0C831F]"}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${isCurrent ? "bg-[#0C831F] ring-4 ring-[#0C831F]/15" : "bg-[#0C831F]"}`}>
                   <CheckCircle2 className="w-4 h-4 text-white" />
                 </div>
               ) : (

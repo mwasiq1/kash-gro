@@ -69,18 +69,24 @@ export default function OrderStatusSelect({
     }
   };
 
+  const status = currentStatus || "PENDING";
+  const statusExists = STATUS_OPTIONS.some(opt => opt.value === status);
+  const optionsToRender = statusExists 
+    ? STATUS_OPTIONS 
+    : [...STATUS_OPTIONS, { value: status, label: status.replace(/_/g, " ") }];
+
   return (
     <div className="relative inline-flex items-center">
       {saving && (
         <Loader2 className="absolute left-2 w-3.5 h-3.5 animate-spin text-gray-500 pointer-events-none" />
       )}
       <select
-        value={currentStatus}
+        value={status}
         onChange={handleChange}
-        disabled={saving || currentStatus === "DELIVERED" || currentStatus === "CANCELLED"}
-        className={`pl-2 pr-7 py-1 text-xs font-semibold rounded-full border-0 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#F8C200] focus:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed ${STATUS_COLORS[currentStatus] ?? "bg-gray-100 text-gray-700"}`}
+        disabled={saving || status === "DELIVERED" || status === "CANCELLED"}
+        className={`pl-2 pr-7 py-1 text-xs font-semibold rounded-full border-0 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#F8C200] focus:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed ${STATUS_COLORS[status] ?? "bg-gray-100 text-gray-700"}`}
       >
-        {STATUS_OPTIONS.map((opt) => (
+        {optionsToRender.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>

@@ -63,7 +63,14 @@ export default function OrdersPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-black text-[#1C1C1C] mb-8">My Orders</h1>
+      <div className="flex items-center gap-3 mb-8">
+        <h1 className="text-3xl font-black text-[#1C1C1C]">My Orders</h1>
+        {orders.length > 0 && (
+          <span className="bg-[#F8C200] text-[#1C1C1C] text-xs font-black px-3 py-1 rounded-full">
+            Total Orders: {orders.length}
+          </span>
+        )}
+      </div>
       
       {orders.length === 0 ? (
         <div className="bg-white rounded-3xl p-16 text-center border border-dashed border-[#E8E8E8]">
